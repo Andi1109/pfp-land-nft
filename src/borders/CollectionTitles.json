@@ -1,0 +1,961 @@
+[
+  {
+    "title": "Forgotten",
+    "originX": 5,
+    "originY": 5,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Runes",
+    "originX": 5,
+    "originY": 7,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Cryptoadz",
+    "originX": 5,
+    "originY": 17,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "TBD4",
+    "originX": 5,
+    "originY": 28,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Cyberkongz",
+    "originX": 5,
+    "originY": 39,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Sup Ducks",
+    "originX": 5,
+    "originY": 50,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Roboto",
+    "originX": 5,
+    "originY": 61,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Deadfellaz",
+    "originX": 5,
+    "originY": 73,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "TBD3",
+    "originX": 5,
+    "originY": 84,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Forgotten",
+    "originX": 5,
+    "originY": 94,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Runes",
+    "originX": 5,
+    "originY": 96,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "World of",
+    "originX": 15,
+    "originY": 5,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Women",
+    "originX": 15,
+    "originY": 7,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Cool",
+    "originX": 25,
+    "originY": 5,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Cats",
+    "originX": 25,
+    "originY": 7,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Dogs",
+    "originX": 35,
+    "originY": 5,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Unchained",
+    "originX": 35,
+    "originY": 7,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Pudgy",
+    "originX": 45,
+    "originY": 5,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Penguins",
+    "originX": 45,
+    "originY": 7,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Bloot",
+    "originX": 55,
+    "originY": 5,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Elves",
+    "originX": 55,
+    "originY": 7,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "The",
+    "originX": 65,
+    "originY": 5,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Vogu",
+    "originX": 65,
+    "originY": 7,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Buttheads",
+    "originX": 75,
+    "originY": 6,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Metahero",
+    "originX": 85,
+    "originY": 6,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Animetas",
+    "originX": 95,
+    "originY": 6,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Fluf",
+    "originX": 95,
+    "originY": 16,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "World",
+    "originX": 95,
+    "originY": 18,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Sup",
+    "originX": 95,
+    "originY": 27,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Ducks",
+    "originX": 95,
+    "originY": 29,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "TBD4",
+    "originX": 95,
+    "originY": 39,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Non",
+    "originX": 95,
+    "originY": 48,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Fungible",
+    "originX": 95,
+    "originY": 50,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Heroes",
+    "originX": 95,
+    "originY": 52,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "TBD5",
+    "originX": 95,
+    "originY": 61,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Bored",
+    "originX": 95,
+    "originY": 72,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Apes",
+    "originX": 95,
+    "originY": 74,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "TBD3",
+    "originX": 95,
+    "originY": 84,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "TBD5",
+    "originX": 95,
+    "originY": 95,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Deadfellaz",
+    "originX": 17,
+    "originY": 15,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "0n1",
+    "originX": 12,
+    "originY": 29,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Doodles",
+    "originX": 29,
+    "originY": 15,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Non Fungible",
+    "originX": 41,
+    "originY": 14,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Heroes",
+    "originX": 41,
+    "originY": 16,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Fluf World",
+    "originX": 38,
+    "originY": 24,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Metahero",
+    "originX": 20,
+    "originY": 24,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Buttheads",
+    "originX": 20,
+    "originY": 34,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Forgotten",
+    "originX": 20,
+    "originY": 43,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Runes",
+    "originX": 20,
+    "originY": 45,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Animetas",
+    "originX": 29,
+    "originY": 33,
+    "size": 2,
+    "rotate": true
+  },
+  {
+    "title": "Bored Apes",
+    "originX": 16,
+    "originY": 49.7,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "The Vogu",
+    "originX": 20,
+    "originY": 56,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Pudgy",
+    "originX": 20,
+    "originY": 64,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Penguins",
+    "originX": 20,
+    "originY": 66,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Cyberkongz",
+    "originX": 20,
+    "originY": 75,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Mekaverse",
+    "originX": 12,
+    "originY": 71,
+    "size": 2,
+    "rotate": true
+  },
+  {
+    "title": "TBD4",
+    "originX": 29,
+    "originY": 65,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Dogs",
+    "originX": 16,
+    "originY": 84,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Unchained",
+    "originX": 16,
+    "originY": 86,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Bored Apes",
+    "originX": 29,
+    "originY": 83,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Non Fungible",
+    "originX": 38,
+    "originY": 74,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Heroes",
+    "originX": 38,
+    "originY": 76,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Bloot Elves",
+    "originX": 39,
+    "originY": 85,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "World of",
+    "originX": 15,
+    "originY": 94,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Women",
+    "originX": 15,
+    "originY": 96,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Fluf",
+    "originX": 25,
+    "originY": 94,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "World",
+    "originX": 25,
+    "originY": 96,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Buttheads",
+    "originX": 35,
+    "originY": 95,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "The Vogu",
+    "originX": 45,
+    "originY": 95,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Cool Cats",
+    "originX": 55,
+    "originY": 95,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Cryptoadz",
+    "originX": 65,
+    "originY": 95,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Doodles",
+    "originX": 75,
+    "originY": 95,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Metahero",
+    "originX": 85,
+    "originY": 95,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "TBD5",
+    "originX": 49.5,
+    "originY": 14,
+    "size": 1,
+    "rotate": true
+  },
+  {
+    "title": "Cryptoadz",
+    "originX": 50,
+    "originY": 22,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Veefriends",
+    "originX": 38,
+    "originY": 32,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Bloot Elves",
+    "originX": 38,
+    "originY": 37,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Sup Ducks",
+    "originX": 38,
+    "originY": 41.5,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Deadfellaz",
+    "originX": 37,
+    "originY": 46,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "World of Women",
+    "originX": 34,
+    "originY": 49.7,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Cool Cats",
+    "originX": 37,
+    "originY": 53.5,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Doodles",
+    "originX": 38,
+    "originY": 58,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Dogs",
+    "originX": 38,
+    "originY": 62,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Unchained",
+    "originX": 38,
+    "originY": 64,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "TBD3",
+    "originX": 38,
+    "originY": 68,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Roboto",
+    "originX": 46,
+    "originY": 37,
+    "size": 2,
+    "rotate": true
+  },
+  {
+    "title": "Mekaverse",
+    "originX": 49.5,
+    "originY": 37,
+    "size": 2,
+    "rotate": true
+  },
+  {
+    "title": "Non Fungible Heroes",
+    "originX": 53,
+    "originY": 36.8,
+    "size": 1.6,
+    "rotate": true
+  },
+  {
+    "title": "0n1",
+    "originX": 46,
+    "originY": 63,
+    "size": 2,
+    "rotate": true
+  },
+  {
+    "title": "Cryptoadz",
+    "originX": 49.6,
+    "originY": 63,
+    "size": 2,
+    "rotate": true
+  },
+  {
+    "title": "Fluf World",
+    "originX": 53.2,
+    "originY": 63,
+    "size": 2,
+    "rotate": true
+  },
+  {
+    "title": "Veefriends",
+    "originX": 59,
+    "originY": 15,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Mekaverse",
+    "originX": 74,
+    "originY": 15,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Roboto",
+    "originX": 85,
+    "originY": 15,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "0n1",
+    "originX": 61,
+    "originY": 24,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "TBD3",
+    "originX": 70,
+    "originY": 33,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "TBD4",
+    "originX": 61,
+    "originY": 32,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Pudgy",
+    "originX": 61,
+    "originY": 36,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Penguins",
+    "originX": 61,
+    "originY": 38,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Cyberkongz",
+    "originX": 61,
+    "originY": 42,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "The Vogu",
+    "originX": 62,
+    "originY": 46,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Bored Apes",
+    "originX": 63,
+    "originY": 50,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Forgotten Runes",
+    "originX": 62,
+    "originY": 53,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Metahero",
+    "originX": 61,
+    "originY": 58,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Buttheads",
+    "originX": 61,
+    "originY": 63,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Animetas",
+    "originX": 61,
+    "originY": 68,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Mekaverse",
+    "originX": 49.5,
+    "originY": 78,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Veefriends",
+    "originX": 49.5,
+    "originY": 86,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Roboto",
+    "originX": 61,
+    "originY": 75,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Pudgy",
+    "originX": 60,
+    "originY": 84,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Penguins",
+    "originX": 60,
+    "originY": 86,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Doodles",
+    "originX": 79,
+    "originY": 24,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Dogs",
+    "originX": 79,
+    "originY": 33,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Unchained",
+    "originX": 79,
+    "originY": 35,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Cool Cats",
+    "originX": 79,
+    "originY": 44,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "World of Women",
+    "originX": 82.5,
+    "originY": 50,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Deadfellaz",
+    "originX": 79,
+    "originY": 55,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Bloot Elves",
+    "originX": 79,
+    "originY": 66,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Sup Ducks",
+    "originX": 79,
+    "originY": 75,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Veefriends",
+    "originX": 70,
+    "originY": 65,
+    "size": 2,
+    "rotate": true
+  },
+  {
+    "title": "Cyberkongz",
+    "originX": 70,
+    "originY": 83,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "0n1",
+    "originX": 83,
+    "originY": 85,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Pudgy",
+    "originX": 87.5,
+    "originY": 24,
+    "size": 1.5,
+    "rotate": false
+  },
+  {
+    "title": "Penguins",
+    "originX": 87.5,
+    "originY": 26,
+    "size": 1.5,
+    "rotate": false
+  },
+  {
+    "title": "Vee",
+    "originX": 87.5,
+    "originY": 28.5,
+    "size": 1.5,
+    "rotate": false
+  },
+  {
+    "title": "friends",
+    "originX": 87.5,
+    "originY": 30,
+    "size": 1.5,
+    "rotate": false
+  },
+  {
+    "title": "TBD5",
+    "originX": 87.5,
+    "originY": 36,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Animetas",
+    "originX": 87.5,
+    "originY": 68,
+    "size": 2,
+    "rotate": true
+  },
+  {
+    "title": "Honorary",
+    "originX": 46.5,
+    "originY": 46.5,
+    "size": 1.3,
+    "rotate": false
+  },
+  {
+    "title": "Elves",
+    "originX": 46.5,
+    "originY": 48,
+    "size": 1.5,
+    "rotate": false
+  },
+  {
+    "title": "Honorary",
+    "originX": 46.5,
+    "originY": 52,
+    "size": 1.3,
+    "rotate": false
+  },
+  {
+    "title": "Elves",
+    "originX": 46.5,
+    "originY": 53.5,
+    "size": 1.5,
+    "rotate": false
+  },
+  {
+    "title": "Honorary",
+    "originX": 52.5,
+    "originY": 46.5,
+    "size": 1.3,
+    "rotate": false
+  },
+  {
+    "title": "Elves",
+    "originX": 52.5,
+    "originY": 48,
+    "size": 1.5,
+    "rotate": false
+  },
+  {
+    "title": "Honorary",
+    "originX": 52.5,
+    "originY": 52,
+    "size": 1.3,
+    "rotate": false
+  },
+  {
+    "title": "Elves",
+    "originX": 52.5,
+    "originY": 53.5,
+    "size": 1.5,
+    "rotate": false
+  },
+  {
+    "title": "Center",
+    "originX": 49.5,
+    "originY": 49.5,
+    "size": 1,
+    "rotate": false
+  }
+]
