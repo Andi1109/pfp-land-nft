@@ -19,12 +19,10 @@ export default function ConnectButton({ handleOpenModal }: Props) {
     <Box
       display="flex"
       alignItems="center"
-      justifyContent="center"
       background="gray.700"
       borderRadius="xl"
-      width="max-content"
-      margin="auto"
       py="0"
+      marginTop="30px"
     >
       <Box px="3">
         <Text color="white" fontSize="md">
@@ -58,9 +56,6 @@ export default function ConnectButton({ handleOpenModal }: Props) {
     </Box>
   ) : (
     <Button
-      display="flex"
-      justifyContent="center"
-      margin="auto"
       onClick={handleConnectWallet}
       bg="blue.800"
       color="blue.300"

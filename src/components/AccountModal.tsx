@@ -118,7 +118,7 @@ export default function AccountModal({ isOpen, onClose }: Props) {
                 fontSize="sm"
                 display="flex"
                 alignItems="center"
-                href={`https://etherscan.io/address/${account}`}
+                href={`https://ropsten.etherscan.io/address/${account}`}
                 isExternal
                 color="gray.400"
                 ml={6}
@@ -133,6 +133,23 @@ export default function AccountModal({ isOpen, onClose }: Props) {
             </Flex>
           </Box>
         </ModalBody>
+
+        <ModalFooter
+          justifyContent="end"
+          background="gray.700"
+          borderBottomLeftRadius="3xl"
+          borderBottomRightRadius="3xl"
+          p={6}
+        >
+          <Text
+            color="white"
+            textAlign="left"
+            fontWeight="medium"
+            fontSize="md"
+          >
+            Your transactions willl appear here...
+          </Text>
+        </ModalFooter>
       </ModalContent>
     </Modal>
   );
