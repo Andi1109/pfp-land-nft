@@ -260,19 +260,10 @@ export default function Map() {
     const canvas: any = canvasRef.current;
     if (canvas) {
       const ctx = canvas.getContext("2d");
-      //   let lastX = canvas.width / 2;
-      //   let lastY = canvas.height / 2;
-      //   let scaleFactor = 1.1;
-      //   let dragStart: any, dragged: any;
 
       canvas.addEventListener(
         "mousedown",
         function(evt: any) {
-          // console.log("mousedown");
-          // lastX = evt.offsetX || evt.pageX - canvas.offsetLeft;
-          // lastY = evt.offsetY || evt.pageY - canvas.offsetTop;
-          // dragStart = ctx.transformedPoint(lastX, lastY);
-          // dragged = false;
           const offsetX = Math.ceil((evt.offsetX / canvasHeight) * 100);
           const offsetY = Math.ceil((evt.offsetY / canvasHeight) * 100);
 
@@ -297,97 +288,11 @@ export default function Map() {
       canvas.addEventListener(
         "mousemove",
         function(evt: any) {
-          // console.log("mousemove");
           const offsetX = Math.ceil((evt.offsetX / canvasHeight) * 100);
           const offsetY = Math.ceil((evt.offsetY / canvasHeight) * 100);
-          // console.log(offsetX, offsetY);
-
-          // lastX = evt.offsetX || evt.pageX - canvas.offsetLeft;
-          // lastY = evt.offsetY || evt.pageY - canvas.offsetTop;
-          // dragged = true;
-          // if (dragStart) {
-          //   var pt = ctx.transformedPoint(lastX, lastY);
-          //   ctx.translate(pt.x - dragStart.x, pt.y - dragStart.y);
-          //   // draw(ctx);
-          //   redraw();
-          // }
         },
         false
       );
-      //   canvas.addEventListener(
-      //     "mouseup",
-      //     function (evt: any) {
-      //       console.log("mouseup");
-      //       dragStart = null;
-      //       if (!dragged) zoom(evt.shiftKey ? -1 : 1);
-      //     },
-      //     false
-      //   );
-
-      //   const zoom = function (clicks: any) {
-      //     const pt = ctx.transformedPoint(lastX, lastY);
-      //     ctx.translate(pt.x, pt.y);
-      //     // ctx.translate(50, 50);
-      //     const factor = Math.pow(scaleFactor, clicks);
-      //     console.log(factor);
-      //     console.log(pt.x, pt.y);
-      //     ctx.scale(factor, factor);
-      //     ctx.translate(-pt.x, -pt.y);
-      //     // ctx.translate(-50, -50);
-      //     redraw();
-      //   };
-
-      //   const handleScroll = function (evt: any) {
-      //     console.log("scroll");
-      //     const delta = evt.wheelDelta
-      //       ? evt.wheelDelta / 40
-      //       : evt.detail
-      //       ? -evt.detail
-      //       : 0;
-      //     console.log(delta);
-      //     if (delta) zoom(delta);
-      //     return evt.preventDefault() && false;
-      //   };
-
-      //   const trackTransforms = (ctx: any) => {
-      //     const svg = document.createElementNS(
-      //       "http://www.w3.org/2000/svg",
-      //       "svg"
-      //     );
-      //     let xform = svg.createSVGMatrix();
-
-      //     const scale = ctx.scale;
-      //     ctx.scale = function (sx: any, sy: any) {
-      //       xform = xform.scaleNonUniform(sx, sy);
-      //       return scale.call(ctx, sx, sy);
-      //     };
-      //     const translate = ctx.translate;
-      //     ctx.translate = function (dx: any, dy: any) {
-      //       xform = xform.translate(dx, dy);
-      //       return translate.call(ctx, dx, dy);
-      //     };
-      //     const pt = svg.createSVGPoint();
-      //     ctx.transformedPoint = function (x: any, y: any) {
-      //       pt.x = x;
-      //       pt.y = y;
-      //       return pt.matrixTransform(xform.inverse());
-      //     };
-      //   };
-      //   trackTransforms(ctx);
-      //   const redraw = () => {
-      //     // Clear the entire canvas
-      //     var p1 = ctx.transformedPoint(0, 0);
-      //     var p2 = ctx.transformedPoint(canvas.width, canvas.height);
-      //     console.log("*", p1.x, p1.y);
-      //     console.log("*", p2.x, p2.y);
-      //     ctx.clearRect(p1.x, p1.y, p2.x - p1.x, p2.y - p1.y);
-      //     // ctx.clearRect(0, 0, canvasHeight, canvasHeight);
-      //     draw(ctx);
-      //     // ctx.drawImage(gkhead, 0, 0);
-      //   };
-      //   redraw();
-      //   canvas.addEventListener("DOMMouseScroll", handleScroll, false);
-      //   canvas.addEventListener("mousewheel", handleScroll, false);
     }
   };
 
