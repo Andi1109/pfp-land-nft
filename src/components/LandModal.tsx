@@ -12,7 +12,11 @@ import {
   Flex,
   Text,
   Image,
+  FormControl,
+  FormLabel,
+  Input,
 } from "@chakra-ui/react";
+import { CheckIcon } from "@chakra-ui/icons";
 import {
   EncodeTokenID,
   GetLandOwnerOf,
@@ -20,6 +24,7 @@ import {
   GetRoyalMetaDataOfLand,
   GetMetaDataAtCollection,
 } from "../hooks";
+import { useEthers } from "@usedapp/core";
 import { ReactNode, useState, useEffect } from "react";
 
 type Props = {
@@ -34,6 +39,7 @@ export default function LandModal({ children, onClaim, isMobile }: Props) {
   const landX = document.getElementById("selectedLandX")?.innerHTML;
   const landY = document.getElementById("selectedLandY")?.innerHTML;
   const [imageURLValue, setImageURLValue] = useState("");
+  const { account } = useEthers();
   let assetID = EncodeTokenID(landX, landY);
   let landOwner = GetLandOwnerOf(assetID);
   const collectionID = CollectionIDAt(landX, landY);
@@ -43,6 +49,7 @@ export default function LandModal({ children, onClaim, isMobile }: Props) {
     royalData.tokenID
   );
 
+  const [myAccountValue, setMyAccountValue] = useState("");
   const [landOwnerValue, setLandOwnerValue] = useState("loading...");
   const [collectionIDValue, setCollectionIDValue] = useState("");
   const [royalTokenURIValue, setRoyalTokenURIValue] = useState("");
@@ -58,6 +65,10 @@ export default function LandModal({ children, onClaim, isMobile }: Props) {
       if (imageURL) setImageURLValue(imageURL);
     });
   }
+
+  useEffect(() => {
+    setMyAccountValue(account ? account.toString() : "");
+  }, [account]);
 
   useEffect(() => {
     setLandOwnerValue(landOwner ? landOwner.toString() : "loading...");
@@ -82,33 +93,28 @@ export default function LandModal({ children, onClaim, isMobile }: Props) {
     onClaim(landX, landY, collectionIDValue);
   };
 
+  const handleRoyalNFT = () => {};
+
   return (
     <div>
       {console.log("isMobile---", isMobile)}
       <div onClick={onOpen}>{children}</div>
       <Modal isOpen={isOpen} onClose={onClose} colorScheme="linkedin">
         <ModalOverlay />
-        <ModalContent style={{ width: isMobile ? "85%" : "100%" }}>
-          <ModalHeader>
+        <ModalContent
+          style={{
+            width: isMobile ? "85%" : "100%",
+            margin: "auto",
+            color: "white",
+          }}
+        >
+          <ModalHeader style={{ backgroundColor: "mediumseagreen" }}>
             Land {landX}, {landY}
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <Flex color="white" direction="column">
-              <Box w="100%" bg="gray.1000" marginBottom="5px">
-                <Text color="black">
-                  Status: {isClaimed === "1" ? "Claimed" : "Not claimed"}
-                </Text>
-              </Box>
-              <Box w="100%" bg="gray.1000" marginBottom="5px">
-                <Text color="black">
-                  Owner: {isClaimed === "1" ? landOwnerValue : "No owner"}
-                </Text>
-              </Box>
-              <Box w="100%" bg="gray.1000">
-                <Text color="black">
-                  Royal NFT: {isClaimed === "1" ? "" : "No royal NFT yet"}
-                </Text>
+              <Flex color="white">
                 {isClaimed === "1" && imageURLValue && royalTokenURIValue ? (
                   imageURLValue.includes("mp4") ? (
                     <Box
@@ -118,7 +124,6 @@ export default function LandModal({ children, onClaim, isMobile }: Props) {
                       allowFullScreen
                       width="200px"
                       height="200px"
-                      marginLeft="30px"
                       marginRight="30px"
                     />
                   ) : (
@@ -127,9 +132,6 @@ export default function LandModal({ children, onClaim, isMobile }: Props) {
                       alt="Segun Adebayo"
                       width="200px"
                       height="200px"
-                      minWidth="200px"
-                      minHeight="200px"
-                      marginLeft="30px"
                       marginRight="30px"
                     />
                   )
@@ -139,27 +141,82 @@ export default function LandModal({ children, onClaim, isMobile }: Props) {
                     alt="Segun Adebayo"
                     width="200px"
                     height="200px"
-                    marginLeft="30px"
                     marginRight="30px"
                   />
                 )}
-              </Box>
+                <Flex
+                  color="white"
+                  direction="column"
+                  style={{ justifyContent: "center", overflowWrap: "anywhere" }}
+                >
+                  <FormControl>
+                    <FormLabel style={{ color: "green" }}>Status:</FormLabel>
+                    <Input
+                      style={{
+                        height: "50%",
+                        marginBottom: "20px",
+                        opacity: "1",
+                      }}
+                      placeholder={
+                        isClaimed === "1" ? "Claimed ✓" : "Not claimed ✖"
+                      }
+                      disabled
+                    ></Input>
+                  </FormControl>
+                  <FormControl>
+                    <FormLabel style={{ color: "green" }}>Owner:</FormLabel>
+                    <Input
+                      style={{
+                        height: "50%",
+                        marginBottom: "20px",
+                        opacity: "1",
+                      }}
+                      placeholder={
+                        isClaimed === "1" ? landOwnerValue : "No owner"
+                      }
+                      disabled
+                    />
+                  </FormControl>
+                </Flex>
+              </Flex>
+              <Button
+                style={{
+                  backgroundColor: "transparent",
+                  color: "green",
+                  border: "solid 1px green",
+                  width: "100%",
+                  marginTop: "20px",
+                  boxShadow: "none",
+                }}
+                onClick={handleRoyalNFT}
+                disabled={myAccountValue === landOwnerValue ? false : true}
+              >
+                Choose Royal NFT...
+              </Button>
             </Flex>
           </ModalBody>
 
-          <ModalFooter>
+          <ModalFooter style={{ justifyContent: "center" }}>
             <Button
               style={{
-                backgroundColor: "rgb(0 140 255)",
+                backgroundColor: "mediumseagreen",
                 marginRight: "20px",
-                width: "27%",
+                width: "40%",
               }}
               onClick={handleClaim}
               disabled={isClaimed === "1" ? true : false}
             >
               Claim
             </Button>
-            <Button style={{ backgroundColor: "#808080" }} onClick={onClose}>
+            <Button
+              style={{
+                backgroundColor: "transparent",
+                border: "solid 1px mediumseagreen",
+                width: "40%",
+                color: "mediumaquamarine",
+              }}
+              onClick={onClose}
+            >
               Close
             </Button>
           </ModalFooter>
