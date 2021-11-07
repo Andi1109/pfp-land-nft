@@ -22,8 +22,8 @@ export default function Map() {
   const toast = useToast();
   const { state, send: claimLand } = useContractMethod("claimLand");
 
-  const [totalLandsValue, setTotalLandsValue] = useState(0);
-  const [myTotalLandsValue, setMyTotalLandsValue] = useState(0);
+  const [totalLandsValue, setTotalLandsValue] = useState("");
+  const [myTotalLandsValue, setMyTotalLandsValue] = useState("0");
   const [claimedLands, setClaimedLands] = useState<Land[]>([]);
   const [myClaimedLands, setMyClaimedLands] = useState<Land[]>([]);
 
@@ -42,14 +42,14 @@ export default function Map() {
     y: number;
   }
   useEffect(() => {
-    if (totalLands && totalLands.toNumber() !== totalLandsValue) {
-      setTotalLandsValue(totalLands.toNumber());
+    if (totalLands && totalLands.toString() !== totalLandsValue) {
+      setTotalLandsValue(totalLands.toString());
     }
   }, [totalLands]);
 
   useEffect(() => {
-    if (myTotalLands && myTotalLands.toNumber() !== myTotalLandsValue) {
-      setMyTotalLandsValue(myTotalLands.toNumber());
+    if (myTotalLands && myTotalLands.toString() !== myTotalLandsValue) {
+      setMyTotalLandsValue(myTotalLands.toString());
     }
   }, [myTotalLands]);
 
@@ -62,7 +62,8 @@ export default function Map() {
     console.log(state);
     switch (state.status) {
       case "Success":
-        msg = "Success. You claimed your land";
+        msg =
+          "Success. To see the latest information, please refresh your browser.";
         toast({
           description: msg,
           status: "success",
@@ -86,7 +87,7 @@ export default function Map() {
         });
         break;
       case "Fail":
-        msg = "Minting transaction failed";
+        msg = "Transaction failed";
         toast({
           description: msg,
           status: "error",
@@ -96,7 +97,7 @@ export default function Map() {
         });
         break;
       case "Exception":
-        msg = "You can't claim this land.";
+        msg = "Your transaction is likely to be failed";
         toast({
           description: msg,
           status: "warning",
@@ -303,33 +304,31 @@ export default function Map() {
   }, [draw]);
 
   return (
-    <Box
-      width={isMobile ? "90vw" : "90vh"}
-      height={isMobile ? "90vw" : "90vh"}
-      margin="auto"
-      marginLeft={isMobile ? "0" : "auto"}
-      border="solid 1px"
-      display="flex"
-      alignItems="center"
-    >
-      <LandModal onClaim={handleClaim} isMobile={isMobile}>
+    <Box border="solid 1px" display="flex" alignItems="center">
+      <LandModal
+        onClaim={handleClaim}
+        isMobile={isMobile}
+        doPostTransaction={doPostTransaction}
+      >
         <canvas
           ref={canvasRef}
           width={`${canvasSize}`}
           height={`${canvasSize}`}
         />
       </LandModal>
-      {Array.from({ length: totalLandsValue }, (_, i) => 0 + i).map((index) => {
-        const landDiv = (
-          <LandDetail
-            index={index}
-            key={index}
-            onFoundLand={appendClaimedLands}
-          />
-        );
-        return landDiv;
-      })}
-      {Array.from({ length: myTotalLandsValue }, (_, i) => 0 + i).map(
+      {Array.from({ length: parseInt(totalLandsValue) }, (_, i) => 0 + i).map(
+        (index) => {
+          const landDiv = (
+            <LandDetail
+              index={index}
+              key={index}
+              onFoundLand={appendClaimedLands}
+            />
+          );
+          return landDiv;
+        }
+      )}
+      {Array.from({ length: parseInt(myTotalLandsValue) }, (_, i) => 0 + i).map(
         (index) => {
           const landDiv = (
             <MyLandDetail

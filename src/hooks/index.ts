@@ -97,6 +97,44 @@ export function CollectionIDAt(landX: any, landY: any) {
   return collectionID;
 }
 
+export function GetTotalRoyalBalanceOf(owner: any, collectionID: any) {
+  const [balance]: any =
+    useContractCall({
+      abi: landContractInterface,
+      address: landContractAddress,
+      method: "totalRoyalBalanceOf",
+      args: [owner, collectionID],
+    }) ?? [];
+  return balance;
+}
+
+export function GetRoyalTokenOfOwnerByIndex(
+  owner: any,
+  index: any,
+  collectionID: any
+) {
+  const [newCollectionID, tokenID]: any =
+    useContractCall({
+      abi: landContractInterface,
+      address: landContractAddress,
+      method: "royalTokenOfOwnerByIndex",
+      args: [owner, index, collectionID],
+    }) ?? [];
+  const royalObj = { newCollectionID, tokenID };
+  return royalObj;
+}
+
+export function GetLandMetaData(collectionID: any, tokenID: any) {
+  const [tokenURI]: any =
+    useContractCall({
+      abi: landContractInterface,
+      address: landContractAddress,
+      method: "getLandMetaData",
+      args: [collectionID, tokenID],
+    }) ?? [];
+  return tokenURI;
+}
+
 export function EncodeTokenID(landX: any, landY: any) {
   const [assetID]: any =
     useContractCall({

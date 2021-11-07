@@ -12,7 +12,6 @@ function App() {
     <ChakraProvider theme={theme}>
       <Layout>
         <ConnectButton handleOpenModal={onOpen} />
-        <br />
         <AccountModal isOpen={isOpen} onClose={onClose} />
         <Map />
       </Layout>

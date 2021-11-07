@@ -22,7 +22,6 @@ export default function ConnectButton({ handleOpenModal }: Props) {
       background="gray.700"
       borderRadius="xl"
       py="0"
-      marginTop="30px"
     >
       <Box px="3">
         <Text color="white" fontSize="md">

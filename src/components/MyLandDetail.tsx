@@ -12,6 +12,7 @@ export default function MyLandDetail({ owner, index, onFoundLand }: Props) {
   const decodedLand = DecodeTokenID(land);
   const [landX, setLandX] = useState(-1);
   const [landY, setLandY] = useState(-1);
+
   useEffect(() => {
     setLandX(decodedLand.decodedX ? decodedLand.decodedX.toNumber() : -1);
     setLandY(decodedLand.decodedY ? decodedLand.decodedY.toNumber() : -1);
