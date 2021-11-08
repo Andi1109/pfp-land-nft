@@ -224,6 +224,41 @@ export default function Map() {
     }
   };
 
+  let flagScale = true;
+  let offsetX = 0;
+  let offsetY = 0;
+  let countMul = 0;
+
+  let zoomX = 0;
+  let zoomY = 0;
+
+  const zoom = (delta: any) => {
+    const canvas: any = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    let factor = 1.25;
+    if (delta > 0) {
+      countMul++;
+      factor = 1.25;
+      if (countMul === 1) {
+        zoomX = offsetX;
+        zoomY = offsetY;
+      }
+    } else {
+      countMul--;
+      factor = 0.8;
+    }
+    if (countMul < 0) {
+      countMul = 0;
+      flagScale = false;
+    } else flagScale = true;
+    if (flagScale) {
+      const valScale = (canvasHeight * (1 - factor)) / 100;
+      ctx.transform(factor, 0, 0, factor, valScale * zoomX, valScale * zoomY);
+      ctx.clearRect(0, 0, canvasHeight, canvasHeight);
+      redrawCanvas();
+    }
+  };
+
   const draw = (ctx: any) => {
     drawTiers(ctx);
     drawLandBorders(ctx);
@@ -255,6 +290,18 @@ export default function Map() {
     }
   };
 
+  const handleScroll = function (evt: any) {
+    const delta = evt.wheelDelta
+      ? evt.wheelDelta / 40
+      : evt.detail
+      ? -evt.detail
+      : 0;
+    if (delta) {
+      zoom(delta);
+    }
+    return evt.preventDefault() && false;
+  };
+
   const initEventListners = () => {
     window.addEventListener("resize", updateSize);
 
@@ -264,9 +311,9 @@ export default function Map() {
 
       canvas.addEventListener(
         "mousedown",
-        function(evt: any) {
-          const offsetX = Math.ceil((evt.offsetX / canvasHeight) * 100);
-          const offsetY = Math.ceil((evt.offsetY / canvasHeight) * 100);
+        function (evt: any) {
+          offsetX = Math.ceil((evt.offsetX / canvasHeight) * 100);
+          offsetY = Math.ceil((evt.offsetY / canvasHeight) * 100);
 
           const isClaimed: any = isClaimedLand.current;
           const landX: any = selectedLandX.current;
@@ -288,16 +335,22 @@ export default function Map() {
       );
       canvas.addEventListener(
         "mousemove",
-        function(evt: any) {
-          const offsetX = Math.ceil((evt.offsetX / canvasHeight) * 100);
-          const offsetY = Math.ceil((evt.offsetY / canvasHeight) * 100);
+        function (evt: any) {
+          offsetX = Math.ceil((evt.offsetX / canvasHeight) * 100);
+          offsetY = Math.ceil((evt.offsetY / canvasHeight) * 100);
         },
         false
       );
+      canvas.addEventListener("mouseup", function () {}, false);
+      canvas.addEventListener("DOMMouseScroll", handleScroll, false);
+      canvas.addEventListener("mousewheel", handleScroll, false);
     }
   };
 
-  initEventListners();
+  useEffect(() => {
+    initEventListners();
+  }, []);
+  // initEventListners();
 
   useEffect(() => {
     redrawCanvas();
