@@ -1,3 +1,4 @@
+// @ts-nocheck
 import {
   Button,
   Modal,
@@ -27,12 +28,16 @@ import {
   GetRoyalMetaDataOfLand,
   GetMetaDataAtCollection,
   GetTotalRoyalBalanceOf,
+  GetTotalDerivativeBalance,
   useContractMethod,
 } from "../hooks";
 import { utils } from "ethers";
 import { useEthers } from "@usedapp/core";
 import { ReactNode, useState, useEffect } from "react";
 import RoyalImage from "./RoyalImage";
+import DerivedImage from "./DerivedImage";
+import ClaimedDerivedImage from "./ClaimedDerivedImage";
+import pairsJson from "../royal_derived_pair/pair.json";
 
 type Props = {
   children: ReactNode;
@@ -62,25 +67,45 @@ export default function LandModal({
     royalData.tokenID
   );
   const royalBalance = GetTotalRoyalBalanceOf(landOwner, collectionID);
-  const { state, send: updateRoyal } = useContractMethod(
+  const derivativeBalance = GetTotalDerivativeBalance(assetID);
+  const { state: royalNFTState, send: updateRoyal } = useContractMethod(
     "updateLandRoyalMetaData"
+  );
+  const { state: derivedNFTState, send: updateDerived } = useContractMethod(
+    "updateLandDerivativeMetaData"
   );
 
   const [imageURLValue, setImageURLValue] = useState("");
   const [myAccountValue, setMyAccountValue] = useState("");
+  const [assetIDValue, setAssetIDValue] = useState("");
   const [landOwnerValue, setLandOwnerValue] = useState("loading...");
   const [collectionIDValue, setCollectionIDValue] = useState("");
+  const [royalCollectionIDValue, setRoyalCollectionIDValue] = useState("0");
+  const [royalTokenIDValue, setRoyalTokenIDValue] = useState("0");
   const [royalTokenURIValue, setRoyalTokenURIValue] = useState("");
   const [royalBalanceValue, setRoyalBalanceValue] = useState("");
+  const [derivativeBalanceValue, setDerivativeBalanceValue] = useState("");
+  const [jsonKeyValue, setJsonKeyValue] = useState("0_0");
   const [selectedRoyalCollectionID, setSelectedRoyalCollectionID] = useState<
     String
   >();
   const [selectedRoyalTokenID, setSelectedRoyalTokenID] = useState<String>();
+  const [
+    selectedDerivedCollectionAddress,
+    setSelectedDerivedCollectionAddress,
+  ] = useState<String>();
+  const [selectedDerivedTokenID, setSelectedDerivedTokenID] = useState<
+    String
+  >();
 
   const fetchImage = async (uri: any) => {
-    return fetch(uri)
-      .then((response) => response.json())
-      .then((data) => data.image);
+    if (uri) {
+      try {
+        return fetch(uri)
+          .then((response) => response.json())
+          .then((data) => data.image);
+      } catch (e) {}
+    }
   };
 
   if (royalTokenURIValue) {
@@ -94,12 +119,28 @@ export default function LandModal({
   }, [account]);
 
   useEffect(() => {
+    setAssetIDValue(assetID ? assetID.toString() : "");
+  }, [assetID]);
+
+  useEffect(() => {
     setLandOwnerValue(landOwner ? landOwner.toString() : "loading...");
   }, [landOwner]);
 
   useEffect(() => {
     setCollectionIDValue(collectionID ? collectionID.toString() : "");
   }, [collectionID]);
+
+  useEffect(() => {
+    setRoyalCollectionIDValue(
+      royalData && royalData.collectionID
+        ? royalData.collectionID.toString()
+        : "0"
+    );
+    setRoyalTokenIDValue(
+      royalData && royalData.tokenID ? royalData.tokenID.toString() : "0"
+    );
+    setJsonKeyValue(royalCollectionIDValue + "_" + royalTokenIDValue);
+  }, [royalData]);
 
   useEffect(() => {
     setRoyalTokenURIValue(
@@ -116,8 +157,20 @@ export default function LandModal({
   }, [royalBalance]);
 
   useEffect(() => {
-    doPostTransaction(state);
-  }, [state]);
+    setDerivativeBalanceValue(
+      derivativeBalance ? derivativeBalance.toString() : ""
+    );
+  }, [derivativeBalance]);
+
+  useEffect(() => {
+    console.log(royalNFTState);
+    if (royalNFTState) doPostTransaction(royalNFTState);
+  }, [royalNFTState]);
+
+  useEffect(() => {
+    console.log(derivedNFTState);
+    if (derivedNFTState) doPostTransaction(derivedNFTState);
+  }, [derivedNFTState]);
 
   const handleClaim = () => {
     onClaim(landX, landY, collectionIDValue);
@@ -127,6 +180,11 @@ export default function LandModal({
   const onRoyalImageChanged = (collectionID: any, tokenID: any) => {
     setSelectedRoyalCollectionID(collectionID);
     setSelectedRoyalTokenID(tokenID);
+  };
+
+  const onDerivedImageChanged = (collectionAddress: any, tokenID: any) => {
+    setSelectedDerivedCollectionAddress(collectionAddress);
+    setSelectedDerivedTokenID(tokenID);
   };
 
   const handleChooseRoyalNFT = async () => {
@@ -139,6 +197,28 @@ export default function LandModal({
         landY,
         selectedRoyalCollectionID,
         selectedRoyalTokenID,
+        {
+          value: utils.parseEther("0"),
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleChooseDerivedNFT = async () => {
+    console.log(
+      "selectedDerivedCollectionAddress",
+      selectedDerivedCollectionAddress
+    );
+    console.log("selectedDerivedTokenID", selectedDerivedTokenID);
+    onClose();
+    try {
+      await updateDerived(
+        landX,
+        landY,
+        selectedDerivedCollectionAddress,
+        selectedDerivedTokenID,
         {
           value: utils.parseEther("0"),
         }
@@ -271,6 +351,41 @@ export default function LandModal({
                   </Flex>
                 </Box>
               </Flex>
+              <Box
+                overflowX="auto"
+                d="flex"
+                h="100%"
+                whiteSpace="nowrap"
+                pb="4px"
+                px="5px"
+                css={{
+                  "&::-webkit-scrollbar": {
+                    width: "1px",
+                  },
+                  "&::-webkit-scrollbar-track": {
+                    width: "1px",
+                  },
+                  "&::-webkit-scrollbar-thumb": {
+                    width: "1px",
+                    background: "#707070",
+                    borderRadius: "5px",
+                  },
+                }}
+              >
+                {Array.from(
+                  { length: parseInt(derivativeBalanceValue) },
+                  (_, i) => 0 + i
+                ).map((index) => {
+                  return (
+                    <ClaimedDerivedImage
+                      assetID={assetIDValue}
+                      index={index}
+                      key={index}
+                    />
+                  );
+                })}
+              </Box>
+              {/* Royal NFT Section*/}
               <Accordion
                 allowMultiple
                 style={{
@@ -330,6 +445,84 @@ export default function LandModal({
                         onClick={handleChooseRoyalNFT}
                       >
                         Choose
+                      </Button>
+                    </Flex>
+                  </AccordionPanel>
+                </AccordionItem>
+              </Accordion>
+              {/* Derivative NFT Section*/}
+              <Accordion
+                allowMultiple
+                style={{
+                  backgroundColor: "transparent",
+                  color: "purple",
+                  width: "100%",
+                  marginTop: "20px",
+                  boxShadow: "none",
+                  pointerEvents:
+                    parseInt(royalCollectionIDValue) != 0 ||
+                    parseInt(royalTokenIDValue) != 0
+                      ? "all"
+                      : "none",
+                }}
+                hidden={myAccountValue === landOwnerValue ? false : true}
+              >
+                <AccordionItem>
+                  <h2>
+                    <AccordionButton style={{ boxShadow: "none" }}>
+                      <Box flex="1" textAlign="left">
+                        Add Derivative NFT
+                      </Box>
+                      <AccordionIcon />
+                    </AccordionButton>
+                  </h2>
+                  <AccordionPanel pb={4}>
+                    <Flex
+                      overflowX="auto"
+                      direction="column"
+                      padding="0"
+                      style={{
+                        display: "flex",
+                        justifyContent: "flex-end",
+                        alignItems: "flex-end",
+                        padding: "0",
+                      }}
+                    >
+                      {console.log("*****", jsonKeyValue)}
+                      {console.log("-------", pairsJson[jsonKeyValue])}
+                      {Array.from(
+                        {
+                          length: pairsJson[jsonKeyValue]
+                            ? pairsJson[jsonKeyValue].length
+                            : 0,
+                        },
+                        (_, i) => 0 + i
+                      ).map((index) => {
+                        return (
+                          <DerivedImage
+                            index={index}
+                            collectionAddress={
+                              pairsJson[jsonKeyValue][index].collectionAddress
+                            }
+                            tokenID={pairsJson[jsonKeyValue][index].tokenID}
+                            onDerivedImageChanged={onDerivedImageChanged}
+                            key={index}
+                          />
+                        );
+                      })}
+                      <Button
+                        style={{
+                          backgroundColor: "transparent",
+                          color: "green",
+                          border: "solid 1px green",
+                          width: "40%",
+                          marginTop: "20px",
+                          marginBottom: "20px",
+                          boxShadow: "none",
+                        }}
+                        onClick={handleChooseDerivedNFT}
+                      >
+                        Add
                       </Button>
                     </Flex>
                   </AccordionPanel>

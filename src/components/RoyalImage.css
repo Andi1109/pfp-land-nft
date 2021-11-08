@@ -2,6 +2,10 @@ input[type="radio"][id^="royalNFT"] {
   display: none;
 }
 
+input[type="radio"][id^="derivedNFT"] {
+  display: none;
+}
+
 label {
   border: 1px solid #fff;
   padding: 10px;

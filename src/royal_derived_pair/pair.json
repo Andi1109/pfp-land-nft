@@ -1,0 +1,36 @@
+{
+  "1_1": [
+    {
+      "collectionAddress": "0xCAccb157236B0969fe21eb486f2Bc5dc0662a5c5",
+      "tokenID": "1"
+    },
+    {
+      "collectionAddress": "0xCAccb157236B0969fe21eb486f2Bc5dc0662a5c5",
+      "tokenID": "2"
+    },
+    {
+      "collectionAddress": "0xCAccb157236B0969fe21eb486f2Bc5dc0662a5c5",
+      "tokenID": "3"
+    }
+  ],
+  "11_4": [
+    {
+      "collectionAddress": "0xCAccb157236B0969fe21eb486f2Bc5dc0662a5c5",
+      "tokenID": "1"
+    },
+    {
+      "collectionAddress": "0xCAccb157236B0969fe21eb486f2Bc5dc0662a5c5",
+      "tokenID": "2"
+    }
+  ],
+  "11_8": [
+    {
+      "collectionAddress": "0xCAccb157236B0969fe21eb486f2Bc5dc0662a5c5",
+      "tokenID": "0"
+    },
+    {
+      "collectionAddress": "0xCAccb157236B0969fe21eb486f2Bc5dc0662a5c5",
+      "tokenID": "53"
+    }
+  ]
+}

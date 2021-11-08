@@ -1,54 +1,32 @@
 import { useState, useEffect } from "react";
 import { Box, Image } from "@chakra-ui/react";
-import { GetRoyalTokenOfOwnerByIndex, GetLandMetaData } from "../hooks";
+import { GetCollectionIDByAddress, GetLandMetaData } from "../hooks";
 import "./RoyalImage.css";
 
 type Props = {
-  account: any;
   index: any;
-  collectionID: any;
-  onRoyalImageChanged: any;
+  collectionAddress: any;
+  tokenID: any;
+  onDerivedImageChanged: any;
 };
 
-export default function RoyalImage({
-  account,
+export default function DerivedImage({
   index,
-  collectionID,
-  onRoyalImageChanged,
+  collectionAddress,
+  tokenID,
+  onDerivedImageChanged,
 }: Props) {
-  const royalMetaData = GetRoyalTokenOfOwnerByIndex(
-    account,
-    index,
-    collectionID
-  );
-  const tokenURI = GetLandMetaData(
-    royalMetaData.newCollectionID,
-    royalMetaData.tokenID
-  );
+  const collectionID = GetCollectionIDByAddress(collectionAddress);
+  const tokenURI = GetLandMetaData(collectionID, tokenID);
 
-  const [newCollectionIDValue, setNewCollectionIDValue] = useState("");
-  const [tokenIDValue, setTokenIDValue] = useState("");
   const [tokenURIValue, setTokenURIValue] = useState("");
   const [imageURLValue, setImageURLValue] = useState("");
 
-  if (index == 0) onRoyalImageChanged(newCollectionIDValue, tokenIDValue);
+  if (index == 0) onDerivedImageChanged(collectionAddress, tokenID);
 
   useEffect(() => {
     setTokenURIValue(tokenURI ? tokenURI.toString() : "");
   }, [tokenURI]);
-
-  useEffect(() => {
-    setNewCollectionIDValue(
-      royalMetaData && royalMetaData.newCollectionID
-        ? royalMetaData.newCollectionID.toString()
-        : ""
-    );
-    setTokenIDValue(
-      royalMetaData && royalMetaData.tokenID
-        ? royalMetaData.tokenID.toString()
-        : ""
-    );
-  }, [royalMetaData]);
 
   const fetchImage = async (uri: any) => {
     return fetch(uri)
@@ -56,8 +34,8 @@ export default function RoyalImage({
       .then((data) => data.image);
   };
 
-  const handleRoyalImageChanged = () => {
-    onRoyalImageChanged(newCollectionIDValue, tokenIDValue);
+  const handleDerivedImageChanged = () => {
+    onDerivedImageChanged(collectionAddress, tokenID);
   };
 
   if (tokenURIValue) {
@@ -73,13 +51,13 @@ export default function RoyalImage({
           <Box>
             <input
               type="radio"
-              id={"royalNFT" + index}
-              name="royalNFT"
+              id={"derivedNFT" + index}
+              name="derivedNFT"
               value={index}
               defaultChecked={index === 0}
-              onChange={handleRoyalImageChanged}
+              onChange={handleDerivedImageChanged}
             />
-            <label htmlFor={"royalNFT" + index}>
+            <label htmlFor={"derivedNFT" + index}>
               <Box
                 as="iframe"
                 title="derivatives"
@@ -95,13 +73,13 @@ export default function RoyalImage({
           <Box>
             <input
               type="radio"
-              id={"royalNFT" + index}
-              name="royalNFT"
+              id={"derivedNFT" + index}
+              name="derivedNFT"
               value={index}
               defaultChecked={index === 0}
-              onChange={handleRoyalImageChanged}
+              onChange={handleDerivedImageChanged}
             />
-            <label htmlFor={"royalNFT" + index}>
+            <label htmlFor={"derivedNFT" + index}>
               <Image
                 src={imageURLValue}
                 alt="Royal NFT Image"
@@ -119,13 +97,13 @@ export default function RoyalImage({
         <Box>
           <input
             type="radio"
-            id={"royalNFT" + index}
-            name="royalNFT"
+            id={"derivedNFT" + index}
+            name="derivedNFT"
             value={index}
             defaultChecked={index === 0}
-            onChange={handleRoyalImageChanged}
+            onChange={handleDerivedImageChanged}
           />
-          <label htmlFor={"royalNFT" + index}>
+          <label htmlFor={"derivedNFT" + index}>
             <Image
               src="/emptyImg.png"
               alt="Royal NFT Image"

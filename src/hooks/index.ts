@@ -124,6 +124,40 @@ export function GetRoyalTokenOfOwnerByIndex(
   return royalObj;
 }
 
+export function GetTotalDerivativeBalance(assetID: any) {
+  const [balance]: any =
+    useContractCall({
+      abi: landContractInterface,
+      address: landContractAddress,
+      method: "landDerivativeBalance",
+      args: [assetID],
+    }) ?? [];
+  return balance;
+}
+
+export function GetDerivativeByIndex(assetID: any, index: any) {
+  const [collectionAddress, tokenID]: any =
+    useContractCall({
+      abi: landContractInterface,
+      address: landContractAddress,
+      method: "landDerivativeMetadataOf",
+      args: [assetID, index],
+    }) ?? [];
+  const derivativeObj = { collectionAddress, tokenID };
+  return derivativeObj;
+}
+
+export function GetCollectionIDByAddress(collectionAddress: any) {
+  const [collectionID]: any =
+    useContractCall({
+      abi: landContractInterface,
+      address: landContractAddress,
+      method: "collectionIndicesByAddress",
+      args: [collectionAddress, 0],
+    }) ?? [];
+  return collectionID;
+}
+
 export function GetLandMetaData(collectionID: any, tokenID: any) {
   const [tokenURI]: any =
     useContractCall({

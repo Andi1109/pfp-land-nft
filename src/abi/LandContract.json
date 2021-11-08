@@ -427,6 +427,26 @@
         "type": "uint256"
       }
     ],
+    "name": "landDerivativeBalance",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function",
+    "constant": true
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
     "name": "landDerivativeCountOf",
     "outputs": [
       {
@@ -1198,18 +1218,13 @@
         "type": "uint256"
       },
       {
-        "internalType": "address[]",
+        "internalType": "address",
         "name": "collectionAddrsOfDerMetadata",
-        "type": "address[]"
-      },
-      {
-        "internalType": "uint256[]",
-        "name": "tokenIDs",
-        "type": "uint256[]"
+        "type": "address"
       },
       {
         "internalType": "uint256",
-        "name": "count",
+        "name": "tokenIDs",
         "type": "uint256"
       }
     ],
@@ -1250,61 +1265,6 @@
         "internalType": "string",
         "name": "",
         "type": "string"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "collectionID",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "claimer",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "index",
-        "type": "uint256"
-      }
-    ],
-    "name": "tokenIDByIndexInCollection",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "collectionID",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "claimer",
-        "type": "address"
-      }
-    ],
-    "name": "tokenBalanceOfInCollection",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -1510,37 +1470,37 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
+        "internalType": "uint256[]",
         "name": "leftBottomX",
-        "type": "uint256"
+        "type": "uint256[]"
       },
       {
-        "internalType": "uint256",
+        "internalType": "uint256[]",
         "name": "leftBottomY",
-        "type": "uint256"
+        "type": "uint256[]"
       },
       {
-        "internalType": "uint256",
+        "internalType": "uint256[]",
         "name": "rightTopX",
-        "type": "uint256"
+        "type": "uint256[]"
       },
       {
-        "internalType": "uint256",
+        "internalType": "uint256[]",
         "name": "rightTopY",
-        "type": "uint256"
+        "type": "uint256[]"
       },
       {
-        "internalType": "address",
+        "internalType": "address[]",
         "name": "collectionAddress",
-        "type": "address"
+        "type": "address[]"
       },
       {
         "internalType": "uint256",
-        "name": "collectionID",
+        "name": "count",
         "type": "uint256"
       }
     ],
-    "name": "updateCollectionRect",
+    "name": "setBatchCollectionRect",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
