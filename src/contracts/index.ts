@@ -1,1 +1,1 @@
-export const landContractAddress = "0x1084565b72B6415A7097b2f36EcE9ba25D6Ef945";
+export const landContractAddress = "0xC3abF9AA00CFeE3d40E797C1de4b702d9c136c99";

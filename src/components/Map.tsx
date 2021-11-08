@@ -28,7 +28,6 @@ export default function Map() {
   const [myClaimedLands, setMyClaimedLands] = useState<Land[]>([]);
 
   const canvasRef = useRef(null);
-  const isClaimedLand = useRef(null);
   const selectedLandX = useRef(null);
   const selectedLandY = useRef(null);
   const isMobile = window.screen.width <= window.screen.height ? true : false;
@@ -71,8 +70,6 @@ export default function Map() {
           position: "top-right",
           isClosable: true,
         });
-        const isClaimed: any = isClaimedLand.current;
-        isClaimed.innerHTML = (1).toString();
         break;
       case "None":
         break;
@@ -281,6 +278,7 @@ export default function Map() {
 
   const handleClaim = async (landX: any, landY: any, collectionID: any) => {
     console.log("claim button clicked");
+    console.log(landX, landY, collectionID);
     try {
       await claimLand(landX, landY, collectionID, {
         value: utils.parseEther("0"),
@@ -290,7 +288,16 @@ export default function Map() {
     }
   };
 
-  const handleScroll = function (evt: any) {
+  const checkClaimedLand = (landX: any, landY: any) => {
+    let isClaimed: string = "0";
+    if (
+      claimedLands.filter((e: any) => e.x === landX && e.y === landY).length > 0
+    )
+      isClaimed = "1";
+    return isClaimed;
+  };
+
+  const handleScroll = function(evt: any) {
     const delta = evt.wheelDelta
       ? evt.wheelDelta / 40
       : evt.detail
@@ -307,41 +314,28 @@ export default function Map() {
 
     const canvas: any = canvasRef.current;
     if (canvas) {
-      const ctx = canvas.getContext("2d");
-
       canvas.addEventListener(
         "mousedown",
-        function (evt: any) {
+        function(evt: any) {
           offsetX = Math.ceil((evt.offsetX / canvasHeight) * 100);
           offsetY = Math.ceil((evt.offsetY / canvasHeight) * 100);
-
-          const isClaimed: any = isClaimedLand.current;
           const landX: any = selectedLandX.current;
           const landY: any = selectedLandY.current;
-          if (landX && landY && isClaimed) {
-            landX.innerHTML = offsetX.toString();
-            landY.innerHTML = offsetY.toString();
-            isClaimed.innerHTML = (0).toString();
-            if (
-              claimedLands.filter(
-                (e: any) => e.x === offsetX && e.y === offsetY
-              ).length > 0
-            ) {
-              isClaimed.innerHTML = (1).toString();
-            }
-          }
+
+          landX.innerHTML = offsetX.toString();
+          landY.innerHTML = offsetY.toString();
         },
         false
       );
       canvas.addEventListener(
         "mousemove",
-        function (evt: any) {
+        function(evt: any) {
           offsetX = Math.ceil((evt.offsetX / canvasHeight) * 100);
           offsetY = Math.ceil((evt.offsetY / canvasHeight) * 100);
         },
         false
       );
-      canvas.addEventListener("mouseup", function () {}, false);
+      canvas.addEventListener("mouseup", function() {}, false);
       canvas.addEventListener("DOMMouseScroll", handleScroll, false);
       canvas.addEventListener("mousewheel", handleScroll, false);
     }
@@ -362,6 +356,7 @@ export default function Map() {
         onClaim={handleClaim}
         isMobile={isMobile}
         doPostTransaction={doPostTransaction}
+        checkClaimedLand={checkClaimedLand}
       >
         <canvas
           ref={canvasRef}
@@ -398,9 +393,6 @@ export default function Map() {
         1
       </div>
       <div id="selectedLandY" ref={selectedLandY} hidden={true}>
-        1
-      </div>
-      <div id="isClaimedLand" ref={isClaimedLand} hidden={true}>
         1
       </div>
     </Box>

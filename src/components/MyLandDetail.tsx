@@ -16,7 +16,6 @@ export default function MyLandDetail({ owner, index, onFoundLand }: Props) {
   useEffect(() => {
     setLandX(decodedLand.decodedX ? decodedLand.decodedX.toNumber() : -1);
     setLandY(decodedLand.decodedY ? decodedLand.decodedY.toNumber() : -1);
-    console.log(landX, landY);
     onFoundLand({ x: landX, y: landY });
   }, [decodedLand]);
 
