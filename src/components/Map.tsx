@@ -221,38 +221,48 @@ export default function Map() {
     }
   };
 
-  let flagScale = true;
-  let offsetX = 0;
-  let offsetY = 0;
-  let countMul = 0;
+  let flagScale = true; // if true draw zoom
+  let offsetX = 0; // X position of mouse pointer
+  let offsetY = 0; // Y position of mouse pointer
+  let countMul = 0; // count of zoomed
 
-  let zoomX = 0;
-  let zoomY = 0;
+  let zoomX = 0; // X position of previous zoomed
+  let zoomY = 0; // Y position of previous zoomed
+  let orinX = 0; // X position of previous dragged
+  let orinY = 0; // Y position of previous dragged
+  let temp = 1; // previous zoom index
 
   const zoom = (delta: any) => {
     const canvas: any = canvasRef.current;
     const ctx = canvas.getContext("2d");
-    let factor = 1.25;
-    if (delta > 0) {
-      countMul++;
-      factor = 1.25;
-      if (countMul === 1) {
+    let factor = 1.25; // zoomed scale index
+      if (countMul === 0) { // No zoom
         zoomX = offsetX;
         zoomY = offsetY;
       }
-    } else {
+    if (delta > 1) { // if zoom in
+      countMul++;
+    } else if (delta < 0) { // if zoom out
       countMul--;
-      factor = 0.8;
     }
-    if (countMul < 0) {
+    if (countMul < 0) { // set format original size
       countMul = 0;
       flagScale = false;
     } else flagScale = true;
-    if (flagScale) {
-      const valScale = (canvasHeight * (1 - factor)) / 100;
-      ctx.transform(factor, 0, 0, factor, valScale * zoomX, valScale * zoomY);
-      ctx.clearRect(0, 0, canvasHeight, canvasHeight);
+    if (flagScale || dragged) { // zoom or dragged
+      factor = Math.pow(factor, countMul);
+      orinX = Math.ceil(((temp - 1) * zoomX + offsetX) / temp);
+      orinY = Math.ceil(((temp - 1) * zoomY + offsetY) / temp);
+      const transX = zoomX + Math.ceil((offsetX - zoomX) / factor);
+      const transY = zoomY + Math.ceil((offsetY - zoomY) / factor);
+      const valScale = (canvasHeight * (1 - factor)) / 100; // transform scale rate
+      ctx.resetTransform(); // reset to original map
+      ctx.transform(factor, 0, 0, factor, valScale * (transX - 0.5), valScale * (transY - 0.5));
+      ctx.clearRect(0, 0, canvasHeight, canvasHeight); // clear the map
       redrawCanvas();
+      temp = factor; // save factor
+      zoomX = offsetX; // save X position of mouse pointer
+      zoomY = offsetY; // save Y position of mouse pointer
     }
   };
 
@@ -309,6 +319,8 @@ export default function Map() {
     return evt.preventDefault() && false;
   };
 
+  let dragged = false; // Flag of drag
+
   const initEventListners = () => {
     window.addEventListener("resize", updateSize);
 
@@ -319,6 +331,15 @@ export default function Map() {
         function(evt: any) {
           offsetX = Math.ceil((evt.offsetX / canvasHeight) * 100);
           offsetY = Math.ceil((evt.offsetY / canvasHeight) * 100);
+          if (countMul != 0) { // if zoomed
+            const divIndex = countMul * 1.25; // zoomed rate
+
+            // set the claimed position in zoom
+            if (offsetX > zoomX) offsetX = zoomX + Math.ceil((offsetX - zoomX) / divIndex);
+            else offsetX = zoomX - Math.ceil((zoomX - offsetX) / divIndex);
+            if (offsetY > zoomY) offsetY = zoomY + Math.ceil((offsetY - zoomY) / divIndex);
+            else offsetY = zoomY - Math.ceil((zoomY - offsetY) / divIndex);
+          }
           const landX: any = selectedLandX.current;
           const landY: any = selectedLandY.current;
 
@@ -334,10 +355,19 @@ export default function Map() {
         function(evt: any) {
           offsetX = Math.ceil((evt.offsetX / canvasHeight) * 100);
           offsetY = Math.ceil((evt.offsetY / canvasHeight) * 100);
+          if (countMul > 0) dragged = true;
+          else dragged = false;
+          if (dragged) {
+            zoom(1);
+          }
         },
         false
       );
-      canvas.addEventListener("mouseup", function() {}, false);
+      canvas.addEventListener(
+        "mouseup",
+        function(evt: any) {
+          dragged = false;
+      }, false);
       canvas.addEventListener("DOMMouseScroll", handleScroll, false);
       canvas.addEventListener("mousewheel", handleScroll, false);
     }
