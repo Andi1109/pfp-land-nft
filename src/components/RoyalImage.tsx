@@ -21,6 +21,7 @@ export default function RoyalImage({
     index,
     collectionID
   );
+
   const tokenURI = GetLandMetaData(
     royalMetaData.newCollectionID,
     royalMetaData.tokenID
@@ -31,7 +32,9 @@ export default function RoyalImage({
   const [tokenURIValue, setTokenURIValue] = useState("");
   const [imageURLValue, setImageURLValue] = useState("");
 
-  if (index == 0) onRoyalImageChanged(newCollectionIDValue, tokenIDValue);
+  useEffect(() => {
+    if (index == 0) onRoyalImageChanged(newCollectionIDValue, tokenIDValue);
+  }, []);
 
   useEffect(() => {
     setTokenURIValue(tokenURI ? tokenURI.toString() : "");

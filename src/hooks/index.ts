@@ -42,14 +42,15 @@ export function GetMyTotalLands(owner: any) {
 }
 
 export function GetMyLandsByIndex(owner: any, index: any) {
-  const [assetID]: any =
+  const [decodedX, decodedY]: any =
     useContractCall({
       abi: landContractInterface,
       address: landContractAddress,
       method: "getLandOfByIndex",
       args: [owner, index],
     }) ?? [];
-  return assetID;
+  const decodeObj = { decodedX, decodedY };
+  return decodeObj;
 }
 
 export function GetLandOwnerOf(assetID: any) {

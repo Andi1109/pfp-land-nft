@@ -260,8 +260,8 @@ export default function Map() {
     drawTiers(ctx);
     drawLandBorders(ctx);
     drawCollectionBorders(ctx);
-    drawCollectionTitles(ctx);
     drawClaimedLand();
+    drawCollectionTitles(ctx);
     drawMyClaimedLand();
   };
 
@@ -281,7 +281,7 @@ export default function Map() {
     console.log(landX, landY, collectionID);
     try {
       await claimLand(landX, landY, collectionID, {
-        value: utils.parseEther("0"),
+        value: utils.parseEther("0.025"),
       });
     } catch (error) {
       console.log(error);
@@ -322,6 +322,8 @@ export default function Map() {
           const landX: any = selectedLandX.current;
           const landY: any = selectedLandY.current;
 
+          offsetX = offsetX === 0 ? 1 : offsetX;
+          offsetY = offsetY === 0 ? 1 : offsetY;
           landX.innerHTML = offsetX.toString();
           landY.innerHTML = offsetY.toString();
         },
@@ -344,7 +346,6 @@ export default function Map() {
   useEffect(() => {
     initEventListners();
   }, []);
-  // initEventListners();
 
   useEffect(() => {
     redrawCanvas();
