@@ -23,7 +23,7 @@ export default function DerivedImage({
   const [imageURLValue, setImageURLValue] = useState("");
 
   useEffect(() => {
-    if (index == 0) onDerivedImageChanged(collectionAddress, tokenID);
+    if (index === 0) onDerivedImageChanged(collectionAddress, tokenID);
   }, []);
 
   useEffect(() => {

@@ -455,8 +455,8 @@ export default function LandModal({
                   marginTop: "20px",
                   boxShadow: "none",
                   pointerEvents:
-                    parseInt(royalCollectionIDValue) != 0 ||
-                    parseInt(royalTokenIDValue) != 0
+                    parseInt(royalCollectionIDValue) !== 0 ||
+                    parseInt(royalTokenIDValue) !== 0
                       ? "all"
                       : "none",
                 }}

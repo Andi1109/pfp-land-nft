@@ -35,6 +35,7 @@ export default function Map() {
     isMobile ? window.innerWidth : window.innerHeight / (100 / 90)
   );
   const [canvasSize, setCanvasSize] = useState(canvasHeight);
+  let initialFlag = true;
 
   interface Land {
     x: number;
@@ -137,11 +138,11 @@ export default function Map() {
 
   const drawTiers = (ctx: any) => {
     for (let i = 0; i < tierBordersJson.length; i++) {
-      if (i === 0) ctx.fillStyle = "rgba(128, 0, 128, 1)";
-      else if (i === 1) ctx.fillStyle = "rgba(0, 100, 235, 1)";
-      else if (i === 2) ctx.fillStyle = "rgba(0, 200, 0, 1)";
-      else if (i === 3) ctx.fillStyle = "rgba(230, 230, 0, 1)";
-      else ctx.fillStyle = "rgba(230, 230, 240, 1)";
+      if (i === 0) ctx.fillStyle = "#9966ff";
+      else if (i === 1) ctx.fillStyle = "#3399ff";
+      else if (i === 2) ctx.fillStyle = "#33ff66";
+      else if (i === 3) ctx.fillStyle = "#ffff33";
+      else ctx.fillStyle = "#66ffff";
 
       const nodes = tierBordersJson[i].nodes;
       ctx.beginPath();
@@ -203,7 +204,7 @@ export default function Map() {
     if (canvas && claimedLands.length > 0) {
       const ctx = canvas.getContext("2d");
       for (let i = 0; i < claimedLands.length; i++) {
-        ctx.fillStyle = "#ffffff";
+        ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
         ctx.fillRect(claimedLands[i].x - 1, claimedLands[i].y - 1, 1, 1);
       }
     }
@@ -215,7 +216,7 @@ export default function Map() {
       const ctx = canvas.getContext("2d");
       for (let i = 0; i < myClaimedLands.length; i++) {
         ctx.strokeStyle = "rgba(255, 0, 0, 1)";
-        ctx.lineWidth = 0.3;
+        ctx.lineWidth = 0.1;
         ctx.strokeRect(myClaimedLands[i].x - 1, myClaimedLands[i].y - 1, 1, 1);
       }
     }
@@ -236,20 +237,33 @@ export default function Map() {
     const canvas: any = canvasRef.current;
     const ctx = canvas.getContext("2d");
     let factor = 1.25; // zoomed scale index
-      if (countMul === 0) { // No zoom
-        zoomX = offsetX;
-        zoomY = offsetY;
-      }
-    if (delta > 1) { // if zoom in
+    if (delta === 2) {
+      countMul = 7;
+      zoomX = 50;
+      zoomY = 50;
+      offsetX = 50;
+      offsetY = 50;
+      initialFlag = false;
+    }
+    if (countMul === 0) {
+      // No zoom
+      zoomX = offsetX;
+      zoomY = offsetY;
+    }
+    if (delta > 1) {
+      // if zoom in
       countMul++;
-    } else if (delta < 0) { // if zoom out
+    } else if (delta < 0) {
+      // if zoom out
       countMul--;
     }
-    if (countMul < 0) { // set format original size
+    if (countMul < 0) {
+      // set format original size
       countMul = 0;
       flagScale = false;
     } else flagScale = true;
-    if (flagScale || dragged) { // zoom or dragged
+    if (flagScale || dragged) {
+      // zoom or dragged
       factor = Math.pow(factor, countMul);
       orinX = Math.ceil(((temp - 1) * zoomX + offsetX) / temp);
       orinY = Math.ceil(((temp - 1) * zoomY + offsetY) / temp);
@@ -257,7 +271,14 @@ export default function Map() {
       const transY = zoomY + Math.ceil((offsetY - zoomY) / factor);
       const valScale = (canvasHeight * (1 - factor)) / 100; // transform scale rate
       ctx.resetTransform(); // reset to original map
-      ctx.transform(factor, 0, 0, factor, valScale * (transX - 0.5), valScale * (transY - 0.5));
+      ctx.transform(
+        factor,
+        0,
+        0,
+        factor,
+        valScale * (transX - 0.5),
+        valScale * (transY - 0.5)
+      );
       ctx.clearRect(0, 0, canvasHeight, canvasHeight); // clear the map
       redrawCanvas();
       temp = factor; // save factor
@@ -331,13 +352,16 @@ export default function Map() {
         function(evt: any) {
           offsetX = Math.ceil((evt.offsetX / canvasHeight) * 100);
           offsetY = Math.ceil((evt.offsetY / canvasHeight) * 100);
-          if (countMul != 0) { // if zoomed
+          if (countMul != 0) {
+            // if zoomed
             const divIndex = countMul * 1.25; // zoomed rate
 
             // set the claimed position in zoom
-            if (offsetX > zoomX) offsetX = zoomX + Math.ceil((offsetX - zoomX) / divIndex);
+            if (offsetX > zoomX)
+              offsetX = zoomX + Math.ceil((offsetX - zoomX) / divIndex);
             else offsetX = zoomX - Math.ceil((zoomX - offsetX) / divIndex);
-            if (offsetY > zoomY) offsetY = zoomY + Math.ceil((offsetY - zoomY) / divIndex);
+            if (offsetY > zoomY)
+              offsetY = zoomY + Math.ceil((offsetY - zoomY) / divIndex);
             else offsetY = zoomY - Math.ceil((zoomY - offsetY) / divIndex);
           }
           const landX: any = selectedLandX.current;
@@ -367,7 +391,9 @@ export default function Map() {
         "mouseup",
         function(evt: any) {
           dragged = false;
-      }, false);
+        },
+        false
+      );
       canvas.addEventListener("DOMMouseScroll", handleScroll, false);
       canvas.addEventListener("mousewheel", handleScroll, false);
     }
@@ -375,6 +401,7 @@ export default function Map() {
 
   useEffect(() => {
     initEventListners();
+    if (initialFlag) zoom(2);
   }, []);
 
   useEffect(() => {

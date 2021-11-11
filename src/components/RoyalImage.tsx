@@ -33,7 +33,7 @@ export default function RoyalImage({
   const [imageURLValue, setImageURLValue] = useState("");
 
   useEffect(() => {
-    if (index == 0) onRoyalImageChanged(newCollectionIDValue, tokenIDValue);
+    if (index === 0) onRoyalImageChanged(newCollectionIDValue, tokenIDValue);
   }, []);
 
   useEffect(() => {
