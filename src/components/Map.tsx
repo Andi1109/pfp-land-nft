@@ -229,16 +229,16 @@ export default function Map() {
 
   let zoomX = 0; // X position of previous zoomed
   let zoomY = 0; // Y position of previous zoomed
-  let orinX = 0; // X position of previous dragged
-  let orinY = 0; // Y position of previous dragged
-  let temp = 1; // previous zoom index
+  // let orinX = 0; // X position of previous dragged
+  // let orinY = 0; // Y position of previous dragged
+  // let temp = 1; // previous zoom index
 
   const zoom = (delta: any) => {
     const canvas: any = canvasRef.current;
     const ctx = canvas.getContext("2d");
     let factor = 1.25; // zoomed scale index
     if (delta === 2) {
-      countMul = 7;
+      countMul = 2;
       zoomX = 50;
       zoomY = 50;
       offsetX = 50;
@@ -253,6 +253,7 @@ export default function Map() {
     if (delta > 1) {
       // if zoom in
       countMul++;
+      if (countMul > 15) countMul = 15;
     } else if (delta < 0) {
       // if zoom out
       countMul--;
@@ -265,8 +266,8 @@ export default function Map() {
     if (flagScale || dragged) {
       // zoom or dragged
       factor = Math.pow(factor, countMul);
-      orinX = Math.ceil(((temp - 1) * zoomX + offsetX) / temp);
-      orinY = Math.ceil(((temp - 1) * zoomY + offsetY) / temp);
+      // orinX = Math.ceil(((temp - 1) * zoomX + offsetX) / temp);
+      // orinY = Math.ceil(((temp - 1) * zoomY + offsetY) / temp);
       const transX = zoomX + Math.ceil((offsetX - zoomX) / factor);
       const transY = zoomY + Math.ceil((offsetY - zoomY) / factor);
       const valScale = (canvasHeight * (1 - factor)) / 100; // transform scale rate
@@ -281,7 +282,7 @@ export default function Map() {
       );
       ctx.clearRect(0, 0, canvasHeight, canvasHeight); // clear the map
       redrawCanvas();
-      temp = factor; // save factor
+      // temp = factor; // save factor
       zoomX = offsetX; // save X position of mouse pointer
       zoomY = offsetY; // save Y position of mouse pointer
     }
