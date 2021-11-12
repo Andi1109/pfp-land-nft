@@ -3,6 +3,7 @@ import { Box, useToast } from "@chakra-ui/react";
 import { GetTotalLands, GetMyTotalLands, useContractMethod } from "../hooks";
 import LandDetail from "./LandDetail";
 import MyLandDetail from "./MyLandDetail";
+import LandRoyal from "./LandRoyal";
 import collectionBordersJson from "../borders/CollectionBorders.json";
 import collectionTitlesJson from "../borders/CollectionTitles.json";
 import tierBordersJson from "../borders/TierBorders.json";
@@ -16,6 +17,22 @@ export default function Map() {
     y: number;
   }
 
+  interface RoyalLand {
+    x: number;
+    y: number;
+    src: string;
+  }
+
+  let initialFlag = true;
+  let flagScale = true; // if true draw zoom
+  let offsetX = 0; // X position of mouse pointer
+  let offsetY = 0; // Y position of mouse pointer
+  let countMul = 0; // count of zoomed
+
+  let zoomX = 0; // X position of previous zoomed
+  let zoomY = 0; // Y position of previous zoomed
+
+  const [zoomed, setZoomed] = useState(false);
   const { account } = useEthers();
   const totalLands = GetTotalLands();
   const myTotalLands = GetMyTotalLands(account);
@@ -26,6 +43,7 @@ export default function Map() {
   const [myTotalLandsValue, setMyTotalLandsValue] = useState("0");
   const [claimedLands, setClaimedLands] = useState<Land[]>([]);
   const [myClaimedLands, setMyClaimedLands] = useState<Land[]>([]);
+  const [royalLands, setRoyalLands] = useState<RoyalLand[]>([]);
 
   const canvasRef = useRef(null);
   const selectedLandX = useRef(null);
@@ -35,12 +53,7 @@ export default function Map() {
     isMobile ? window.innerWidth : window.innerHeight / (100 / 90)
   );
   const [canvasSize, setCanvasSize] = useState(canvasHeight);
-  let initialFlag = true;
 
-  interface Land {
-    x: number;
-    y: number;
-  }
   useEffect(() => {
     if (totalLands && totalLands.toString() !== totalLandsValue) {
       setTotalLandsValue(totalLands.toString());
@@ -112,6 +125,20 @@ export default function Map() {
       isMobile ? window.innerWidth : window.innerHeight / (100 / 90)
     );
     setCanvasSize(height);
+  };
+
+  const appendRoyalLands = (newLand: RoyalLand) => {
+    if (
+      royalLands.filter(
+        (e: any) =>
+          e.x === newLand.x && e.y === newLand.y && e.src === newLand.src
+      ).length === 0 &&
+      newLand.x >= 0 &&
+      newLand.y >= 0 &&
+      newLand.src
+    ) {
+      setRoyalLands(royalLands.concat(newLand));
+    }
   };
 
   const appendClaimedLands = (newLand: Land) => {
@@ -221,22 +248,55 @@ export default function Map() {
       }
     }
   };
+  
+  const drawRoyalLand = () => {
+    const canvas: any = canvasRef.current;
+    const royallen = royalLands.length ? royalLands.length : 0;
+    const ctx = canvas.getContext("2d");
+    const divRate = Math.pow(1.25, countMul);
 
-  let flagScale = true; // if true draw zoom
-  let offsetX = 0; // X position of mouse pointer
-  let offsetY = 0; // Y position of mouse pointer
-  let countMul = 0; // count of zoomed
-
-  let zoomX = 0; // X position of previous zoomed
-  let zoomY = 0; // Y position of previous zoomed
-  // let orinX = 0; // X position of previous dragged
-  // let orinY = 0; // Y position of previous dragged
-  // let temp = 1; // previous zoom index
+    let tmpX, tmpY;
+    if (offsetX > zoomX) tmpX = zoomX + Math.ceil((offsetX - zoomX) / divRate);
+    else tmpX = zoomX - Math.ceil((zoomX - offsetX) / divRate);
+    if (offsetY > zoomY) tmpY = zoomY + Math.ceil((offsetY - zoomY) / divRate);
+    else tmpY = zoomY - Math.ceil((zoomY - offsetY) / divRate);
+    const x1 = tmpX - Math.ceil(tmpX / divRate);
+    const x2 = tmpX + Math.floor((100 - tmpX) / divRate);
+    const y1 = tmpY - Math.ceil(tmpY / divRate);
+    const y2 = tmpY + Math.floor((100 - tmpY) / divRate);
+    for (let i = 0; i < royallen; i++) {
+      const x = royalLands[i].x;
+      const y = royalLands[i].y;
+      if (x > x1 && x < x2 && y > y1 && y < y2) {
+        const imgsrc = royalLands[i].src ? royalLands[i].src : "";
+        if (imgsrc !== "") {
+          const img = new Image();
+          img.src = imgsrc;
+          ctx.drawImage(img, x - 1, y - 1, 1, 1);
+        }
+      }
+    }
+  };
 
   const zoom = (delta: any) => {
     const canvas: any = canvasRef.current;
     const ctx = canvas.getContext("2d");
     let factor = 1.25; // zoomed scale index
+    if (delta > 2) {
+      // if zoom in
+      if (countMul > 15) countMul = 15;
+      else countMul++;
+      flagScale = true;
+    } else if (delta < 0) {
+      // if zoom out
+      countMul--;
+      if (countMul < 0) countMul = 0;
+      if (countMul === 0) {
+        zoomX = offsetX;
+        zoomY = offsetY;
+        flagScale = false;
+      }
+    }
     if (delta === 2) {
       countMul = 2;
       zoomX = 50;
@@ -245,29 +305,10 @@ export default function Map() {
       offsetY = 50;
       initialFlag = false;
     }
-    if (countMul === 0) {
-      // No zoom
-      zoomX = offsetX;
-      zoomY = offsetY;
-    }
-    if (delta > 1) {
-      // if zoom in
-      countMul++;
-      if (countMul > 15) countMul = 15;
-    } else if (delta < 0) {
-      // if zoom out
-      countMul--;
-    }
-    if (countMul < 0) {
-      // set format original size
-      countMul = 0;
-      flagScale = false;
-    } else flagScale = true;
+    if (countMul > 9) setZoomed(true);
     if (flagScale || dragged) {
       // zoom or dragged
       factor = Math.pow(factor, countMul);
-      // orinX = Math.ceil(((temp - 1) * zoomX + offsetX) / temp);
-      // orinY = Math.ceil(((temp - 1) * zoomY + offsetY) / temp);
       const transX = zoomX + Math.ceil((offsetX - zoomX) / factor);
       const transY = zoomY + Math.ceil((offsetY - zoomY) / factor);
       const valScale = (canvasHeight * (1 - factor)) / 100; // transform scale rate
@@ -282,7 +323,6 @@ export default function Map() {
       );
       ctx.clearRect(0, 0, canvasHeight, canvasHeight); // clear the map
       redrawCanvas();
-      // temp = factor; // save factor
       zoomX = offsetX; // save X position of mouse pointer
       zoomY = offsetY; // save Y position of mouse pointer
     }
@@ -295,7 +335,8 @@ export default function Map() {
     drawClaimedLand();
     drawCollectionTitles(ctx);
     drawMyClaimedLand();
-  };
+    if (zoomed) drawRoyalLand();
+ };
 
   const redrawCanvas = () => {
     const canvas: any = canvasRef.current;
@@ -337,6 +378,7 @@ export default function Map() {
       : 0;
     if (delta) {
       zoom(delta);
+      if (delta < 0) setZoomed(false);
     }
     return evt.preventDefault() && false;
   };
@@ -350,10 +392,10 @@ export default function Map() {
     if (canvas) {
       canvas.addEventListener(
         "mousedown",
-        function(evt: any) {
+        function (evt: any) {
           offsetX = Math.ceil((evt.offsetX / canvasHeight) * 100);
           offsetY = Math.ceil((evt.offsetY / canvasHeight) * 100);
-          if (countMul != 0) {
+          if (countMul !== 0) {
             // if zoomed
             const divIndex = countMul * 1.25; // zoomed rate
 
@@ -443,6 +485,18 @@ export default function Map() {
               index={index}
               key={index}
               onFoundLand={appendMyClaimedLands}
+            />
+          );
+          return landDiv;
+        }
+      )}
+      {Array.from({ length: parseInt(totalLandsValue) }, (_, i) => 0 + i).map(
+        (index) => {
+          const landDiv = (
+            <LandRoyal
+              index={index}
+              key={index}
+              onFoundLand={appendRoyalLands}
             />
           );
           return landDiv;
