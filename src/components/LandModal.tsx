@@ -44,6 +44,7 @@ type Props = {
   onClaim: Function;
   isMobile: boolean;
   doPostTransaction: Function;
+  checkClaimedLand: Function;
 };
 
 export default function LandModal({
@@ -51,11 +52,12 @@ export default function LandModal({
   onClaim,
   isMobile,
   doPostTransaction,
+  checkClaimedLand,
 }: Props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const isClaimed = document.getElementById("isClaimedLand")?.innerHTML;
   const landX = document.getElementById("selectedLandX")?.innerHTML;
   const landY = document.getElementById("selectedLandY")?.innerHTML;
+  const isClaimed = checkClaimedLand(parseInt(landX), parseInt(landY));
 
   const { account } = useEthers();
   const assetID = EncodeTokenID(landX, landY);
@@ -163,12 +165,10 @@ export default function LandModal({
   }, [derivativeBalance]);
 
   useEffect(() => {
-    console.log(royalNFTState);
     if (royalNFTState) doPostTransaction(royalNFTState);
   }, [royalNFTState]);
 
   useEffect(() => {
-    console.log(derivedNFTState);
     if (derivedNFTState) doPostTransaction(derivedNFTState);
   }, [derivedNFTState]);
 
@@ -207,11 +207,6 @@ export default function LandModal({
   };
 
   const handleChooseDerivedNFT = async () => {
-    console.log(
-      "selectedDerivedCollectionAddress",
-      selectedDerivedCollectionAddress
-    );
-    console.log("selectedDerivedTokenID", selectedDerivedTokenID);
     onClose();
     try {
       await updateDerived(
@@ -460,8 +455,8 @@ export default function LandModal({
                   marginTop: "20px",
                   boxShadow: "none",
                   pointerEvents:
-                    parseInt(royalCollectionIDValue) != 0 ||
-                    parseInt(royalTokenIDValue) != 0
+                    parseInt(royalCollectionIDValue) !== 0 ||
+                    parseInt(royalTokenIDValue) !== 0
                       ? "all"
                       : "none",
                 }}
@@ -488,8 +483,6 @@ export default function LandModal({
                         padding: "0",
                       }}
                     >
-                      {console.log("*****", jsonKeyValue)}
-                      {console.log("-------", pairsJson[jsonKeyValue])}
                       {Array.from(
                         {
                           length: pairsJson[jsonKeyValue]
@@ -544,7 +537,7 @@ export default function LandModal({
                 width: "40%",
               }}
               onClick={handleClaim}
-              disabled={isClaimed === "1" ? true : false}
+              disabled={isClaimed === "1" || collectionIDValue === ""}
             >
               Claim
             </Button>
