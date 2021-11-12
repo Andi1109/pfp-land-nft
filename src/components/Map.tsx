@@ -27,7 +27,7 @@ export default function Map() {
   let flagScale = true; // if true draw zoom
   let offsetX = 0; // X position of mouse pointer
   let offsetY = 0; // Y position of mouse pointer
-  let countMul = 0; // count of zoomed
+  let countMul = 2; // count of zoomed
 
   let zoomX = 0; // X position of previous zoomed
   let zoomY = 0; // Y position of previous zoomed
@@ -261,7 +261,7 @@ export default function Map() {
       }
     }
   };
-  
+
   const drawRoyalLand = () => {
     const canvas: any = canvasRef.current;
     const royalJson = localStorage.getItem("royalLands");
@@ -347,8 +347,8 @@ export default function Map() {
     drawClaimedLand();
     drawCollectionTitles(ctx);
     drawMyClaimedLand();
-    if (countMul > 9) drawRoyalLand();
- };
+    drawRoyalLand();
+  };
 
   const redrawCanvas = () => {
     const canvas: any = canvasRef.current;
@@ -382,7 +382,7 @@ export default function Map() {
     return isClaimed;
   };
 
-  const handleScroll = function(evt: any) {
+  const handleScroll = function (evt: any) {
     const delta = evt.wheelDelta
       ? evt.wheelDelta / 40
       : evt.detail
@@ -430,7 +430,7 @@ export default function Map() {
       );
       canvas.addEventListener(
         "mousemove",
-        function(evt: any) {
+        function (evt: any) {
           offsetX = Math.ceil((evt.offsetX / canvasHeight) * 100);
           offsetY = Math.ceil((evt.offsetY / canvasHeight) * 100);
           if (countMul > 0) dragged = true;
@@ -443,7 +443,7 @@ export default function Map() {
       );
       canvas.addEventListener(
         "mouseup",
-        function(evt: any) {
+        function (evt: any) {
           dragged = false;
         },
         false
@@ -456,7 +456,7 @@ export default function Map() {
   useEffect(() => {
     initEventListners();
     if (initialFlag) {
-      // localStorage.clear();
+      localStorage.clear();
       zoom(2);
     }
   }, []);
@@ -517,10 +517,10 @@ export default function Map() {
         }
       )}
       <div id="selectedLandX" ref={selectedLandX} hidden={true}>
-        1
+        {claimedLands[0] ? claimedLands[0].x : 1}
       </div>
       <div id="selectedLandY" ref={selectedLandY} hidden={true}>
-        1
+        {claimedLands[0] ? claimedLands[0].y : 1}
       </div>
     </Box>
   );
