@@ -32,7 +32,6 @@ export default function Map() {
   let zoomX = 0; // X position of previous zoomed
   let zoomY = 0; // Y position of previous zoomed
 
-  const [zoomed, setZoomed] = useState(false);
   const { account } = useEthers();
   const totalLands = GetTotalLands();
   const myTotalLands = GetMyTotalLands(account);
@@ -128,8 +127,9 @@ export default function Map() {
   };
 
   const appendRoyalLands = (newLand: RoyalLand) => {
+    let _royalLands = JSON.parse(JSON.stringify(royalLands));
     if (
-      royalLands.filter(
+      _royalLands.filter(
         (e: any) =>
           e.x === newLand.x && e.y === newLand.y && e.src === newLand.src
       ).length === 0 &&
@@ -137,30 +137,38 @@ export default function Map() {
       newLand.y >= 0 &&
       newLand.src
     ) {
-      setRoyalLands(royalLands.concat(newLand));
+      _royalLands.push(newLand);
+      setRoyalLands(_royalLands);
     }
+    localStorage.setItem("royalLands", JSON.stringify(_royalLands));
   };
 
   const appendClaimedLands = (newLand: Land) => {
+    let _claimedLands = JSON.parse(JSON.stringify(claimedLands));
     if (
-      claimedLands.filter((e: any) => e.x === newLand.x && e.y === newLand.y)
+      _claimedLands.filter((e: any) => e.x === newLand.x && e.y === newLand.y)
         .length === 0 &&
       newLand.x >= 0 &&
       newLand.y >= 0
     ) {
-      setClaimedLands(claimedLands.concat(newLand));
+      _claimedLands.push(newLand);
+      setClaimedLands(_claimedLands);
     }
+    localStorage.setItem("claimedLands", JSON.stringify(_claimedLands));
   };
 
   const appendMyClaimedLands = (newLand: Land) => {
+    let _myClaimedLands = JSON.parse(JSON.stringify(myClaimedLands));
     if (
-      myClaimedLands.filter((e: any) => e.x === newLand.x && e.y === newLand.y)
+      _myClaimedLands.filter((e: any) => e.x === newLand.x && e.y === newLand.y)
         .length === 0 &&
       newLand.x >= 0 &&
       newLand.y >= 0
     ) {
-      setMyClaimedLands(myClaimedLands.concat(newLand));
+      _myClaimedLands.push(newLand);
+      setMyClaimedLands(_myClaimedLands);
     }
+    localStorage.setItem("myClaimedLands", JSON.stringify(_myClaimedLands));
   };
 
   const drawTiers = (ctx: any) => {
@@ -228,33 +236,38 @@ export default function Map() {
 
   const drawClaimedLand = () => {
     const canvas: any = canvasRef.current;
-    if (canvas && claimedLands.length > 0) {
+    const claimJson = localStorage.getItem("claimedLands");
+    const _claimed = claimJson !== null ? JSON.parse(claimJson) : claimedLands;
+    if (canvas && _claimed.length > 0) {
       const ctx = canvas.getContext("2d");
-      for (let i = 0; i < claimedLands.length; i++) {
+      for (let i = 0; i < _claimed.length; i++) {
         ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
-        ctx.fillRect(claimedLands[i].x - 1, claimedLands[i].y - 1, 1, 1);
+        ctx.fillRect(_claimed[i].x - 1, _claimed[i].y - 1, 1, 1);
       }
     }
   };
 
   const drawMyClaimedLand = () => {
     const canvas: any = canvasRef.current;
-    if (canvas && myClaimedLands.length > 0) {
+    const myClaimJson = localStorage.getItem("myClaimedLands");
+    const _myClaimed =
+      myClaimJson !== null ? JSON.parse(myClaimJson) : myClaimedLands;
+    if (canvas && _myClaimed.length > 0) {
       const ctx = canvas.getContext("2d");
-      for (let i = 0; i < myClaimedLands.length; i++) {
+      for (let i = 0; i < _myClaimed.length; i++) {
         ctx.strokeStyle = "rgba(255, 0, 0, 1)";
-        ctx.lineWidth = 0.1;
-        ctx.strokeRect(myClaimedLands[i].x - 1, myClaimedLands[i].y - 1, 1, 1);
+        ctx.lineWidth = 0.3;
+        ctx.strokeRect(_myClaimed[i].x - 1, _myClaimed[i].y - 1, 1, 1);
       }
     }
   };
   
   const drawRoyalLand = () => {
     const canvas: any = canvasRef.current;
-    const royallen = royalLands.length ? royalLands.length : 0;
+    const royalJson = localStorage.getItem("royalLands");
+    const _royaled = royalJson !== null ? JSON.parse(royalJson) : royalLands;
     const ctx = canvas.getContext("2d");
     const divRate = Math.pow(1.25, countMul);
-
     let tmpX, tmpY;
     if (offsetX > zoomX) tmpX = zoomX + Math.ceil((offsetX - zoomX) / divRate);
     else tmpX = zoomX - Math.ceil((zoomX - offsetX) / divRate);
@@ -264,11 +277,11 @@ export default function Map() {
     const x2 = tmpX + Math.floor((100 - tmpX) / divRate);
     const y1 = tmpY - Math.ceil(tmpY / divRate);
     const y2 = tmpY + Math.floor((100 - tmpY) / divRate);
-    for (let i = 0; i < royallen; i++) {
-      const x = royalLands[i].x;
-      const y = royalLands[i].y;
+    for (let i = 0; i < _royaled.length; i++) {
+      const x = _royaled[i].x;
+      const y = _royaled[i].y;
       if (x > x1 && x < x2 && y > y1 && y < y2) {
-        const imgsrc = royalLands[i].src ? royalLands[i].src : "";
+        const imgsrc = _royaled[i].src ? _royaled[i].src : "";
         if (imgsrc !== "") {
           const img = new Image();
           img.src = imgsrc;
@@ -305,7 +318,6 @@ export default function Map() {
       offsetY = 50;
       initialFlag = false;
     }
-    if (countMul > 9) setZoomed(true);
     if (flagScale || dragged) {
       // zoom or dragged
       factor = Math.pow(factor, countMul);
@@ -335,7 +347,7 @@ export default function Map() {
     drawClaimedLand();
     drawCollectionTitles(ctx);
     drawMyClaimedLand();
-    if (zoomed) drawRoyalLand();
+    if (countMul > 9) drawRoyalLand();
  };
 
   const redrawCanvas = () => {
@@ -378,7 +390,6 @@ export default function Map() {
       : 0;
     if (delta) {
       zoom(delta);
-      if (delta < 0) setZoomed(false);
     }
     return evt.preventDefault() && false;
   };
@@ -444,7 +455,10 @@ export default function Map() {
 
   useEffect(() => {
     initEventListners();
-    if (initialFlag) zoom(2);
+    if (initialFlag) {
+      // localStorage.clear();
+      zoom(2);
+    }
   }, []);
 
   useEffect(() => {
