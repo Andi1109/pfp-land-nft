@@ -10,7 +10,7 @@ type Props = {
   onFoundLand: Function;
 };
 
-export default function LandDetail({ index, onFoundLand }: Props) {
+export default function LandRoyal({ index, onFoundLand }: Props) {
   const land = GetLandsByIndex(index);
   const landX = land.landX ? land.landX.toNumber() : -1;
   const landY = land.landY ? land.landY.toNumber() : -1;
