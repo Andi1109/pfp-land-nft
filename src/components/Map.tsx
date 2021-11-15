@@ -10,6 +10,7 @@ import tierBordersJson from "../borders/TierBorders.json";
 import LandModal from "./LandModal";
 import { utils } from "ethers";
 import { useEthers } from "@usedapp/core";
+import "./font.css";
 
 export default function Map() {
   interface Land {
@@ -51,7 +52,11 @@ export default function Map() {
   const isMobile = window.screen.width <= window.screen.height ? true : false;
   const canvasHeight = Math.round(window.innerHeight / (100 / 90));
   const canvasWidth = Math.round(window.innerWidth / (100 / 90));
-  // const [canvasSize, setCanvasSize] = useState({w:canvasWidth, h: canvasHeight});
+  const [canvasSize, setCanvasSize] = useState(
+    isMobile
+      ? { w: canvasHeight, h: canvasWidth }
+      : { w: canvasWidth, h: canvasHeight }
+  );
 
   useEffect(() => {
     if (totalLands && totalLands.toString() !== totalLandsValue) {
@@ -119,12 +124,13 @@ export default function Map() {
     }
   };
 
-  // const updateSize = () => {
-  //   const height = Math.round(
-  //     isMobile ? window.innerWidth : window.innerHeight / (100 / 90)
-  //   );
-  //   setCanvasSize(height);
-  // };
+  const updateSize = () => {
+    const mheight = Math.round(window.innerHeight / (100 / 90));
+    const mwidth = Math.round(window.innerWidth / (100 / 90));
+    if (isMobile) {
+      setCanvasSize({ w: mheight, h: mwidth });
+    } else setCanvasSize({ w: mwidth, h: mheight });
+  };
 
   const appendRoyalLands = (newLand: RoyalLand) => {
     let _royalLands = JSON.parse(JSON.stringify(royalLands));
@@ -221,13 +227,13 @@ export default function Map() {
   const drawCollectionTitles = (ctx: any) => {
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillStyle = "#000000";
+    ctx.fillStyle = "rgb(0, 0, 0, 0.8)";
 
     for (let i = 0; i < collectionTitlesJson.length; i++) {
       const titleObj = collectionTitlesJson[i];
       ctx.save();
       ctx.translate(titleObj.originX, titleObj.originY);
-      ctx.font = titleObj.size + "px Poppins";
+      ctx.font = titleObj.size + "px Changa One";
       if (titleObj.rotate) ctx.rotate(-Math.PI / 2);
       ctx.fillText(titleObj.title, 0, 0);
       ctx.restore();
@@ -315,7 +321,7 @@ export default function Map() {
       zoomX = 50;
       zoomY = 50;
       offsetX = 50;
-      innerY = 25;
+      innerY = (canvasSize.h * 50) / canvasSize.w;
       offsetY = 50;
       initialFlag = false;
     }
@@ -324,8 +330,8 @@ export default function Map() {
       factor = Math.pow(factor, countMul);
       const transX = zoomX + (offsetX - zoomX) / factor;
       const transY = zoomY + (offsetY - zoomY) / factor;
-      const valScaleX = (canvasWidth * (1 - factor)) / 100; // transform scale rate
-      const valScaleY = (canvasHeight * (1 - factor)) / 100; // transform scale rate
+      const valScaleX = (canvasSize.w * (1 - factor)) / 100; // transform scale rate
+      const valScaleY = (canvasSize.h * (1 - factor)) / 100; // transform scale rate
       ctx.resetTransform(); // reset to original map
       // let dx = 0.5;
       let dy = 0.5;
@@ -333,7 +339,7 @@ export default function Map() {
       // else if (offsetX > 95) dx = 0;
       // if (offsetY < 5) dy = 1;
       // else if (offsetY > 95) dy = 0;
-      const my = (canvasWidth * (innerY - offsetY)) / 100 - dy;
+      const my = (canvasSize.w * (innerY - offsetY)) / 100 - dy;
       ctx.transform(
         factor,
         0,
@@ -343,7 +349,7 @@ export default function Map() {
         valScaleY * (transY - dy)
       );
       ctx.transform(1, 0, 0, 1, 0, my);
-      ctx.clearRect(0, 0, canvasWidth, canvasHeight); // clear the map
+      ctx.clearRect(0, 0, canvasSize.w, canvasSize.h); // clear the map
       redrawCanvas();
       zoomX = offsetX; // save X position of mouse pointer
       zoomY = offsetY; // save Y position of mouse pointer
@@ -358,18 +364,18 @@ export default function Map() {
     let dy = 0.5;
     if (offsetY < 5) dy = 1;
     else if (offsetY > 95) dy = 0;
-    ctx.transform(1, 0, 0, 1, 0, (canvasWidth * transY) / 100 - dy);
-    ctx.clearRect(0, 0, canvasWidth, canvasHeight); // clear the map
+    ctx.transform(1, 0, 0, 1, 0, (canvasSize.w * transY) / 100 - dy);
+    ctx.clearRect(0, 0, canvasSize.w, canvasSize.h); // clear the map
     redrawCanvas();
   };
 
   const draw = (ctx: any) => {
     drawTiers(ctx);
     drawLandBorders(ctx);
-    drawCollectionBorders(ctx);
     drawClaimedLand();
     drawCollectionTitles(ctx);
     drawMyClaimedLand();
+    drawCollectionBorders(ctx);
     drawRoyalLand();
   };
 
@@ -378,7 +384,7 @@ export default function Map() {
     if (canvas) {
       const ctx = canvas.getContext("2d");
       ctx.save();
-      ctx.scale(canvasWidth / 100, canvasWidth / 100);
+      ctx.scale(canvasSize.w / 100, canvasSize.w / 100);
       draw(ctx);
       ctx.restore();
     }
@@ -420,16 +426,16 @@ export default function Map() {
   let dragged = false; // Flag of drag
 
   const initEventListners = () => {
-    // window.addEventListener("resize", updateSize);
+    window.addEventListener("resize", updateSize);
 
     const canvas: any = canvasRef.current;
     if (canvas) {
       canvas.addEventListener(
         "mousedown",
         function (evt: any) {
-          offsetX = Math.ceil((evt.offsetX / canvasWidth) * 100);
-          offsetY = Math.ceil((evt.offsetY / canvasHeight) * 100);
-          innerY = Math.ceil((evt.offsetY / canvasWidth) * 100);
+          offsetX = Math.ceil((evt.offsetX / canvasSize.w) * 100);
+          offsetY = Math.ceil((evt.offsetY / canvasSize.h) * 100);
+          innerY = Math.ceil((evt.offsetY / canvasSize.w) * 100);
           if (countMul !== 0) {
             // if zoomed
             const divIndex = countMul * 1.25; // zoomed rate
@@ -455,9 +461,9 @@ export default function Map() {
       canvas.addEventListener(
         "mousemove",
         function (evt: any) {
-          offsetX = (evt.offsetX / canvasWidth) * 100;
-          offsetY = (evt.offsetY / canvasHeight) * 100;
-          innerY = (evt.offsetY / canvasWidth) * 100;
+          offsetX = (evt.offsetX / canvasSize.w) * 100;
+          offsetY = (evt.offsetY / canvasSize.h) * 100;
+          innerY = (evt.offsetY / canvasSize.w) * 100;
           if (countMul > 0) dragged = true;
           else dragged = false;
           if (dragged) {
@@ -500,8 +506,8 @@ export default function Map() {
       >
         <canvas
           ref={canvasRef}
-          width={`${canvasWidth}`}
-          height={`${canvasHeight}`}
+          width={`${canvasSize.w}`}
+          height={`${canvasSize.h}`}
         />
       </LandModal>
       {Array.from({ length: parseInt(totalLandsValue) }, (_, i) => 0 + i).map(
