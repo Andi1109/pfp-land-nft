@@ -322,26 +322,27 @@ export default function Map() {
     if (flagScale || dragged) {
       // zoom or dragged
       factor = Math.pow(factor, countMul);
-      const transX = zoomX + Math.ceil((offsetX - zoomX) / factor);
-      const transY = zoomY + Math.ceil((offsetY - zoomY) / factor);
+      const transX = zoomX + (offsetX - zoomX) / factor;
+      const transY = zoomY + (offsetY - zoomY) / factor;
       const valScaleX = (canvasWidth * (1 - factor)) / 100; // transform scale rate
       const valScaleY = (canvasHeight * (1 - factor)) / 100; // transform scale rate
       ctx.resetTransform(); // reset to original map
-      let dx = 0.5;
+      // let dx = 0.5;
       let dy = 0.5;
-      if (offsetX < 5) dx = 1;
-      else if (offsetX > 95) dx = 0;
-      if (offsetY < 5) dy = 1;
-      else if (offsetY > 95) dy = 0;
-      const my = Math.ceil(canvasWidth / 100) * (innerY - offsetY);
+      // if (offsetX < 5) dx = 1;
+      // else if (offsetX > 95) dx = 0;
+      // if (offsetY < 5) dy = 1;
+      // else if (offsetY > 95) dy = 0;
+      const my = (canvasWidth * (innerY - offsetY)) / 100 - dy;
       ctx.transform(
         factor,
         0,
         0,
         factor,
-        valScaleX * (transX - dx),
-        Math.ceil(valScaleY * (transY - dy) + my * factor)
+        valScaleX * transX,
+        valScaleY * (transY - dy)
       );
+      ctx.transform(1, 0, 0, 1, 0, my);
       ctx.clearRect(0, 0, canvasWidth, canvasHeight); // clear the map
       redrawCanvas();
       zoomX = offsetX; // save X position of mouse pointer
@@ -353,12 +354,11 @@ export default function Map() {
     const canvas: any = canvasRef.current;
     const ctx = canvas.getContext("2d");
     const transY = innerY - offsetY;
-    const valScaleY = Math.ceil(canvasWidth / 100); // transform scale rate
     ctx.resetTransform(); // reset to original map
     let dy = 0.5;
     if (offsetY < 5) dy = 1;
     else if (offsetY > 95) dy = 0;
-    ctx.transform(1, 0, 0, 1, 0, valScaleY * transY - dy);
+    ctx.transform(1, 0, 0, 1, 0, (canvasWidth * transY) / 100 - dy);
     ctx.clearRect(0, 0, canvasWidth, canvasHeight); // clear the map
     redrawCanvas();
   };
@@ -445,8 +445,8 @@ export default function Map() {
           const landX: any = selectedLandX.current;
           const landY: any = selectedLandY.current;
 
-          offsetX = offsetX === 0 ? 1 : offsetX;
-          offsetY = offsetY === 0 ? 1 : offsetY;
+          offsetX = offsetX === 0 ? 1 : Math.floor(offsetX);
+          offsetY = offsetY === 0 ? 1 : Math.floor(offsetY);
           landX.innerHTML = offsetX.toString();
           landY.innerHTML = offsetY.toString();
         },
@@ -455,9 +455,9 @@ export default function Map() {
       canvas.addEventListener(
         "mousemove",
         function (evt: any) {
-          offsetX = Math.ceil((evt.offsetX / canvasWidth) * 100);
-          offsetY = Math.ceil((evt.offsetY / canvasHeight) * 100);
-          innerY = Math.ceil((evt.offsetY / canvasWidth) * 100);
+          offsetX = (evt.offsetX / canvasWidth) * 100;
+          offsetY = (evt.offsetY / canvasHeight) * 100;
+          innerY = (evt.offsetY / canvasWidth) * 100;
           if (countMul > 0) dragged = true;
           else dragged = false;
           if (dragged) {

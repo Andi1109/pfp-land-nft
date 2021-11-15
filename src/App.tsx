@@ -1,4 +1,4 @@
-import { ChakraProvider, useDisclosure } from "@chakra-ui/react";
+import { ChakraProvider, useDisclosure, Flex } from "@chakra-ui/react";
 import theme from "./theme";
 import Layout from "./components/Layout";
 import ConnectButton from "./components/ConnectButton";
