@@ -30,8 +30,8 @@
   {
     "title": "Cyberkongz",
     "originX": 5,
-    "originY": 39,
-    "size": 2,
+    "originY": 38.5,
+    "size": 1.8,
     "rotate": false
   },
   {
@@ -52,7 +52,7 @@
     "title": "Deadfellaz",
     "originX": 5,
     "originY": 73,
-    "size": 2,
+    "size": 1.9,
     "rotate": false
   },
   {
@@ -416,14 +416,14 @@
     "title": "Bored Apes",
     "originX": 29,
     "originY": 83,
-    "size": 2,
+    "size": 1.8,
     "rotate": false
   },
   {
     "title": "Non Fungible",
     "originX": 38,
     "originY": 74,
-    "size": 2,
+    "size": 1.9,
     "rotate": false
   },
   {
@@ -437,7 +437,7 @@
     "title": "Bloot Elves",
     "originX": 39,
     "originY": 85,
-    "size": 2,
+    "size": 1.8,
     "rotate": false
   },
   {
@@ -611,8 +611,8 @@
   {
     "title": "Non Fungible Heroes",
     "originX": 53,
-    "originY": 36.8,
-    "size": 1.6,
+    "originY": 36.6,
+    "size": 1.5,
     "rotate": true
   },
   {
@@ -681,14 +681,14 @@
   {
     "title": "Pudgy",
     "originX": 61,
-    "originY": 36,
+    "originY": 35.5,
     "size": 2,
     "rotate": false
   },
   {
     "title": "Penguins",
     "originX": 61,
-    "originY": 38,
+    "originY": 37.5,
     "size": 2,
     "rotate": false
   },
@@ -715,9 +715,9 @@
   },
   {
     "title": "Forgotten Runes",
-    "originX": 62,
+    "originX": 62.5,
     "originY": 53,
-    "size": 2,
+    "size": 1.9,
     "rotate": false
   },
   {
@@ -843,7 +843,7 @@
     "title": "Cyberkongz",
     "originX": 70,
     "originY": 83,
-    "size": 2,
+    "size": 1.8,
     "rotate": false
   },
   {
@@ -856,7 +856,7 @@
   {
     "title": "Pudgy",
     "originX": 87.5,
-    "originY": 24,
+    "originY": 24.5,
     "size": 1.5,
     "rotate": false
   },
@@ -864,7 +864,7 @@
     "title": "Penguins",
     "originX": 87.5,
     "originY": 26,
-    "size": 1.5,
+    "size": 1.1,
     "rotate": false
   },
   {
@@ -878,7 +878,7 @@
     "title": "friends",
     "originX": 87.5,
     "originY": 30,
-    "size": 1.5,
+    "size": 1.4,
     "rotate": false
   },
   {
@@ -899,56 +899,56 @@
     "title": "Honorary",
     "originX": 46.5,
     "originY": 46.5,
-    "size": 1.3,
+    "size": 1.1,
     "rotate": false
   },
   {
     "title": "Elves",
     "originX": 46.5,
     "originY": 48,
-    "size": 1.5,
+    "size": 1.4,
     "rotate": false
   },
   {
     "title": "Honorary",
     "originX": 46.5,
     "originY": 52,
-    "size": 1.3,
+    "size": 1.1,
     "rotate": false
   },
   {
     "title": "Elves",
     "originX": 46.5,
     "originY": 53.5,
-    "size": 1.5,
+    "size": 1.4,
     "rotate": false
   },
   {
     "title": "Honorary",
     "originX": 52.5,
     "originY": 46.5,
-    "size": 1.3,
+    "size": 1.1,
     "rotate": false
   },
   {
     "title": "Elves",
     "originX": 52.5,
     "originY": 48,
-    "size": 1.5,
+    "size": 1.4,
     "rotate": false
   },
   {
     "title": "Honorary",
     "originX": 52.5,
     "originY": 52,
-    "size": 1.3,
+    "size": 1.1,
     "rotate": false
   },
   {
     "title": "Elves",
     "originX": 52.5,
     "originY": 53.5,
-    "size": 1.5,
+    "size": 1.4,
     "rotate": false
   },
   {
