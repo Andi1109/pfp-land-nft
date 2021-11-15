@@ -27,6 +27,7 @@ export default function Map() {
   let flagScale = true; // if true draw zoom
   let offsetX = 0; // X position of mouse pointer
   let offsetY = 0; // Y position of mouse pointer
+  let innerY = 0; // Y position of mouse pointer in the canvas
   let countMul = 2; // count of zoomed
 
   let zoomX = 0; // X position of previous zoomed
@@ -48,10 +49,9 @@ export default function Map() {
   const selectedLandX = useRef(null);
   const selectedLandY = useRef(null);
   const isMobile = window.screen.width <= window.screen.height ? true : false;
-  const canvasHeight = Math.round(
-    isMobile ? window.innerWidth : window.innerHeight / (100 / 90)
-  );
-  const [canvasSize, setCanvasSize] = useState(canvasHeight);
+  const canvasHeight = Math.round(window.innerHeight / (100 / 90));
+  const canvasWidth = Math.round(window.innerWidth / (100 / 90));
+  // const [canvasSize, setCanvasSize] = useState({w:canvasWidth, h: canvasHeight});
 
   useEffect(() => {
     if (totalLands && totalLands.toString() !== totalLandsValue) {
@@ -119,12 +119,12 @@ export default function Map() {
     }
   };
 
-  const updateSize = () => {
-    const height = Math.round(
-      isMobile ? window.innerWidth : window.innerHeight / (100 / 90)
-    );
-    setCanvasSize(height);
-  };
+  // const updateSize = () => {
+  //   const height = Math.round(
+  //     isMobile ? window.innerWidth : window.innerHeight / (100 / 90)
+  //   );
+  //   setCanvasSize(height);
+  // };
 
   const appendRoyalLands = (newLand: RoyalLand) => {
     let _royalLands = JSON.parse(JSON.stringify(royalLands));
@@ -227,7 +227,7 @@ export default function Map() {
       const titleObj = collectionTitlesJson[i];
       ctx.save();
       ctx.translate(titleObj.originX, titleObj.originY);
-      ctx.font = titleObj.size + "px Georgia";
+      ctx.font = titleObj.size + "px Poppins";
       if (titleObj.rotate) ctx.rotate(-Math.PI / 2);
       ctx.fillText(titleObj.title, 0, 0);
       ctx.restore();
@@ -315,6 +315,7 @@ export default function Map() {
       zoomX = 50;
       zoomY = 50;
       offsetX = 50;
+      innerY = 25;
       offsetY = 50;
       initialFlag = false;
     }
@@ -323,21 +324,43 @@ export default function Map() {
       factor = Math.pow(factor, countMul);
       const transX = zoomX + Math.ceil((offsetX - zoomX) / factor);
       const transY = zoomY + Math.ceil((offsetY - zoomY) / factor);
-      const valScale = (canvasHeight * (1 - factor)) / 100; // transform scale rate
+      const valScaleX = (canvasWidth * (1 - factor)) / 100; // transform scale rate
+      const valScaleY = (canvasHeight * (1 - factor)) / 100; // transform scale rate
       ctx.resetTransform(); // reset to original map
+      let dx = 0.5;
+      let dy = 0.5;
+      if (offsetX < 5) dx = 1;
+      else if (offsetX > 95) dx = 0;
+      if (offsetY < 5) dy = 1;
+      else if (offsetY > 95) dy = 0;
+      const my = Math.ceil(canvasWidth / 100) * (innerY - offsetY);
       ctx.transform(
         factor,
         0,
         0,
         factor,
-        valScale * (transX - 0.5),
-        valScale * (transY - 0.5)
+        valScaleX * (transX - dx),
+        Math.ceil(valScaleY * (transY - dy) + my * factor)
       );
-      ctx.clearRect(0, 0, canvasHeight, canvasHeight); // clear the map
+      ctx.clearRect(0, 0, canvasWidth, canvasHeight); // clear the map
       redrawCanvas();
       zoomX = offsetX; // save X position of mouse pointer
       zoomY = offsetY; // save Y position of mouse pointer
     }
+  };
+
+  const dragdraw = () => {
+    const canvas: any = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    const transY = innerY - offsetY;
+    const valScaleY = Math.ceil(canvasWidth / 100); // transform scale rate
+    ctx.resetTransform(); // reset to original map
+    let dy = 0.5;
+    if (offsetY < 5) dy = 1;
+    else if (offsetY > 95) dy = 0;
+    ctx.transform(1, 0, 0, 1, 0, valScaleY * transY - dy);
+    ctx.clearRect(0, 0, canvasWidth, canvasHeight); // clear the map
+    redrawCanvas();
   };
 
   const draw = (ctx: any) => {
@@ -355,7 +378,7 @@ export default function Map() {
     if (canvas) {
       const ctx = canvas.getContext("2d");
       ctx.save();
-      ctx.scale(canvasHeight / 100, canvasHeight / 100);
+      ctx.scale(canvasWidth / 100, canvasWidth / 100);
       draw(ctx);
       ctx.restore();
     }
@@ -397,15 +420,16 @@ export default function Map() {
   let dragged = false; // Flag of drag
 
   const initEventListners = () => {
-    window.addEventListener("resize", updateSize);
+    // window.addEventListener("resize", updateSize);
 
     const canvas: any = canvasRef.current;
     if (canvas) {
       canvas.addEventListener(
         "mousedown",
         function (evt: any) {
-          offsetX = Math.ceil((evt.offsetX / canvasHeight) * 100);
+          offsetX = Math.ceil((evt.offsetX / canvasWidth) * 100);
           offsetY = Math.ceil((evt.offsetY / canvasHeight) * 100);
+          innerY = Math.ceil((evt.offsetY / canvasWidth) * 100);
           if (countMul !== 0) {
             // if zoomed
             const divIndex = countMul * 1.25; // zoomed rate
@@ -431,13 +455,14 @@ export default function Map() {
       canvas.addEventListener(
         "mousemove",
         function (evt: any) {
-          offsetX = Math.ceil((evt.offsetX / canvasHeight) * 100);
+          offsetX = Math.ceil((evt.offsetX / canvasWidth) * 100);
           offsetY = Math.ceil((evt.offsetY / canvasHeight) * 100);
+          innerY = Math.ceil((evt.offsetY / canvasWidth) * 100);
           if (countMul > 0) dragged = true;
           else dragged = false;
           if (dragged) {
             zoom(1);
-          }
+          } else dragdraw();
         },
         false
       );
@@ -475,8 +500,8 @@ export default function Map() {
       >
         <canvas
           ref={canvasRef}
-          width={`${canvasSize}`}
-          height={`${canvasSize}`}
+          width={`${canvasWidth}`}
+          height={`${canvasHeight}`}
         />
       </LandModal>
       {Array.from({ length: parseInt(totalLandsValue) }, (_, i) => 0 + i).map(
