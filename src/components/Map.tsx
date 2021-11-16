@@ -228,7 +228,7 @@ export default function Map() {
     const curJson = localStorage.getItem("curPoint");
     if (curJson) {
       const _curPoint = JSON.parse(curJson);
-      ctx.strokeStyle = "rgb(255, 0, 0, 0.8)";
+      ctx.strokeStyle = "rgb(255, 255, 255, 0.8)";
       ctx.lineWidth = 0.1;
       ctx.strokeRect(_curPoint.x - 0.95, _curPoint.y - 0.95, 0.9, 0.9);
     }
@@ -243,7 +243,7 @@ export default function Map() {
       const titleObj = collectionTitlesJson[i];
       ctx.save();
       ctx.translate(titleObj.originX, titleObj.originY);
-      ctx.font = titleObj.size + "px Changa One";
+      ctx.font = titleObj.size + "px changa";
       if (titleObj.rotate) ctx.rotate(-Math.PI / 2);
       ctx.fillText(titleObj.title, 0, 0);
       ctx.restore();

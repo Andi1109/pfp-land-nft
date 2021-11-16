@@ -1,1 +1,4 @@
-@import url("http://fonts.cdnfonts.com/css/changa-one");
+@font-face {
+  font-family: "changa";
+  src: url("./ChangaOne.woff");
+}
