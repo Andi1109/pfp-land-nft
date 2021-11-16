@@ -224,6 +224,16 @@ export default function Map() {
     }
   };
 
+  const drawPointerOutLine = (ctx: any) => {
+    const curJson = localStorage.getItem("curPoint");
+    if (curJson) {
+      const _curPoint = JSON.parse(curJson);
+      ctx.strokeStyle = "rgb(255, 0, 0, 0.8)";
+      ctx.lineWidth = 0.1;
+      ctx.strokeRect(_curPoint.x - 0.95, _curPoint.y - 0.95, 0.9, 0.9);
+    }
+  };
+
   const drawCollectionTitles = (ctx: any) => {
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
@@ -377,6 +387,7 @@ export default function Map() {
     drawMyClaimedLand();
     drawCollectionBorders(ctx);
     drawRoyalLand();
+    drawPointerOutLine(ctx);
   };
 
   const redrawCanvas = () => {
@@ -464,6 +475,31 @@ export default function Map() {
           offsetX = (evt.offsetX / canvasSize.w) * 100;
           offsetY = (evt.offsetY / canvasSize.h) * 100;
           innerY = (evt.offsetY / canvasSize.w) * 100;
+
+          let curPoint: Land = { x: Math.ceil(offsetX), y: Math.ceil(offsetY) };
+          if (countMul !== 0) {
+            // if zoomed
+            const divIndex = countMul * 1.25; // zoomed rate
+
+            // set the claimed position in zoom
+            if (curPoint.x > zoomX)
+              curPoint.x = Math.floor(
+                zoomX + Math.ceil((curPoint.x - zoomX) / divIndex)
+              );
+            else
+              curPoint.x = Math.floor(
+                zoomX - Math.ceil((zoomX - curPoint.x) / divIndex)
+              );
+            if (curPoint.y > zoomY)
+              curPoint.y = Math.floor(
+                zoomY + Math.ceil((curPoint.y - zoomY) / divIndex)
+              );
+            else
+              curPoint.y = Math.floor(
+                zoomY - Math.ceil((zoomY - curPoint.y) / divIndex)
+              );
+          }
+          localStorage.setItem("curPoint", JSON.stringify(curPoint));
           if (countMul > 0) dragged = true;
           else dragged = false;
           if (dragged) {
