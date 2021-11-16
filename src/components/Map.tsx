@@ -228,7 +228,7 @@ export default function Map() {
     const curJson = localStorage.getItem("curPoint");
     if (curJson) {
       const _curPoint = JSON.parse(curJson);
-      ctx.strokeStyle = "rgb(255, 0, 0, 0.8)";
+      ctx.strokeStyle = "rgb(255, 255, 255, 0.8)";
       ctx.lineWidth = 0.1;
       ctx.strokeRect(_curPoint.x - 0.95, _curPoint.y - 0.95, 0.9, 0.9);
     }
@@ -243,7 +243,7 @@ export default function Map() {
       const titleObj = collectionTitlesJson[i];
       ctx.save();
       ctx.translate(titleObj.originX, titleObj.originY);
-      ctx.font = titleObj.size + "px Changa One";
+      ctx.font = titleObj.size + "px changa";
       if (titleObj.rotate) ctx.rotate(-Math.PI / 2);
       ctx.fillText(titleObj.title, 0, 0);
       ctx.restore();
@@ -320,6 +320,7 @@ export default function Map() {
       // if zoom out
       countMul--;
       if (countMul < 0) countMul = 0;
+      if (canvasWidth < canvasHeight && countMul === 0) countMul = 1;
       if (countMul === 0) {
         zoomX = offsetX;
         zoomY = offsetY;
@@ -542,8 +543,8 @@ export default function Map() {
       >
         <canvas
           ref={canvasRef}
-          width={`${canvasSize.w}`}
-          height={`${canvasSize.h}`}
+          width={`${canvasWidth}`}
+          height={`${canvasHeight}`}
         />
       </LandModal>
       {Array.from({ length: parseInt(totalLandsValue) }, (_, i) => 0 + i).map(
