@@ -320,6 +320,7 @@ export default function Map() {
       // if zoom out
       countMul--;
       if (countMul < 0) countMul = 0;
+      if (canvasWidth < canvasHeight && countMul === 0) countMul = 1;
       if (countMul === 0) {
         zoomX = offsetX;
         zoomY = offsetY;
@@ -542,8 +543,8 @@ export default function Map() {
       >
         <canvas
           ref={canvasRef}
-          width={`${canvasSize.w}`}
-          height={`${canvasSize.h}`}
+          width={`${canvasWidth}`}
+          height={`${canvasHeight}`}
         />
       </LandModal>
       {Array.from({ length: parseInt(totalLandsValue) }, (_, i) => 0 + i).map(
