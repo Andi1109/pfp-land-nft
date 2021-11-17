@@ -10,6 +10,7 @@ type Props = {
 export default function ConnectButton({ handleOpenModal }: Props) {
   const { activateBrowserWallet, account } = useEthers();
   const etherBalance = useEtherBalance(account);
+  const isMobile = window.screen.width <= window.screen.height ? true : false;
 
   function handleConnectWallet() {
     activateBrowserWallet();
@@ -41,7 +42,7 @@ export default function ConnectButton({ handleOpenModal }: Props) {
         borderRadius="xl"
         m="1px"
         px={3}
-        height="38px"
+        height={isMobile ? "30px" : "38px"}
       >
         <Text color="white" fontSize="md" fontWeight="medium" mr="2">
           {account &&
@@ -70,6 +71,7 @@ export default function ConnectButton({ handleOpenModal }: Props) {
         backgroundColor: "blue.800",
         borderColor: "blue.700",
       }}
+      height={isMobile ? "30px" : "38px"}
     >
       Connect to a wallet
     </Button>
