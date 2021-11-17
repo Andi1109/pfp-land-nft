@@ -26,8 +26,12 @@ export default function Map() {
 
   let initialFlag = true;
   let flagScale = true; // if true draw zoom
+  let touchDragged = false;
   let offsetX = 0; // X position of mouse pointer
   let offsetY = 0; // Y position of mouse pointer
+  let touchOffsetX = 0; // X position of touch pointer
+  let touchOffsetY = 0; // Y position of touch pointer
+  let innerX = 0;
   let innerY = 0; // Y position of mouse pointer in the canvas
   let countMul = 2; // count of zoomed
 
@@ -320,7 +324,6 @@ export default function Map() {
       // if zoom out
       countMul--;
       if (countMul < 0) countMul = 0;
-      if (canvasWidth < canvasHeight && countMul === 0) countMul = 1;
       if (countMul === 0) {
         zoomX = offsetX;
         zoomY = offsetY;
@@ -344,40 +347,106 @@ export default function Map() {
       const valScaleX = (canvasSize.w * (1 - factor)) / 100; // transform scale rate
       const valScaleY = (canvasSize.h * (1 - factor)) / 100; // transform scale rate
       ctx.resetTransform(); // reset to original map
-      // let dx = 0.5;
-      let dy = 0.5;
-      // if (offsetX < 5) dx = 1;
-      // else if (offsetX > 95) dx = 0;
-      // if (offsetY < 5) dy = 1;
-      // else if (offsetY > 95) dy = 0;
-      const my = (canvasSize.w * (innerY - offsetY)) / 100 - dy;
+      let dx = 0.25;
+      let dy = 0.25;
+      if (offsetX < 1) dx = 0.25;
+      else if (offsetX > 99) dx = -0.25;
+      if (offsetY < 1) dy = 0.25;
+      else if (offsetY > 99) dy = -0.25;
+      const my = (canvasSize.w * (innerY - offsetY)) / 100;
       ctx.transform(
         factor,
         0,
         0,
         factor,
-        valScaleX * transX,
+        valScaleX * (transX - dx),
         valScaleY * (transY - dy)
       );
       ctx.transform(1, 0, 0, 1, 0, my);
-      ctx.clearRect(0, 0, canvasSize.w, canvasSize.h); // clear the map
+      ctx.clearRect(0, 0, canvasSize.w, canvasSize.w); // clear the map
       redrawCanvas();
       zoomX = offsetX; // save X position of mouse pointer
       zoomY = offsetY; // save Y position of mouse pointer
     }
   };
 
+  const zoomTouch = (delta: any) => {
+    const canvas: any = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    let factor = 1.25; // zoomed scale index
+    if (delta > 2) {
+      // if zoom in
+      if (countMul > 15) countMul = 15;
+      else countMul++;
+      touchDragged = true;
+    } else if (delta < 0) {
+      // if zoom out
+      countMul--;
+      if (countMul < 0) countMul = 0;
+      if (countMul === 0) {
+        zoomX = touchOffsetX;
+        zoomY = touchOffsetY;
+        touchDragged = false;
+      }
+    }
+    if (delta === 2) {
+      countMul = 2;
+      zoomX = 50;
+      zoomY = 50;
+      touchOffsetX = 50;
+      innerX = (canvasWidth * 50) / canvasHeight;
+      touchOffsetY = 50;
+      touchDragged = true;
+      delta = 0;
+    }
+    if (touchDragged) {
+      // zoom or dragged
+      factor = Math.pow(factor, countMul);
+      const transX = zoomX + (touchOffsetX - zoomX) / factor;
+      const transY = zoomY + (touchOffsetY - zoomY) / factor;
+      const valScaleX = (canvasWidth * (1 - factor)) / 100; // transform scale rate
+      const valScaleY = (canvasHeight * (1 - factor)) / 100; // transform scale rate
+      ctx.resetTransform(); // reset to original map
+      let dx = 0.25;
+      let dy = 0.25;
+      if (touchOffsetX < 1) dx = 0.25;
+      else if (touchOffsetX > 99) dx = -0.25;
+      if (touchOffsetY < 1) dy = 0.25;
+      else if (touchOffsetY > 99) dy = -0.25;
+      const mx = (canvasHeight * (innerX - touchOffsetX)) / 100 - dx;
+      ctx.transform(
+        factor,
+        0,
+        0,
+        factor,
+        valScaleX * (transX - dx),
+        valScaleY * (transY - dy)
+      );
+      ctx.transform(1, 0, 0, 1, mx, 0);
+      ctx.clearRect(0, 0, canvasHeight, canvasHeight); // clear the map
+      redrawCanvas();
+      zoomX = touchOffsetX; // save X position of mouse pointer
+      zoomY = touchOffsetY; // save Y position of mouse pointer
+    }
+  };
+
   const dragdraw = () => {
     const canvas: any = canvasRef.current;
     const ctx = canvas.getContext("2d");
-    const transY = innerY - offsetY;
-    ctx.resetTransform(); // reset to original map
-    let dy = 0.5;
-    if (offsetY < 5) dy = 1;
-    else if (offsetY > 95) dy = 0;
-    ctx.transform(1, 0, 0, 1, 0, (canvasSize.w * transY) / 100 - dy);
-    ctx.clearRect(0, 0, canvasSize.w, canvasSize.h); // clear the map
-    redrawCanvas();
+    if (canvasWidth > canvasHeight) {
+      const transY = innerY - offsetY;
+      ctx.resetTransform(); // reset to original map
+      let dy = 0.5;
+      if (offsetY < 5) dy = 1;
+      else if (offsetY > 95) dy = 0;
+      ctx.transform(1, 0, 0, 1, 0, (canvasSize.w * transY) / 100 - dy);
+      ctx.clearRect(0, 0, canvasSize.w, canvasSize.w); // clear the map
+      redrawCanvas();
+    } else {
+      ctx.resetTransform(); // reset to original map
+      ctx.clearRect(0, 0, canvasSize.h, canvasSize.h); // clear the map
+      redrawCanvas();
+    }
   };
 
   const draw = (ctx: any) => {
@@ -430,18 +499,153 @@ export default function Map() {
       ? -evt.detail
       : 0;
     if (delta) {
-      zoom(delta);
+      if (isMobile) zoomTouch(delta);
+      else zoom(delta);
     }
     return evt.preventDefault() && false;
   };
 
+  function getPos(offsetpos: any) {
+    if (offsetpos > 100) return 100;
+    else if (offsetpos < 0) return 0;
+    else return offsetpos;
+  }
+
   let dragged = false; // Flag of drag
+  let touchStartPos = {
+    x: 0,
+    y: 0,
+  };
 
   const initEventListners = () => {
     window.addEventListener("resize", updateSize);
 
     const canvas: any = canvasRef.current;
     if (canvas) {
+      canvas.addEventListener(
+        "touchstart",
+        function touchEventHandler(evt: any) {
+          if (evt.targetTouches.length === 2) {
+            const touch1: any = evt.changedTouches[0];
+            const touch2: any = evt.changedTouches[1];
+          } else if (evt.targetTouches.length === 1) {
+            console.log("touchstart", evt.targetTouches);
+            const touch: any = evt.changedTouches[0];
+            if (touch) {
+              touchOffsetX =
+                ((touch.clientX - touch.target.offsetLeft) / canvasWidth) * 100;
+              touchOffsetY =
+                ((touch.clientY - touch.target.offsetTop) / canvasHeight) * 100;
+              innerX =
+                ((touch.clientX - touch.target.offsetLeft) / canvasHeight) *
+                100;
+              touchOffsetX = getPos(touchOffsetX);
+              touchOffsetY = getPos(touchOffsetY);
+              innerX = getPos(innerX);
+              if (countMul !== 0) {
+                // if zoomed
+                const divIndex = countMul * 1.25; // zoomed rate
+
+                // set the claimed position in zoom
+                if (touchOffsetX > zoomX)
+                  touchOffsetX =
+                    zoomX + Math.ceil((touchOffsetX - zoomX) / divIndex);
+                else
+                  touchOffsetX =
+                    zoomX - Math.ceil((zoomX - touchOffsetX) / divIndex);
+                if (touchOffsetY > zoomY)
+                  touchOffsetY =
+                    zoomY + Math.ceil((touchOffsetY - zoomY) / divIndex);
+                else
+                  touchOffsetY =
+                    zoomY - Math.ceil((zoomY - touchOffsetY) / divIndex);
+              }
+              touchDragged = true;
+              touchStartPos.x = touchOffsetX;
+              touchStartPos.y = touchOffsetY;
+              const landX: any = selectedLandX.current;
+              const landY: any = selectedLandY.current;
+
+              offsetX = touchOffsetX === 0 ? 1 : Math.ceil(touchOffsetX);
+              offsetY = touchOffsetY === 0 ? 1 : Math.ceil(touchOffsetY);
+              landX.innerHTML = offsetX.toString();
+              landY.innerHTML = offsetY.toString();
+              console.log("starttouchpos:", offsetX, offsetY);
+            }
+          }
+        },
+        false
+      );
+      canvas.addEventListener(
+        "touchmove",
+        function touchEventHandler(evt: any) {
+          if (evt.targetTouches.length === 2) {
+            const touch1: any = evt.changedTouches[0];
+            const touch2: any = evt.changedTouches[1];
+          } else if (evt.targetTouches.length === 1) {
+            const touch: any = evt.changedTouches[0];
+            if (touch) {
+              touchOffsetX =
+                ((touch.clientX - touch.target.offsetLeft) / canvasWidth) * 100;
+              touchOffsetY =
+                ((touch.clientY - touch.target.offsetTop) / canvasHeight) * 100;
+              innerX =
+                ((touch.clientX - touch.target.offsetLeft) / canvasHeight) *
+                100;
+              touchOffsetX = getPos(touchOffsetX);
+              touchOffsetY = getPos(touchOffsetY);
+              let curPoint: Land = {
+                x: Math.ceil(touchOffsetX),
+                y: Math.ceil(touchOffsetY),
+              };
+              if (countMul !== 0) {
+                // if zoomed
+                const divIndex = countMul * 1.25; // zoomed rate
+
+                // set the claimed position in zoom
+                if (curPoint.x > zoomX)
+                  curPoint.x = Math.floor(
+                    zoomX + Math.ceil((curPoint.x - zoomX) / divIndex)
+                  );
+                else
+                  curPoint.x = Math.floor(
+                    zoomX - Math.ceil((zoomX - curPoint.x) / divIndex)
+                  );
+                if (curPoint.y > zoomY)
+                  curPoint.y = Math.floor(
+                    zoomY + Math.ceil((curPoint.y - zoomY) / divIndex)
+                  );
+                else
+                  curPoint.y = Math.floor(
+                    zoomY - Math.ceil((zoomY - curPoint.y) / divIndex)
+                  );
+                if (curPoint.x > 100) curPoint.x = 100;
+                if (curPoint.y > 100) curPoint.y = 100;
+                if (curPoint.x < 1) curPoint.x = 1;
+                if (curPoint.y < 1) curPoint.y = 1;
+              } else
+                curPoint = {
+                  x: Math.ceil(touchOffsetX),
+                  y: Math.ceil(touchOffsetY),
+                };
+              localStorage.setItem("curPoint", JSON.stringify(curPoint));
+              innerX = getPos(innerX);
+              console.log("touchpos:", innerX, touchOffsetX, touchOffsetY);
+              console.log("curPoint:", curPoint);
+              if (touchDragged) zoomTouch(1);
+            }
+          }
+        },
+        false
+      );
+      canvas.addEventListener(
+        "touchend",
+        function touchEventHandler(evt: any) {
+          console.log("touchend");
+          touchDragged = false;
+        },
+        false
+      );
       canvas.addEventListener(
         "mousedown",
         function (evt: any) {
@@ -460,13 +664,15 @@ export default function Map() {
               offsetY = zoomY + Math.ceil((offsetY - zoomY) / divIndex);
             else offsetY = zoomY - Math.ceil((zoomY - offsetY) / divIndex);
           }
-          const landX: any = selectedLandX.current;
-          const landY: any = selectedLandY.current;
+          if (!isMobile) {
+            const landX: any = selectedLandX.current;
+            const landY: any = selectedLandY.current;
 
-          offsetX = offsetX === 0 ? 1 : Math.floor(offsetX);
-          offsetY = offsetY === 0 ? 1 : Math.floor(offsetY);
-          landX.innerHTML = offsetX.toString();
-          landY.innerHTML = offsetY.toString();
+            offsetX = offsetX === 0 ? 1 : Math.floor(offsetX);
+            offsetY = offsetY === 0 ? 1 : Math.floor(offsetY);
+            landX.innerHTML = offsetX.toString();
+            landY.innerHTML = offsetY.toString();
+          }
         },
         false
       );
@@ -499,7 +705,11 @@ export default function Map() {
               curPoint.y = Math.floor(
                 zoomY - Math.ceil((zoomY - curPoint.y) / divIndex)
               );
-          }
+            if (curPoint.x > 100) curPoint.x = 100;
+            if (curPoint.y > 100) curPoint.y = 100;
+            if (curPoint.x < 1) curPoint.x = 1;
+            if (curPoint.y < 1) curPoint.y = 1;
+          } else curPoint = { x: Math.ceil(offsetX), y: Math.ceil(offsetY) };
           localStorage.setItem("curPoint", JSON.stringify(curPoint));
           if (countMul > 0) dragged = true;
           else dragged = false;
@@ -525,7 +735,8 @@ export default function Map() {
     initEventListners();
     if (initialFlag) {
       localStorage.clear();
-      zoom(2);
+      if (isMobile) zoomTouch(2);
+      else zoom(2);
     }
   }, []);
 
