@@ -239,11 +239,11 @@ export default function LandModal({
             color: "white",
           }}
         >
-          <ModalHeader style={{ backgroundColor: "mediumseagreen" }}>
+          <ModalHeader style={{ backgroundColor: "#3a2f85" }}>
             Land {landX}, {landY}
           </ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
+          <ModalCloseButton style={{ backgroundColor: "#0dbab0" }} />
+          <ModalBody padding={isMobile ? "8px" : "8px 24px"}>
             <Flex color="white" direction="column">
               <Flex color="white" display="flex" alignItems="center">
                 {isClaimed === "1" &&
@@ -276,9 +276,12 @@ export default function LandModal({
                   <Image
                     src="/emptyImg.png"
                     alt="Segun Adebayo"
-                    width={isMobile ? "100px" : "200px"}
-                    height={isMobile ? "100px" : "200px"}
-                    marginRight="10px"
+                    width={isMobile ? "100px" : "150px"}
+                    height={isMobile ? "100px" : "150px"}
+                    padding="15px"
+                    marginTop="15px"
+                    marginLeft="20px"
+                    marginRight="25px"
                   />
                 )}
                 <Box
@@ -290,43 +293,41 @@ export default function LandModal({
                   alignItems="center"
                 >
                   <Flex direction="column" padding="0">
-                    <Box
-                      display="flex"
-                      alignItems="baseline"
-                      justifyContent="flex-start"
-                      padding="5px"
-                    >
+                    {isClaimed === "1" && (
                       <Box
-                        color="gray.500"
-                        fontWeight="semibold"
-                        fontSize="xl"
-                        marginRight="5px"
-                        ml="2"
+                        display="flex"
+                        alignItems="baseline"
+                        justifyContent="center"
+                        padding="5px"
                       >
-                        Status
-                      </Box>
-                      {isClaimed === "1" ? (
+                        <Box
+                          color="gray.500"
+                          fontWeight="semibold"
+                          fontSize="xl"
+                          marginRight="5px"
+                          ml="2"
+                        >
+                          Status
+                        </Box>
                         <Badge borderRadius="full" px="3" colorScheme="teal">
                           Claimed ✓
                         </Badge>
-                      ) : (
-                        <Badge borderRadius="full" px="3" colorScheme="red">
-                          Not claimed ✖
-                        </Badge>
-                      )}
-                    </Box>
+                        )
+                      </Box>
+                    )}
                     <Box
                       display="flex"
                       alignItems="baseline"
                       justifyContent="flex-start"
-                      padding="5px"
+                      padding="20px 10px 15px 5px"
+                      margin="5px"
                     >
                       <Avatar margin="auto 10px">
                         <AvatarBadge boxSize="1.25em" bg="green.500" />
                       </Avatar>
                       <Box
                         color="gray.500"
-                        margin="auto 15px"
+                        margin={isMobile ? "auto" : "auto 25px"}
                         fontWeight="1000"
                       >
                         Owner
@@ -336,9 +337,10 @@ export default function LandModal({
                       display="flex"
                       alignItems="baseline"
                       justifyContent="space-around"
-                      padding="5px"
-                      marginTop="10px"
+                      marginBottom="15px"
+                      marginRight="3px"
                       color="gray"
+                      fontSize={isMobile ? "14px" : "16px"}
                       fontWeight="1000"
                     >
                       {isClaimed === "1"
@@ -350,6 +352,27 @@ export default function LandModal({
                   </Flex>
                 </Box>
               </Flex>
+              {isClaimed === "0" && (
+                <Box
+                  display="flex"
+                  alignItems="baseline"
+                  justifyContent="center"
+                  padding="5px"
+                >
+                  <Box
+                    color="gray.500"
+                    fontWeight="semibold"
+                    fontSize="xl"
+                    marginRight="5px"
+                    ml="2"
+                  >
+                    Status
+                  </Box>
+                  <Badge borderRadius="full" px="3" colorScheme="red">
+                    Not claimed ✖
+                  </Badge>
+                </Box>
+              )}
               <Box
                 overflowX="auto"
                 d="flex"
@@ -534,9 +557,23 @@ export default function LandModal({
           >
             <Button
               style={{
-                backgroundColor: "mediumseagreen",
-                marginRight: "20px",
+                backgroundColor: "transparent",
+                border: "solid 1px #3f55e2",
                 width: "40%",
+                marginRight: "12px",
+                color: "#564af0",
+              }}
+              onClick={onCloseModal}
+            >
+              Close
+            </Button>
+            <Button
+              style={{
+                backgroundColor: "#564af0",
+                width:
+                  isMobile && (isClaimed === "1" || collectionIDValue === "")
+                    ? "60%"
+                    : "40%",
               }}
               onClick={isClaimed === "1" ? handleBuy : handleClaim}
               disabled={
@@ -546,17 +583,6 @@ export default function LandModal({
               {isClaimed === "1" || collectionIDValue === ""
                 ? "Buy on OpenSea"
                 : "Mint"}
-            </Button>
-            <Button
-              style={{
-                backgroundColor: "transparent",
-                border: "solid 1px mediumseagreen",
-                width: "40%",
-                color: "mediumaquamarine",
-              }}
-              onClick={onCloseModal}
-            >
-              Close
             </Button>
           </ModalFooter>
         </ModalContent>
