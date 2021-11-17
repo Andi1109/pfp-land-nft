@@ -24,7 +24,6 @@ export default function Map() {
     src: string;
   }
 
-  let initialFlag = true;
   let flagScale = true; // if true draw zoom
   let touchDragged = false;
   let offsetX = 0; // X position of mouse pointer
@@ -324,6 +323,7 @@ export default function Map() {
       // if zoom out
       countMul--;
       if (countMul < 0) countMul = 0;
+      if (canvasWidth < canvasHeight && countMul === 0) countMul = 1;
       if (countMul === 0) {
         zoomX = offsetX;
         zoomY = offsetY;
@@ -337,7 +337,6 @@ export default function Map() {
       offsetX = 50;
       innerY = (canvasSize.h * 50) / canvasSize.w;
       offsetY = 50;
-      initialFlag = false;
     }
     if (flagScale || dragged) {
       // zoom or dragged
@@ -382,11 +381,12 @@ export default function Map() {
     } else if (delta < 0) {
       // if zoom out
       countMul--;
+      touchDragged = true;
       if (countMul < 0) countMul = 0;
       if (countMul === 0) {
         zoomX = touchOffsetX;
         zoomY = touchOffsetY;
-        touchDragged = false;
+        // touchDragged = false;
       }
     }
     if (delta === 2) {
@@ -512,10 +512,9 @@ export default function Map() {
   }
 
   let dragged = false; // Flag of drag
-  let touchStartPos = {
-    x: 0,
-    y: 0,
-  };
+  let zoomTouchPos1 = { x: 0, y: 0 };
+  let zoomTouchPos2 = { x: 0, y: 0 };
+  let distZoom = 0;
 
   const initEventListners = () => {
     window.addEventListener("resize", updateSize);
@@ -528,6 +527,63 @@ export default function Map() {
           if (evt.targetTouches.length === 2) {
             const touch1: any = evt.changedTouches[0];
             const touch2: any = evt.changedTouches[1];
+            if (touch1 && touch2) {
+              zoomTouchPos1.x =
+                ((touch1.clientX - touch1.target.offsetLeft) / canvasWidth) *
+                100;
+              zoomTouchPos1.y =
+                ((touch1.clientY - touch1.target.offsetTop) / canvasHeight) *
+                100;
+              zoomTouchPos2.x =
+                ((touch2.clientX - touch2.target.offsetLeft) / canvasWidth) *
+                100;
+              zoomTouchPos2.y =
+                ((touch2.clientY - touch2.target.offsetTop) / canvasHeight) *
+                100;
+              distZoom = Math.sqrt(
+                Math.pow(zoomTouchPos1.x - zoomTouchPos2.x, 2) +
+                  Math.pow(zoomTouchPos1.y - zoomTouchPos2.y, 2)
+              );
+              if (zoomTouchPos1.x > zoomTouchPos2.x)
+                touchOffsetX = getPos(
+                  zoomTouchPos2.x +
+                    ((zoomTouchPos1.x - zoomTouchPos2.x) * canvasWidth) /
+                      canvasHeight
+                );
+              else
+                touchOffsetX = getPos(
+                  zoomTouchPos2.x -
+                    ((zoomTouchPos2.x - zoomTouchPos1.x) * canvasWidth) /
+                      canvasHeight
+                );
+              touchOffsetY = getPos((zoomTouchPos1.y + zoomTouchPos2.y) / 2);
+              innerX = getPos(innerX);
+              if (countMul !== 0) {
+                // if zoomed
+                const divIndex = Math.pow(1.25, countMul); // zoomed rate
+
+                // set the claimed position in zoom
+                if (zoomTouchPos1.x > zoomTouchPos2.x)
+                  touchOffsetX = Math.ceil(
+                    zoomTouchPos2.x +
+                      (zoomTouchPos1.x - zoomTouchPos2.x) / divIndex
+                  );
+                else
+                  touchOffsetX = Math.ceil(
+                    zoomTouchPos2.x -
+                      (zoomTouchPos2.x - zoomTouchPos1.x) / divIndex
+                  );
+                if (zoomTouchPos1.y > zoomTouchPos2.y)
+                  touchOffsetY =
+                    zoomTouchPos2.y +
+                    Math.ceil((zoomTouchPos1.y - zoomTouchPos2.y) / divIndex);
+                else
+                  touchOffsetY = Math.ceil(
+                    zoomTouchPos2.y -
+                      (zoomTouchPos2.y - zoomTouchPos1.y) / divIndex
+                  );
+              }
+            }
           } else if (evt.targetTouches.length === 1) {
             console.log("touchstart", evt.targetTouches);
             const touch: any = evt.changedTouches[0];
@@ -539,30 +595,37 @@ export default function Map() {
               innerX =
                 ((touch.clientX - touch.target.offsetLeft) / canvasHeight) *
                 100;
-              touchOffsetX = getPos(touchOffsetX);
+              if (touchOffsetX > zoomX)
+                touchOffsetX = getPos(
+                  zoomX + ((touchOffsetX - zoomX) * canvasWidth) / canvasHeight
+                );
+              else
+                touchOffsetX = getPos(
+                  zoomX - ((zoomX - touchOffsetX) * canvasWidth) / canvasHeight
+                );
               touchOffsetY = getPos(touchOffsetY);
               innerX = getPos(innerX);
               if (countMul !== 0) {
                 // if zoomed
-                const divIndex = countMul * 1.25; // zoomed rate
+                const divIndex = Math.pow(1.25, countMul); // zoomed rate
 
                 // set the claimed position in zoom
                 if (touchOffsetX > zoomX)
-                  touchOffsetX =
-                    zoomX + Math.ceil((touchOffsetX - zoomX) / divIndex);
+                  touchOffsetX = Math.ceil(
+                    zoomX + (touchOffsetX - zoomX) / divIndex
+                  );
                 else
-                  touchOffsetX =
-                    zoomX - Math.ceil((zoomX - touchOffsetX) / divIndex);
+                  touchOffsetX = Math.ceil(
+                    zoomX - (zoomX - touchOffsetX) / divIndex
+                  );
                 if (touchOffsetY > zoomY)
                   touchOffsetY =
                     zoomY + Math.ceil((touchOffsetY - zoomY) / divIndex);
                 else
-                  touchOffsetY =
-                    zoomY - Math.ceil((zoomY - touchOffsetY) / divIndex);
+                  touchOffsetY = Math.ceil(
+                    zoomY - (zoomY - touchOffsetY) / divIndex
+                  );
               }
-              touchDragged = true;
-              touchStartPos.x = touchOffsetX;
-              touchStartPos.y = touchOffsetY;
               const landX: any = selectedLandX.current;
               const landY: any = selectedLandY.current;
 
@@ -570,7 +633,7 @@ export default function Map() {
               offsetY = touchOffsetY === 0 ? 1 : Math.ceil(touchOffsetY);
               landX.innerHTML = offsetX.toString();
               landY.innerHTML = offsetY.toString();
-              console.log("starttouchpos:", offsetX, offsetY);
+              touchDragged = false;
             }
           }
         },
@@ -582,6 +645,27 @@ export default function Map() {
           if (evt.targetTouches.length === 2) {
             const touch1: any = evt.changedTouches[0];
             const touch2: any = evt.changedTouches[1];
+            if (touch1 && touch2) {
+              const zoomTouchPos1x =
+                ((touch1.clientX - touch1.target.offsetLeft) / canvasWidth) *
+                100;
+              const zoomTouchPos1y =
+                ((touch1.clientY - touch1.target.offsetTop) / canvasHeight) *
+                100;
+              const zoomTouchPos2x =
+                ((touch2.clientX - touch2.target.offsetLeft) / canvasWidth) *
+                100;
+              const zoomTouchPos2y =
+                ((touch2.clientY - touch2.target.offsetTop) / canvasHeight) *
+                100;
+              const distZoom2 = Math.sqrt(
+                Math.pow(zoomTouchPos1x - zoomTouchPos2x, 2) +
+                  Math.pow(zoomTouchPos1y - zoomTouchPos2y, 2)
+              );
+              const distanceZoom = distZoom2 - distZoom;
+              if (distanceZoom > 15) zoomTouch(3);
+              else if (distanceZoom < -15) zoomTouch(-3);
+            }
           } else if (evt.targetTouches.length === 1) {
             const touch: any = evt.changedTouches[0];
             if (touch) {
@@ -592,7 +676,14 @@ export default function Map() {
               innerX =
                 ((touch.clientX - touch.target.offsetLeft) / canvasHeight) *
                 100;
-              touchOffsetX = getPos(touchOffsetX);
+              if (touchOffsetX > zoomX)
+                touchOffsetX = getPos(
+                  zoomX + ((touchOffsetX - zoomX) * canvasWidth) / canvasHeight
+                );
+              else
+                touchOffsetX = getPos(
+                  zoomX - ((zoomX - touchOffsetX) * canvasWidth) / canvasHeight
+                );
               touchOffsetY = getPos(touchOffsetY);
               let curPoint: Land = {
                 x: Math.ceil(touchOffsetX),
@@ -605,11 +696,19 @@ export default function Map() {
                 // set the claimed position in zoom
                 if (curPoint.x > zoomX)
                   curPoint.x = Math.floor(
-                    zoomX + Math.ceil((curPoint.x - zoomX) / divIndex)
+                    zoomX +
+                      Math.ceil(
+                        ((curPoint.x - zoomX) * canvasWidth) /
+                          (divIndex * canvasHeight)
+                      )
                   );
                 else
                   curPoint.x = Math.floor(
-                    zoomX - Math.ceil((zoomX - curPoint.x) / divIndex)
+                    zoomX -
+                      Math.ceil(
+                        ((zoomX - curPoint.x) * canvasWidth) /
+                          (divIndex * canvasHeight)
+                      )
                   );
                 if (curPoint.y > zoomY)
                   curPoint.y = Math.floor(
@@ -632,7 +731,8 @@ export default function Map() {
               innerX = getPos(innerX);
               console.log("touchpos:", innerX, touchOffsetX, touchOffsetY);
               console.log("curPoint:", curPoint);
-              if (touchDragged) zoomTouch(1);
+              touchDragged = true;
+              zoomTouch(1);
             }
           }
         },
@@ -642,6 +742,7 @@ export default function Map() {
         "touchend",
         function touchEventHandler(evt: any) {
           console.log("touchend");
+          if (!touchDragged) zoomTouch(1);
           touchDragged = false;
         },
         false
@@ -649,22 +750,22 @@ export default function Map() {
       canvas.addEventListener(
         "mousedown",
         function (evt: any) {
-          offsetX = Math.ceil((evt.offsetX / canvasSize.w) * 100);
-          offsetY = Math.ceil((evt.offsetY / canvasSize.h) * 100);
-          innerY = Math.ceil((evt.offsetY / canvasSize.w) * 100);
-          if (countMul !== 0) {
-            // if zoomed
-            const divIndex = countMul * 1.25; // zoomed rate
-
-            // set the claimed position in zoom
-            if (offsetX > zoomX)
-              offsetX = zoomX + Math.ceil((offsetX - zoomX) / divIndex);
-            else offsetX = zoomX - Math.ceil((zoomX - offsetX) / divIndex);
-            if (offsetY > zoomY)
-              offsetY = zoomY + Math.ceil((offsetY - zoomY) / divIndex);
-            else offsetY = zoomY - Math.ceil((zoomY - offsetY) / divIndex);
-          }
           if (!isMobile) {
+            offsetX = Math.ceil((evt.offsetX / canvasSize.w) * 100);
+            offsetY = Math.ceil((evt.offsetY / canvasSize.h) * 100);
+            innerY = Math.ceil((evt.offsetY / canvasSize.w) * 100);
+            if (countMul !== 0) {
+              // if zoomed
+              const divIndex = countMul * 1.25; // zoomed rate
+
+              // set the claimed position in zoom
+              if (offsetX > zoomX)
+                offsetX = zoomX + Math.ceil((offsetX - zoomX) / divIndex);
+              else offsetX = zoomX - Math.ceil((zoomX - offsetX) / divIndex);
+              if (offsetY > zoomY)
+                offsetY = zoomY + Math.ceil((offsetY - zoomY) / divIndex);
+              else offsetY = zoomY - Math.ceil((zoomY - offsetY) / divIndex);
+            }
             const landX: any = selectedLandX.current;
             const landY: any = selectedLandY.current;
 
@@ -679,43 +780,48 @@ export default function Map() {
       canvas.addEventListener(
         "mousemove",
         function (evt: any) {
-          offsetX = (evt.offsetX / canvasSize.w) * 100;
-          offsetY = (evt.offsetY / canvasSize.h) * 100;
-          innerY = (evt.offsetY / canvasSize.w) * 100;
+          if (!isMobile) {
+            offsetX = (evt.offsetX / canvasSize.w) * 100;
+            offsetY = (evt.offsetY / canvasSize.h) * 100;
+            innerY = (evt.offsetY / canvasSize.w) * 100;
 
-          let curPoint: Land = { x: Math.ceil(offsetX), y: Math.ceil(offsetY) };
-          if (countMul !== 0) {
-            // if zoomed
-            const divIndex = countMul * 1.25; // zoomed rate
+            let curPoint: Land = {
+              x: Math.ceil(offsetX),
+              y: Math.ceil(offsetY),
+            };
+            if (countMul !== 0) {
+              // if zoomed
+              const divIndex = countMul * 1.25; // zoomed rate
 
-            // set the claimed position in zoom
-            if (curPoint.x > zoomX)
-              curPoint.x = Math.floor(
-                zoomX + Math.ceil((curPoint.x - zoomX) / divIndex)
-              );
-            else
-              curPoint.x = Math.floor(
-                zoomX - Math.ceil((zoomX - curPoint.x) / divIndex)
-              );
-            if (curPoint.y > zoomY)
-              curPoint.y = Math.floor(
-                zoomY + Math.ceil((curPoint.y - zoomY) / divIndex)
-              );
-            else
-              curPoint.y = Math.floor(
-                zoomY - Math.ceil((zoomY - curPoint.y) / divIndex)
-              );
-            if (curPoint.x > 100) curPoint.x = 100;
-            if (curPoint.y > 100) curPoint.y = 100;
-            if (curPoint.x < 1) curPoint.x = 1;
-            if (curPoint.y < 1) curPoint.y = 1;
-          } else curPoint = { x: Math.ceil(offsetX), y: Math.ceil(offsetY) };
-          localStorage.setItem("curPoint", JSON.stringify(curPoint));
-          if (countMul > 0) dragged = true;
-          else dragged = false;
-          if (dragged) {
-            zoom(1);
-          } else dragdraw();
+              // set the claimed position in zoom
+              if (curPoint.x > zoomX)
+                curPoint.x = Math.floor(
+                  zoomX + Math.ceil((curPoint.x - zoomX) / divIndex)
+                );
+              else
+                curPoint.x = Math.floor(
+                  zoomX - Math.ceil((zoomX - curPoint.x) / divIndex)
+                );
+              if (curPoint.y > zoomY)
+                curPoint.y = Math.floor(
+                  zoomY + Math.ceil((curPoint.y - zoomY) / divIndex)
+                );
+              else
+                curPoint.y = Math.floor(
+                  zoomY - Math.ceil((zoomY - curPoint.y) / divIndex)
+                );
+              if (curPoint.x > 100) curPoint.x = 100;
+              if (curPoint.y > 100) curPoint.y = 100;
+              if (curPoint.x < 1) curPoint.x = 1;
+              if (curPoint.y < 1) curPoint.y = 1;
+            } else curPoint = { x: Math.ceil(offsetX), y: Math.ceil(offsetY) };
+            localStorage.setItem("curPoint", JSON.stringify(curPoint));
+            if (countMul > 0) dragged = true;
+            else dragged = false;
+            if (dragged) {
+              zoom(1);
+            } else dragdraw();
+          }
         },
         false
       );
@@ -733,11 +839,9 @@ export default function Map() {
 
   useEffect(() => {
     initEventListners();
-    if (initialFlag) {
-      localStorage.clear();
-      if (isMobile) zoomTouch(2);
-      else zoom(2);
-    }
+    localStorage.clear();
+    if (isMobile) zoomTouch(2);
+    else zoom(2);
   }, []);
 
   useEffect(() => {
