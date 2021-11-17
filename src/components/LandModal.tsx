@@ -279,9 +279,7 @@ export default function LandModal({
                     width={isMobile ? "100px" : "150px"}
                     height={isMobile ? "100px" : "150px"}
                     padding="15px"
-                    marginTop="15px"
-                    marginLeft="20px"
-                    marginRight="25px"
+                    margin={isMobile ? "7px" : "15px 25px 15px 20px"}
                   />
                 )}
                 <Box
