@@ -116,7 +116,20 @@ export default function Map() {
         });
         break;
       case "Exception":
-        msg = "Your transaction is likely to be failed";
+        const errMsg = state.errorMessage;
+        if (errMsg.includes("not contained"))
+          msg = "This collection is not registered by the admin. Please wait.";
+        else if (errMsg.includes("Don't own any NFT in this collection"))
+          msg =
+            "You can't mint this land. You don't hold any NFT(s) in this collection.";
+        else if (errMsg.includes("Already claimed all lands"))
+          msg =
+            "You can't mint this land. You've already claimed all lands in this collection.";
+        else if (errMsg.includes("You are not the owner of this land"))
+          msg = "You should be the owner of this land.";
+        else if (errMsg.includes("You are not the owner of this tokenID"))
+          msg = "You should be the owner of this NFT";
+        else msg = "Transaction can't be performed.";
         toast({
           description: msg,
           status: "warning",
