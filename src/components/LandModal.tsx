@@ -245,7 +245,12 @@ export default function LandModal({
           <ModalCloseButton style={{ backgroundColor: "#0dbab0" }} />
           <ModalBody padding={isMobile ? "8px" : "8px 24px"}>
             <Flex color="white" direction="column">
-              <Flex color="white" display="flex" alignItems="center">
+              <Flex
+                color="white"
+                display="flex"
+                alignItems="center"
+                justifyContent="space-around"
+              >
                 {isClaimed === "1" &&
                 imageURLValue &&
                 royalTokenURIValue &&
