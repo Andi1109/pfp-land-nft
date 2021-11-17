@@ -43,8 +43,8 @@ export default function Map() {
   const toast = useToast();
   const { state, send: claimLand } = useContractMethod("claimLand");
 
-  const [clickedX, setClickedX] = useState(1);
-  const [clickedY, setClickedY] = useState(1);
+  const [clickedX, setClickedX] = useState(13);
+  const [clickedY, setClickedY] = useState(58);
   const [totalLandsValue, setTotalLandsValue] = useState("");
   const [myTotalLandsValue, setMyTotalLandsValue] = useState("0");
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -590,7 +590,6 @@ export default function Map() {
               }
             }
           } else if (evt.targetTouches.length === 1) {
-            console.log("touchstart", evt.targetTouches);
             const touch: any = evt.changedTouches[0];
             if (touch) {
               touchOffsetX =
@@ -733,8 +732,6 @@ export default function Map() {
                 };
               localStorage.setItem("curPoint", JSON.stringify(curPoint));
               innerX = getPos(innerX);
-              console.log("touchpos:", innerX, touchOffsetX, touchOffsetY);
-              console.log("curPoint:", curPoint);
               touchDragged = true;
               zoomTouch(1);
             }
@@ -745,8 +742,6 @@ export default function Map() {
       canvas.addEventListener(
         "touchend",
         function touchEventHandler(evt: any) {
-          console.log("touchend");
-          if (!touchDragged) setIsOpenModal(true);
           touchDragged = false;
         },
         false
@@ -775,8 +770,9 @@ export default function Map() {
             offsetY = offsetY === 0 ? 1 : Math.floor(offsetY);
             setClickedX(offsetX);
             setClickedY(offsetY);
-            setIsOpenModal(true);
+            touchDragged = false;
           }
+          if (!touchDragged) setIsOpenModal(true);
         },
         false
       );
