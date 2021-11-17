@@ -7,62 +7,117 @@ import { landContractAddress } from "../contracts";
 const landContractInterface = new ethers.utils.Interface(landContractAbi);
 const contract = new Contract(landContractAddress, landContractInterface);
 
-export function GetTotalLands() {
-  const [totalLands]: any =
+export function GetTotalSupply() {
+  const [totalSupply]: any =
     useContractCall({
       abi: landContractInterface,
       address: landContractAddress,
-      method: "totalLands",
+      method: "totalSupply",
       args: [],
     }) ?? [];
-  return totalLands;
+  return totalSupply;
 }
 
-export function GetLandsByIndex(index: any) {
-  const [landX, landY]: any =
+export function GetTokenByIndex(index: any) {
+  const [tokenID]: any =
     useContractCall({
       abi: landContractInterface,
       address: landContractAddress,
-      method: "landByIndex",
+      method: "tokenByIndex",
       args: [index],
     }) ?? [];
-  const land = { landX, landY };
-  return land;
+  return tokenID;
 }
 
-export function GetMyTotalLands(owner: any) {
-  const [myTotalLands]: any =
+export function GetBalanceOf(owner: any) {
+  const [balance]: any =
     useContractCall({
       abi: landContractInterface,
       address: landContractAddress,
-      method: "claimedLandBalanceOf",
+      method: "balanceOf",
       args: [owner],
     }) ?? [];
-  return myTotalLands;
+  return balance;
 }
 
-export function GetMyLandsByIndex(owner: any, index: any) {
-  const [decodedX, decodedY]: any =
-    useContractCall({
-      abi: landContractInterface,
-      address: landContractAddress,
-      method: "getLandOfByIndex",
-      args: [owner, index],
-    }) ?? [];
-  const decodeObj = { decodedX, decodedY };
-  return decodeObj;
-}
-
-export function GetLandOwnerOf(assetID: any) {
+export function GetOwnerOf(tokenID: any) {
   const [owner]: any =
     useContractCall({
       abi: landContractInterface,
       address: landContractAddress,
       method: "landOwnerOf",
-      args: [assetID],
+      args: [tokenID],
     }) ?? [];
   return owner;
 }
+
+export function GetTokenOfOwnerByIndex(owner: any, index: any) {
+  const [tokenID]: any =
+    useContractCall({
+      abi: landContractInterface,
+      address: landContractAddress,
+      method: "tokenOfOwnerByIndex",
+      args: [owner, index],
+    }) ?? [];
+  return tokenID;
+}
+
+// export function GetTotalLands() {
+//   const [totalLands]: any =
+//     useContractCall({
+//       abi: landContractInterface,
+//       address: landContractAddress,
+//       method: "totalLands",
+//       args: [],
+//     }) ?? [];
+//   return totalLands;
+// }
+
+// export function GetLandsByIndex(index: any) {
+//   const [landX, landY]: any =
+//     useContractCall({
+//       abi: landContractInterface,
+//       address: landContractAddress,
+//       method: "landByIndex",
+//       args: [index],
+//     }) ?? [];
+//   const land = { landX, landY };
+//   return land;
+// }
+
+// export function GetMyTotalLands(owner: any) {
+//   const [myTotalLands]: any =
+//     useContractCall({
+//       abi: landContractInterface,
+//       address: landContractAddress,
+//       method: "claimedLandBalanceOf",
+//       args: [owner],
+//     }) ?? [];
+//   return myTotalLands;
+// }
+
+// export function GetMyLandsByIndex(owner: any, index: any) {
+//   const [decodedX, decodedY]: any =
+//     useContractCall({
+//       abi: landContractInterface,
+//       address: landContractAddress,
+//       method: "getLandOfByIndex",
+//       args: [owner, index],
+//     }) ?? [];
+//   const decodeObj = { decodedX, decodedY };
+//   return decodeObj;
+// }
+
+// export function GetLandOwnerOf(assetID: any) {
+//   const [owner]: any =
+//     useContractCall({
+//       abi: landContractInterface,
+//       address: landContractAddress,
+//       method: "landOwnerOf",
+//       args: [assetID],
+//     }) ?? [];
+//   return owner;
+// }
 
 export function GetRoyalMetaDataOfLand(assetID: any) {
   const [collectionID, tokenID]: any =
@@ -88,11 +143,11 @@ export function GetMetaDataAtCollection(collectionID: any, tokenID: any) {
 }
 
 export function CollectionIDAt(landX: any, landY: any) {
-  const [collectionID, owner]: any =
+  const [collectionID]: any =
     useContractCall({
       abi: landContractInterface,
       address: landContractAddress,
-      method: "collectionIDAndClaimerAt",
+      method: "collectionIDAt",
       args: [landX, landY],
     }) ?? [];
   return collectionID;

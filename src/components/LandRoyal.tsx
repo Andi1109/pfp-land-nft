@@ -1,9 +1,9 @@
 import {
-  GetLandsByIndex,
-  EncodeTokenID,
+  GetTokenByIndex,
   GetRoyalMetaDataOfLand,
   GetMetaDataAtCollection,
 } from "../hooks";
+import { useState, useEffect } from "react";
 
 type Props = {
   index: number;
@@ -11,15 +11,23 @@ type Props = {
 };
 
 export default function LandRoyal({ index, onFoundLand }: Props) {
-  const land = GetLandsByIndex(index);
-  const landX = land.landX ? land.landX.toNumber() : -1;
-  const landY = land.landY ? land.landY.toNumber() : -1;
-  const assetID = EncodeTokenID(landX, landY);
-  const royalData = GetRoyalMetaDataOfLand(assetID);
+  const land = GetTokenByIndex(index);
+  console.log("landRoyal tokenID is ", land);
+  const royalData = GetRoyalMetaDataOfLand(land);
   const royalTokenURI = GetMetaDataAtCollection(
     royalData.collectionID,
     royalData.tokenID
   );
+
+  const [landX, setLandX] = useState(0);
+  const [landY, setLandY] = useState(0);
+
+  useEffect(() => {
+    if (land && land.toNumber() > 10000) {
+      setLandX(Math.ceil((land.toNumber() - 10000) / 100));
+      setLandY(land.toNumber() - 10000 - (landX - 1) * 100);
+    }
+  }, [land]);
 
   const fetchImage = async (uri: any) => {
     if (uri) {

@@ -8,7 +8,6 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
-  useDisclosure,
   Box,
   Flex,
   Image,
@@ -22,8 +21,7 @@ import {
   AvatarBadge,
 } from "@chakra-ui/react";
 import {
-  EncodeTokenID,
-  GetLandOwnerOf,
+  GetOwnerOf,
   CollectionIDAt,
   GetRoyalMetaDataOfLand,
   GetMetaDataAtCollection,
@@ -33,35 +31,38 @@ import {
 } from "../hooks";
 import { utils } from "ethers";
 import { useEthers } from "@usedapp/core";
-import { ReactNode, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import RoyalImage from "./RoyalImage";
 import DerivedImage from "./DerivedImage";
 import ClaimedDerivedImage from "./ClaimedDerivedImage";
 import pairsJson from "../royal_derived_pair/pair.json";
 
 type Props = {
-  children: ReactNode;
   onClaim: Function;
   isMobile: boolean;
+  isOpenModal: boolean;
+  onCloseModal: Function;
   doPostTransaction: Function;
   checkClaimedLand: Function;
+  landX: Number;
+  landY: Number;
 };
 
 export default function LandModal({
-  children,
   onClaim,
   isMobile,
+  isOpenModal,
+  onCloseModal,
   doPostTransaction,
   checkClaimedLand,
+  landX,
+  landY,
 }: Props) {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const landX = document.getElementById("selectedLandX")?.innerHTML;
-  const landY = document.getElementById("selectedLandY")?.innerHTML;
-  const isClaimed = checkClaimedLand(parseInt(landX), parseInt(landY));
+  const isClaimed = checkClaimedLand(landX, landY);
 
   const { account } = useEthers();
-  const assetID = EncodeTokenID(landX, landY);
-  const landOwner = GetLandOwnerOf(assetID);
+  const assetID = (landX - 1) * 100 + landY + 10000;
+  const landOwner = GetOwnerOf(assetID);
   const collectionID = CollectionIDAt(landX, landY);
   const royalData = GetRoyalMetaDataOfLand(assetID);
   const royalTokenURI = GetMetaDataAtCollection(
@@ -88,17 +89,15 @@ export default function LandModal({
   const [royalBalanceValue, setRoyalBalanceValue] = useState("");
   const [derivativeBalanceValue, setDerivativeBalanceValue] = useState("");
   const [jsonKeyValue, setJsonKeyValue] = useState("0_0");
-  const [selectedRoyalCollectionID, setSelectedRoyalCollectionID] = useState<
-    String
-  >();
+  const [selectedRoyalCollectionID, setSelectedRoyalCollectionID] =
+    useState<String>();
   const [selectedRoyalTokenID, setSelectedRoyalTokenID] = useState<String>();
   const [
     selectedDerivedCollectionAddress,
     setSelectedDerivedCollectionAddress,
   ] = useState<String>();
-  const [selectedDerivedTokenID, setSelectedDerivedTokenID] = useState<
-    String
-  >();
+  const [selectedDerivedTokenID, setSelectedDerivedTokenID] =
+    useState<String>();
 
   const fetchImage = async (uri: any) => {
     if (uri) {
@@ -174,7 +173,13 @@ export default function LandModal({
 
   const handleClaim = () => {
     onClaim(landX, landY, collectionIDValue);
-    onClose();
+    onCloseModal();
+  };
+
+  const handleBuy = () => {
+    console.log("buy button clicked");
+    window.open("https://opensea.io/collection/mypfpland", "_blank").focus();
+    onCloseModal();
   };
 
   const onRoyalImageChanged = (collectionID: any, tokenID: any) => {
@@ -190,7 +195,7 @@ export default function LandModal({
   const handleChooseRoyalNFT = async () => {
     console.log("selectedRoyalCollectionID", selectedRoyalCollectionID);
     console.log("selectedRoyalTokenID", selectedRoyalTokenID);
-    onClose();
+    onCloseModal();
     try {
       await updateRoyal(
         landX,
@@ -207,7 +212,7 @@ export default function LandModal({
   };
 
   const handleChooseDerivedNFT = async () => {
-    onClose();
+    onCloseModal();
     try {
       await updateDerived(
         landX,
@@ -225,8 +230,7 @@ export default function LandModal({
 
   return (
     <div>
-      <div onClick={onOpen}>{children}</div>
-      <Modal isOpen={isOpen} onClose={onClose} colorScheme="linkedin">
+      <Modal isOpen={isOpenModal} onClose={onCloseModal} colorScheme="linkedin">
         <ModalOverlay />
         <ModalContent
           style={{
@@ -380,7 +384,6 @@ export default function LandModal({
                   );
                 })}
               </Box>
-              {/* Royal NFT Section*/}
               <Accordion
                 allowMultiple
                 style={{
@@ -445,7 +448,6 @@ export default function LandModal({
                   </AccordionPanel>
                 </AccordionItem>
               </Accordion>
-              {/* Derivative NFT Section*/}
               <Accordion
                 allowMultiple
                 style={{
@@ -536,10 +538,14 @@ export default function LandModal({
                 marginRight: "20px",
                 width: "40%",
               }}
-              onClick={handleClaim}
-              disabled={isClaimed === "1" || collectionIDValue === ""}
+              onClick={isClaimed === "1" ? handleBuy : handleClaim}
+              disabled={
+                myAccountValue === landOwnerValue || collectionIDValue === ""
+              }
             >
-              Claim
+              {isClaimed === "1" || collectionIDValue === ""
+                ? "Buy on OpenSea"
+                : "Mint"}
             </Button>
             <Button
               style={{
@@ -548,7 +554,7 @@ export default function LandModal({
                 width: "40%",
                 color: "mediumaquamarine",
               }}
-              onClick={onClose}
+              onClick={onCloseModal}
             >
               Close
             </Button>

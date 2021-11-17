@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { GetLandsByIndex } from "../hooks";
+import { useEffect } from "react";
+import { GetTokenByIndex } from "../hooks";
 
 type Props = {
   index: number;
@@ -7,13 +7,13 @@ type Props = {
 };
 
 export default function LandDetail({ index, onFoundLand }: Props) {
-  const land = GetLandsByIndex(index);
-  const [landX, setLandX] = useState(-1);
-  const [landY, setLandY] = useState(-1);
+  const land = GetTokenByIndex(index);
   useEffect(() => {
-    setLandX(land.landX ? land.landX.toNumber() : -1);
-    setLandY(land.landY ? land.landY.toNumber() : -1);
-    onFoundLand({ x: landX, y: landY });
+    if (land && land.toNumber() > 10000) {
+      const landX = Math.ceil((land.toNumber() - 10000) / 100);
+      const landY = land.toNumber() - 10000 - (landX - 1) * 100;
+      onFoundLand({ x: landX, y: landY });
+    }
   }, [land]);
 
   return <></>;

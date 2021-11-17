@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 import { Box, useToast } from "@chakra-ui/react";
-import { GetTotalLands, GetMyTotalLands, useContractMethod } from "../hooks";
+import { GetTotalSupply, GetBalanceOf, useContractMethod } from "../hooks";
 import LandDetail from "./LandDetail";
 import MyLandDetail from "./MyLandDetail";
 import LandRoyal from "./LandRoyal";
@@ -24,6 +24,7 @@ export default function Map() {
     src: string;
   }
 
+  let initialFlag = true;
   let flagScale = true; // if true draw zoom
   let touchDragged = false;
   let offsetX = 0; // X position of mouse pointer
@@ -38,20 +39,21 @@ export default function Map() {
   let zoomY = 0; // Y position of previous zoomed
 
   const { account } = useEthers();
-  const totalLands = GetTotalLands();
-  const myTotalLands = GetMyTotalLands(account);
+  const totalLands = GetTotalSupply();
+  const myTotalLands = GetBalanceOf(account);
   const toast = useToast();
   const { state, send: claimLand } = useContractMethod("claimLand");
 
+  const [clickedX, setClickedX] = useState(1);
+  const [clickedY, setClickedY] = useState(1);
   const [totalLandsValue, setTotalLandsValue] = useState("");
   const [myTotalLandsValue, setMyTotalLandsValue] = useState("0");
+  const [isOpenModal, setIsOpenModal] = useState(false);
   const [claimedLands, setClaimedLands] = useState<Land[]>([]);
   const [myClaimedLands, setMyClaimedLands] = useState<Land[]>([]);
   const [royalLands, setRoyalLands] = useState<RoyalLand[]>([]);
 
   const canvasRef = useRef(null);
-  const selectedLandX = useRef(null);
-  const selectedLandY = useRef(null);
   const isMobile = window.screen.width <= window.screen.height ? true : false;
   const canvasHeight = Math.round(window.innerHeight / (100 / 90));
   const canvasWidth = Math.round(window.innerWidth / (100 / 90));
@@ -505,6 +507,10 @@ export default function Map() {
     return evt.preventDefault() && false;
   };
 
+  const handleCloseModal = () => {
+    setIsOpenModal(false);
+  };
+
   function getPos(offsetpos: any) {
     if (offsetpos > 100) return 100;
     else if (offsetpos < 0) return 0;
@@ -626,13 +632,13 @@ export default function Map() {
                     zoomY - (zoomY - touchOffsetY) / divIndex
                   );
               }
-              const landX: any = selectedLandX.current;
-              const landY: any = selectedLandY.current;
 
               offsetX = touchOffsetX === 0 ? 1 : Math.ceil(touchOffsetX);
               offsetY = touchOffsetY === 0 ? 1 : Math.ceil(touchOffsetY);
-              landX.innerHTML = offsetX.toString();
-              landY.innerHTML = offsetY.toString();
+
+              setClickedX(offsetX);
+              setClickedY(offsetY);
+              setIsOpenModal(true);
               touchDragged = false;
             }
           }
@@ -766,13 +772,12 @@ export default function Map() {
                 offsetY = zoomY + Math.ceil((offsetY - zoomY) / divIndex);
               else offsetY = zoomY - Math.ceil((zoomY - offsetY) / divIndex);
             }
-            const landX: any = selectedLandX.current;
-            const landY: any = selectedLandY.current;
 
             offsetX = offsetX === 0 ? 1 : Math.floor(offsetX);
             offsetY = offsetY === 0 ? 1 : Math.floor(offsetY);
-            landX.innerHTML = offsetX.toString();
-            landY.innerHTML = offsetY.toString();
+            setClickedX(offsetX);
+            setClickedY(offsetY);
+            setIsOpenModal(true);
           }
         },
         false
@@ -849,33 +854,29 @@ export default function Map() {
   }, [draw]);
 
   return (
-    <Box border="solid 1px" display="flex" alignItems="center">
-      <LandModal
-        onClaim={handleClaim}
-        isMobile={isMobile}
-        doPostTransaction={doPostTransaction}
-        checkClaimedLand={checkClaimedLand}
-      >
+    <>
+      <Box border="solid 1px" display="flex" alignItems="center">
         <canvas
           ref={canvasRef}
           width={`${canvasWidth}`}
           height={`${canvasHeight}`}
         />
-      </LandModal>
-      {Array.from({ length: parseInt(totalLandsValue) }, (_, i) => 0 + i).map(
-        (index) => {
-          const landDiv = (
-            <LandDetail
-              index={index}
-              key={index}
-              onFoundLand={appendClaimedLands}
-            />
-          );
-          return landDiv;
-        }
-      )}
-      {Array.from({ length: parseInt(myTotalLandsValue) }, (_, i) => 0 + i).map(
-        (index) => {
+        {Array.from({ length: parseInt(totalLandsValue) }, (_, i) => 0 + i).map(
+          (index) => {
+            const landDiv = (
+              <LandDetail
+                index={index}
+                key={index}
+                onFoundLand={appendClaimedLands}
+              />
+            );
+            return landDiv;
+          }
+        )}
+        {Array.from(
+          { length: parseInt(myTotalLandsValue) },
+          (_, i) => 0 + i
+        ).map((index) => {
           const landDiv = (
             <MyLandDetail
               owner={account}
@@ -885,26 +886,30 @@ export default function Map() {
             />
           );
           return landDiv;
-        }
-      )}
-      {Array.from({ length: parseInt(totalLandsValue) }, (_, i) => 0 + i).map(
-        (index) => {
-          const landDiv = (
-            <LandRoyal
-              index={index}
-              key={index}
-              onFoundLand={appendRoyalLands}
-            />
-          );
-          return landDiv;
-        }
-      )}
-      <div id="selectedLandX" ref={selectedLandX} hidden={true}>
-        {claimedLands[0] ? claimedLands[0].x : 1}
-      </div>
-      <div id="selectedLandY" ref={selectedLandY} hidden={true}>
-        {claimedLands[0] ? claimedLands[0].y : 1}
-      </div>
-    </Box>
+        })}
+        {Array.from({ length: parseInt(totalLandsValue) }, (_, i) => 0 + i).map(
+          (index) => {
+            const landDiv = (
+              <LandRoyal
+                index={index}
+                key={index}
+                onFoundLand={appendRoyalLands}
+              />
+            );
+            return landDiv;
+          }
+        )}
+      </Box>
+      <LandModal
+        isOpenModal={isOpenModal}
+        onCloseModal={handleCloseModal}
+        landX={clickedX}
+        landY={clickedY}
+        onClaim={handleClaim}
+        isMobile={isMobile}
+        doPostTransaction={doPostTransaction}
+        checkClaimedLand={checkClaimedLand}
+      ></LandModal>
+    </>
   );
 }

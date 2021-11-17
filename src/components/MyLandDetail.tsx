@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { GetMyLandsByIndex } from "../hooks";
+import { useEffect } from "react";
+import { GetTokenOfOwnerByIndex } from "../hooks";
 
 type Props = {
   owner: any;
@@ -8,14 +8,14 @@ type Props = {
 };
 
 export default function MyLandDetail({ owner, index, onFoundLand }: Props) {
-  const land = GetMyLandsByIndex(owner, index);
-  const [landX, setLandX] = useState(-1);
-  const [landY, setLandY] = useState(-1);
+  const land = GetTokenOfOwnerByIndex(owner, index);
 
   useEffect(() => {
-    setLandX(land.decodedX ? land.decodedX.toNumber() : -1);
-    setLandY(land.decodedY ? land.decodedY.toNumber() : -1);
-    onFoundLand({ x: landX, y: landY });
+    if (land && land.toNumber() > 10000) {
+      const landX = Math.ceil((land.toNumber() - 10000) / 100);
+      const landY = land.toNumber() - 10000 - (landX - 1) * 100;
+      onFoundLand({ x: landX, y: landY });
+    }
   }, [land]);
 
   return <></>;

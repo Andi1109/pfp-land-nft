@@ -160,26 +160,6 @@
         "internalType": "address",
         "name": "",
         "type": "address"
-      }
-    ],
-    "name": "claimedLandBalanceOf",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
       },
       {
         "internalType": "uint256",
@@ -402,52 +382,7 @@
         "type": "uint256"
       }
     ],
-    "name": "landByIndex",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "x",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "y",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
     "name": "landDerivativeBalance",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "landDerivativeCountOf",
     "outputs": [
       {
         "internalType": "uint256",
@@ -483,26 +418,6 @@
         "internalType": "uint256",
         "name": "tokenID",
         "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "landOwnerOf",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -758,20 +673,6 @@
   },
   {
     "inputs": [],
-    "name": "totalLands",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
-  },
-  {
-    "inputs": [],
     "name": "totalSupply",
     "outputs": [
       {
@@ -806,6 +707,20 @@
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "transfertest",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function",
+    "constant": true
   },
   {
     "inputs": [],
@@ -970,6 +885,24 @@
       }
     ],
     "name": "setBatchHonoraries",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address[]",
+        "name": "_whitelist",
+        "type": "address[]"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_count",
+        "type": "uint256"
+      }
+    ],
+    "name": "setBatchMekakeyWallets",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1149,33 +1082,42 @@
     ],
     "name": "claimLand",
     "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
+    "stateMutability": "payable",
+    "type": "function",
+    "payable": true
   },
   {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "claimer",
-        "type": "address"
-      },
-      {
         "internalType": "uint256",
-        "name": "index",
+        "name": "tokenId",
         "type": "uint256"
       }
     ],
-    "name": "getLandOfByIndex",
+    "name": "landOwnerOf",
     "outputs": [
       {
-        "internalType": "uint256",
+        "internalType": "address",
         "name": "",
-        "type": "uint256"
+        "type": "address"
       }
     ],
     "stateMutability": "view",
     "type": "function",
     "constant": true
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "_baseURI",
+        "type": "string"
+      }
+    ],
+    "name": "setBaseURIForLand",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
     "inputs": [
@@ -1224,7 +1166,7 @@
       },
       {
         "internalType": "uint256",
-        "name": "tokenIDs",
+        "name": "tokenID",
         "type": "uint256"
       }
     ],
@@ -1284,17 +1226,12 @@
         "type": "uint256"
       }
     ],
-    "name": "collectionIDAndClaimerAt",
+    "name": "collectionIDAt",
     "outputs": [
       {
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -1526,7 +1463,7 @@
         "type": "uint256"
       }
     ],
-    "stateMutability": "pure",
+    "stateMutability": "view",
     "type": "function",
     "constant": true
   },
@@ -1551,7 +1488,7 @@
         "type": "uint256"
       }
     ],
-    "stateMutability": "pure",
+    "stateMutability": "view",
     "type": "function",
     "constant": true
   }
