@@ -638,7 +638,6 @@ export default function Map() {
 
               setClickedX(offsetX);
               setClickedY(offsetY);
-              setIsOpenModal(true);
               touchDragged = false;
             }
           }
@@ -748,7 +747,7 @@ export default function Map() {
         "touchend",
         function touchEventHandler(evt: any) {
           console.log("touchend");
-          if (!touchDragged) zoomTouch(1);
+          if (!touchDragged) setIsOpenModal(true);
           touchDragged = false;
         },
         false
