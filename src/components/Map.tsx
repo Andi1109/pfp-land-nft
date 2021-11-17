@@ -24,7 +24,6 @@ export default function Map() {
     src: string;
   }
 
-  let initialFlag = true;
   let flagScale = true; // if true draw zoom
   let touchDragged = false;
   let offsetX = 0; // X position of mouse pointer
