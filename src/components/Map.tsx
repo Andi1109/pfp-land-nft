@@ -465,8 +465,8 @@ export default function Map() {
         function touchEventHandler(evt: any) {
           evt.preventDefault();
           if (evt.targetTouches.length === 2) {
-            const touch1: any = evt.changedTouches[0];
-            const touch2: any = evt.changedTouches[1];
+            const touch1: any = evt.touches[0];
+            const touch2: any = evt.touches[1];
             if (touch1 && touch2) {
               const touch1X =
                 ((touch1.clientX - touch1.target.offsetLeft) / canvasSize.w) *
@@ -535,9 +535,12 @@ export default function Map() {
         "touchmove",
         function touchEventHandler(evt: any) {
           evt.preventDefault();
-          if (evt.targetTouches.length === 2) {
-            const touch1: any = evt.changedTouches[0];
-            const touch2: any = evt.changedTouches[1];
+          if (
+            evt.targetTouches.length === 2 &&
+            evt.changedTouches.length === 2
+          ) {
+            const touch1: any = evt.touches[0];
+            const touch2: any = evt.touches[1];
             if (touch1 && touch2) {
               const touch1X =
                 ((touch1.clientX - touch1.target.offsetLeft) / canvasSize.w) *
@@ -557,9 +560,13 @@ export default function Map() {
                 touch1X - touch2X,
                 touch1Y - touch2Y
               );
-              const distanceZoom = distZoom2 - distZoom;
-              if (distanceZoom > 0) handleZoom(3, offsetX, offsetY);
-              else if (distanceZoom < 0) handleZoom(-3, offsetX, offsetY);
+              if (distZoom > distZoom2) {
+                handleZoom(-3, offsetX, offsetY);
+                alert("zoom out");
+              } else if (distZoom < distZoom2) {
+                handleZoom(3, offsetX, offsetY);
+                alert("zoom in");
+              }
             }
           } else if (evt.targetTouches.length === 1) {
             const touch: any = evt.changedTouches[0];
