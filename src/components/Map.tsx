@@ -468,19 +468,10 @@ export default function Map() {
             const touch1: any = evt.touches[0];
             const touch2: any = evt.touches[1];
             if (touch1 && touch2) {
-              const touch1X =
-                ((touch1.clientX - touch1.target.offsetLeft) / canvasSize.w) *
-                100;
-              const touch1Y =
-                ((touch1.clientY - touch1.target.offsetTop) / canvasSize.w) *
-                100;
-              const touch2X =
-                ((touch2.clientX - touch2.target.offsetLeft) / canvasSize.w) *
-                100;
-              const touch2Y =
-                ((touch2.clientY - touch2.target.offsetTop) / canvasSize.w) *
-                100;
-              distZoom = Math.hypot(touch1X - touch2X, touch1Y - touch2Y);
+              distZoom = Math.hypot(
+                touch1.pageX - touch2.pageX,
+                touch1.pageY - touch2.pageY
+              );
             }
           } else if (evt.targetTouches.length === 1) {
             const touch: any = evt.changedTouches[0];
@@ -517,8 +508,8 @@ export default function Map() {
             curPos.y = orinPos.y + offsetY / zoomScale;
             localStorage.setItem("curPoint", JSON.stringify(curPos));
             draw(ctx);
+            alert("touchend");
             const curJson = localStorage.getItem("curPoint");
-            console.log("touchend");
             if (curJson) {
               const _curPoint = JSON.parse(curJson);
               setClickedX(Math.ceil(_curPoint.x));
@@ -557,8 +548,8 @@ export default function Map() {
               const offsetX = (touch1X + touch2X) / 2;
               const offsetY = (touch1Y + touch2Y) / 2;
               const distZoom2 = Math.hypot(
-                touch1X - touch2X,
-                touch1Y - touch2Y
+                touch1.pageX - touch2.pageX,
+                touch1.pageY - touch2.pageY
               );
               if (distZoom > distZoom2) {
                 handleZoom(-3, offsetX, offsetY);
@@ -568,7 +559,10 @@ export default function Map() {
                 alert("zoom in");
               }
             }
-          } else if (evt.targetTouches.length === 1) {
+          } else if (
+            evt.targetTouches.length === 1 ||
+            evt.changedTouches.length === 1
+          ) {
             const touch: any = evt.changedTouches[0];
             if (touch && isDown) {
               const offsetX =
