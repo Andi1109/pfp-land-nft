@@ -233,11 +233,6 @@ export default function LandModal({
   return (
     <div>
       <Modal isOpen={isOpenModal} onClose={onCloseModal} colorScheme="linkedin">
-        {console.log("collectionIDValue is ", collectionIDValue)}
-        {console.log(
-          "==========",
-          collectionIDNamePairJson["collectionID_" + collectionIDValue]
-        )}
         <ModalOverlay />
         <ModalContent
           style={{
