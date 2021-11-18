@@ -8,7 +8,7 @@ export default function ConnectButton() {
         <></>
       ) : (
         <Text color="white" fontSize="md">
-          To see more lands, move your mouse up or down
+          To see more lands, drag your mouse up or down
         </Text>
       )}
     </Box>
