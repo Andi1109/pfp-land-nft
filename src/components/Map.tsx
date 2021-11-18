@@ -423,14 +423,21 @@ export default function Map() {
     handleDrawCanvas("zoom");
   };
 
-  const handleDrag = (posX: any, posY: any, lastX: any, lastY: any) => {
+  const handleDrag = (
+    orinX: any,
+    orinY: any,
+    posX: any,
+    posY: any,
+    lastX: any,
+    lastY: any
+  ) => {
     const zoomScale = Math.pow(1.25, countMul);
     const zoomS = 1.25 * countMul ? 1.25 * countMul : 1;
     const dx = (posX - lastX) / zoomS;
     const dy = (posY - lastY) / zoomS;
 
-    orinPos.x -= dx / 10;
-    orinPos.y -= dy / 10;
+    orinPos.x = orinX - dx;
+    orinPos.y = orinY - dy;
     limitOrinPos();
 
     curPos.x = orinPos.x + posX / zoomScale;
@@ -448,35 +455,15 @@ export default function Map() {
 
     const canvas: any = canvasRef.current;
     if (canvas) {
-      let distZoom = 0;
       let lastX = 0;
       let lastY = 0;
+      let orin = { x: 0, y: 0 };
       let dragged = false;
       canvas.addEventListener(
         "touchstart",
         function touchEventHandler(evt: any) {
           evt.preventDefault();
-          if (evt.targetTouches.length === 2) {
-            // const touch1: any = evt.changedTouches[0];
-            // const touch2: any = evt.changedTouches[1];
-            // if (touch1 && touch2) {
-            //   const touch1X =
-            //     ((touch1.clientX - touch1.target.offsetLeft) / canvasSize.w) *
-            //     100;
-            //   const touch1Y =
-            //     ((touch1.clientY - touch1.target.offsetTop) / canvasSize.w) *
-            //     100;
-            //   const touch2X =
-            //     ((touch2.clientX - touch2.target.offsetLeft) / canvasSize.w) *
-            //     100;
-            //   const touch2Y =
-            //     ((touch2.clientY - touch2.target.offsetTop) / canvasSize.w) *
-            //     100;
-            //   distZoom = Math.sqrt(
-            //     Math.pow(touch1X - touch2X, 2) + Math.pow(touch1Y - touch2Y, 2)
-            //   );
-            // }
-          } else if (evt.targetTouches.length === 1) {
+          if (evt.targetTouches.length === 1) {
             const touch: any = evt.changedTouches[0];
             if (touch) {
               const offsetX =
@@ -486,6 +473,8 @@ export default function Map() {
                 ((touch.clientY - touch.target.offsetTop) / canvasSize.w) * 100;
               lastX = offsetX;
               lastY = offsetY;
+              orin.x = orinPos.x;
+              orin.y = orinPos.y;
 
               isDown = true;
             }
@@ -497,32 +486,7 @@ export default function Map() {
         "touchmove",
         function touchEventHandler(evt: any) {
           evt.preventDefault();
-          if (evt.targetTouches.length === 2) {
-            // const touch1: any = evt.changedTouches[0];
-            // const touch2: any = evt.changedTouches[1];
-            // if (touch1 && touch2) {
-            //   const touch1X =
-            //     ((touch1.clientX - touch1.target.offsetLeft) / canvasSize.w) *
-            //     100;
-            //   const touch1Y =
-            //     ((touch1.clientY - touch1.target.offsetTop) / canvasSize.w) *
-            //     100;
-            //   const touch2X =
-            //     ((touch2.clientX - touch2.target.offsetLeft) / canvasSize.w) *
-            //     100;
-            //   const touch2Y =
-            //     ((touch2.clientY - touch2.target.offsetTop) / canvasSize.w) *
-            //     100;
-            //   const offsetX = (touch1X + touch2X) / 2;
-            //   const offsetY = (touch1Y + touch2Y) / 2;
-            //   const distZoom2 = Math.sqrt(
-            //     Math.pow(touch1X - touch2X, 2) + Math.pow(touch1Y - touch2Y, 2)
-            //   );
-            //   const distanceZoom = distZoom2 - distZoom;
-            //   if (distanceZoom > 0) handleZoom(3, offsetX, offsetY);
-            //   else if (distanceZoom < 0) handleZoom(-3, offsetX, offsetY);
-            // }
-          } else if (evt.targetTouches.length === 1) {
+          if (evt.targetTouches.length === 1) {
             const touch: any = evt.changedTouches[0];
             if (touch && isDown) {
               const offsetX =
@@ -531,7 +495,7 @@ export default function Map() {
               const offsetY =
                 ((touch.clientY - touch.target.offsetTop) / canvasSize.w) * 100;
               dragged = true;
-              handleDrag(offsetX, offsetY, lastX, lastY);
+              handleDrag(orin.x, orin.y, offsetX, offsetY, lastX, lastY);
             }
           }
         },
@@ -577,6 +541,8 @@ export default function Map() {
 
           lastX = offsetX;
           lastY = offsetY;
+          orin.x = orinPos.x;
+          orin.y = orinPos.y;
 
           isDown = true;
         },
@@ -585,7 +551,7 @@ export default function Map() {
       canvas.addEventListener(
         "mouseup",
         function (evt: any) {
-          if (!dragged) {
+          if (!isMobile && !dragged) {
             const curJson = localStorage.getItem("curPoint");
             if (curJson) {
               const _curPoint = JSON.parse(curJson);
@@ -615,7 +581,7 @@ export default function Map() {
             const offsetX = (evt.offsetX / canvasSize.w) * 100;
             const offsetY = (evt.offsetY / canvasSize.w) * 100;
             dragged = true;
-            handleDrag(offsetX, offsetY, lastX, lastY);
+            handleDrag(orin.x, orin.y, offsetX, offsetY, lastX, lastY);
           }
         },
         false
