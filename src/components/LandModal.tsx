@@ -1,5 +1,6 @@
 // @ts-nocheck
 import {
+  Text,
   Button,
   Modal,
   ModalOverlay,
@@ -36,6 +37,7 @@ import RoyalImage from "./RoyalImage";
 import DerivedImage from "./DerivedImage";
 import ClaimedDerivedImage from "./ClaimedDerivedImage";
 import pairsJson from "../royal_derived_pair/pair.json";
+import collectionIDNamePairJson from "../collectionIDNamePair/pair.json";
 
 type Props = {
   onClaim: Function;
@@ -231,6 +233,11 @@ export default function LandModal({
   return (
     <div>
       <Modal isOpen={isOpenModal} onClose={onCloseModal} colorScheme="linkedin">
+        {console.log("collectionIDValue is ", collectionIDValue)}
+        {console.log(
+          "==========",
+          collectionIDNamePairJson["collectionID_" + collectionIDValue]
+        )}
         <ModalOverlay />
         <ModalContent
           style={{
@@ -241,6 +248,12 @@ export default function LandModal({
         >
           <ModalHeader style={{ backgroundColor: "#3a2f85" }}>
             Land {landX}, {landY}
+            <Text fontSize="sm">
+              {collectionIDNamePairJson["collectionID_" + collectionIDValue]
+                ? "Reserved to: " +
+                  collectionIDNamePairJson["collectionID_" + collectionIDValue]
+                : ""}
+            </Text>
           </ModalHeader>
           <ModalCloseButton style={{ backgroundColor: "#0dbab0" }} />
           <ModalBody padding={isMobile ? "8px" : "8px 24px"}>
