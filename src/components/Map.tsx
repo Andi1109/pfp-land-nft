@@ -457,25 +457,25 @@ export default function Map() {
         function touchEventHandler(evt: any) {
           evt.preventDefault();
           if (evt.targetTouches.length === 2) {
-            const touch1: any = evt.changedTouches[0];
-            const touch2: any = evt.changedTouches[1];
-            if (touch1 && touch2) {
-              const touch1X =
-                ((touch1.clientX - touch1.target.offsetLeft) / canvasSize.w) *
-                100;
-              const touch1Y =
-                ((touch1.clientY - touch1.target.offsetTop) / canvasSize.w) *
-                100;
-              const touch2X =
-                ((touch2.clientX - touch2.target.offsetLeft) / canvasSize.w) *
-                100;
-              const touch2Y =
-                ((touch2.clientY - touch2.target.offsetTop) / canvasSize.w) *
-                100;
-              distZoom = Math.sqrt(
-                Math.pow(touch1X - touch2X, 2) + Math.pow(touch1Y - touch2Y, 2)
-              );
-            }
+            // const touch1: any = evt.changedTouches[0];
+            // const touch2: any = evt.changedTouches[1];
+            // if (touch1 && touch2) {
+            //   const touch1X =
+            //     ((touch1.clientX - touch1.target.offsetLeft) / canvasSize.w) *
+            //     100;
+            //   const touch1Y =
+            //     ((touch1.clientY - touch1.target.offsetTop) / canvasSize.w) *
+            //     100;
+            //   const touch2X =
+            //     ((touch2.clientX - touch2.target.offsetLeft) / canvasSize.w) *
+            //     100;
+            //   const touch2Y =
+            //     ((touch2.clientY - touch2.target.offsetTop) / canvasSize.w) *
+            //     100;
+            //   distZoom = Math.sqrt(
+            //     Math.pow(touch1X - touch2X, 2) + Math.pow(touch1Y - touch2Y, 2)
+            //   );
+            // }
           } else if (evt.targetTouches.length === 1) {
             const touch: any = evt.changedTouches[0];
             if (touch) {
@@ -498,30 +498,30 @@ export default function Map() {
         function touchEventHandler(evt: any) {
           evt.preventDefault();
           if (evt.targetTouches.length === 2) {
-            const touch1: any = evt.changedTouches[0];
-            const touch2: any = evt.changedTouches[1];
-            if (touch1 && touch2) {
-              const touch1X =
-                ((touch1.clientX - touch1.target.offsetLeft) / canvasSize.w) *
-                100;
-              const touch1Y =
-                ((touch1.clientY - touch1.target.offsetTop) / canvasSize.w) *
-                100;
-              const touch2X =
-                ((touch2.clientX - touch2.target.offsetLeft) / canvasSize.w) *
-                100;
-              const touch2Y =
-                ((touch2.clientY - touch2.target.offsetTop) / canvasSize.w) *
-                100;
-              const offsetX = (touch1X + touch2X) / 2;
-              const offsetY = (touch1Y + touch2Y) / 2;
-              const distZoom2 = Math.sqrt(
-                Math.pow(touch1X - touch2X, 2) + Math.pow(touch1Y - touch2Y, 2)
-              );
-              const distanceZoom = distZoom2 - distZoom;
-              if (distanceZoom > 0) handleZoom(3, offsetX, offsetY);
-              else if (distanceZoom < 0) handleZoom(-3, offsetX, offsetY);
-            }
+            // const touch1: any = evt.changedTouches[0];
+            // const touch2: any = evt.changedTouches[1];
+            // if (touch1 && touch2) {
+            //   const touch1X =
+            //     ((touch1.clientX - touch1.target.offsetLeft) / canvasSize.w) *
+            //     100;
+            //   const touch1Y =
+            //     ((touch1.clientY - touch1.target.offsetTop) / canvasSize.w) *
+            //     100;
+            //   const touch2X =
+            //     ((touch2.clientX - touch2.target.offsetLeft) / canvasSize.w) *
+            //     100;
+            //   const touch2Y =
+            //     ((touch2.clientY - touch2.target.offsetTop) / canvasSize.w) *
+            //     100;
+            //   const offsetX = (touch1X + touch2X) / 2;
+            //   const offsetY = (touch1Y + touch2Y) / 2;
+            //   const distZoom2 = Math.sqrt(
+            //     Math.pow(touch1X - touch2X, 2) + Math.pow(touch1Y - touch2Y, 2)
+            //   );
+            //   const distanceZoom = distZoom2 - distZoom;
+            //   if (distanceZoom > 0) handleZoom(3, offsetX, offsetY);
+            //   else if (distanceZoom < 0) handleZoom(-3, offsetX, offsetY);
+            // }
           } else if (evt.targetTouches.length === 1) {
             const touch: any = evt.changedTouches[0];
             if (touch && isDown) {
@@ -541,24 +541,27 @@ export default function Map() {
         "touchend",
         function touchEventHandler(evt: any) {
           evt.preventDefault();
-          const touch: any = evt.changedTouches[0];
-          if (touch && !dragged) {
-            const ctx = canvas.getContext("2d");
-            const zoomScale = Math.pow(1.25, countMul);
-            const offsetX =
-              ((touch.clientX - touch.target.offsetLeft) / canvasSize.w) * 100;
-            const offsetY =
-              ((touch.clientY - touch.target.offsetTop) / canvasSize.w) * 100;
-            curPos.x = orinPos.x + offsetX / zoomScale;
-            curPos.y = orinPos.y + offsetY / zoomScale;
-            localStorage.setItem("curPoint", JSON.stringify(curPos));
-            draw(ctx);
-            const curJson = localStorage.getItem("curPoint");
-            if (curJson) {
-              const _curPoint = JSON.parse(curJson);
-              setClickedX(Math.ceil(_curPoint.x));
-              setClickedY(Math.ceil(_curPoint.y));
-              setIsOpenModal(true);
+          if (evt.targetTouches.length === 1) {
+            const touch: any = evt.changedTouches[0];
+            if (touch && !dragged) {
+              const ctx = canvas.getContext("2d");
+              const zoomScale = Math.pow(1.25, countMul);
+              const offsetX =
+                ((touch.clientX - touch.target.offsetLeft) / canvasSize.w) *
+                100;
+              const offsetY =
+                ((touch.clientY - touch.target.offsetTop) / canvasSize.w) * 100;
+              curPos.x = orinPos.x + offsetX / zoomScale;
+              curPos.y = orinPos.y + offsetY / zoomScale;
+              localStorage.setItem("curPoint", JSON.stringify(curPos));
+              draw(ctx);
+              const curJson = localStorage.getItem("curPoint");
+              if (curJson) {
+                const _curPoint = JSON.parse(curJson);
+                setClickedX(Math.ceil(_curPoint.x));
+                setClickedY(Math.ceil(_curPoint.y));
+                setIsOpenModal(true);
+              }
             }
           }
           isDown = false;
