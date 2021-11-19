@@ -519,30 +519,21 @@ export default function Map() {
             const touch1: any = evt.touches[0];
             const touch2: any = evt.touches[1];
             if (touch1 && touch2) {
-              const touch1X =
-                ((touch1.clientX - touch1.target.offsetLeft) / canvasSize.w) *
-                100;
-              const touch1Y =
-                ((touch1.clientY - touch1.target.offsetTop) / canvasSize.w) *
-                100;
-              const touch2X =
-                ((touch2.clientX - touch2.target.offsetLeft) / canvasSize.w) *
-                100;
-              const touch2Y =
-                ((touch2.clientY - touch2.target.offsetTop) / canvasSize.w) *
-                100;
-              const offsetX = (touch1X + touch2X) / 2;
-              const offsetY = (touch1Y + touch2Y) / 2;
               const distZoom2 = Math.hypot(
                 touch1.pageX - touch2.pageX,
                 touch1.pageY - touch2.pageY
               );
-              if (distZoom > distZoom2) {
-                handleZoom(-3, offsetX, offsetY);
-              } else if (distZoom < distZoom2) {
-                handleZoom(3, offsetX, offsetY);
+              const curJson = localStorage.getItem("curPoint");
+              if (curJson) {
+                const _curPoint = JSON.parse(curJson);
+                if (distZoom > distZoom2) {
+                  handleZoom(-3, _curPoint.x, _curPoint.y);
+                } else if (distZoom < distZoom2) {
+                  handleZoom(3, _curPoint.x, _curPoint.y);
+                }
               }
             }
+            dragged = true;
           } else if (evt.changedTouches.length === 1) {
             const touch: any = evt.changedTouches[0];
             if (touch && isDown) {
