@@ -35,8 +35,8 @@ export default function Map() {
   const toast = useToast();
   const { state, send: claimLand } = useContractMethod("claimLand");
 
-  const [clickedX, setClickedX] = useState(13);
-  const [clickedY, setClickedY] = useState(58);
+  const [clickedX, setClickedX] = useState(30);
+  const [clickedY, setClickedY] = useState(20);
   const [totalLandsValue, setTotalLandsValue] = useState("");
   const [myTotalLandsValue, setMyTotalLandsValue] = useState("0");
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -369,9 +369,23 @@ export default function Map() {
     console.log("claim button clicked");
     console.log(landX, landY, collectionID);
     try {
-      await claimLand(landX, landY, collectionID, {
-        value: utils.parseEther("0.025"),
-      });
+      if (
+        collectionID === "0" ||
+        collectionID === "1" ||
+        collectionID === "2" ||
+        collectionID === "3" ||
+        collectionID === "139" ||
+        collectionID === "140" ||
+        collectionID === "141"
+      )
+        // collections for Honorary and metakey
+        await claimLand(landX, landY, collectionID, {
+          value: utils.parseEther("0"),
+        });
+      else
+        await claimLand(landX, landY, collectionID, {
+          value: utils.parseEther("0.03"),
+        });
     } catch (error) {
       console.log(error);
     }
