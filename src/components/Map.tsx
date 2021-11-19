@@ -481,7 +481,7 @@ export default function Map() {
         "touchstart",
         function touchEventHandler(evt: any) {
           evt.preventDefault();
-          if (evt.targetTouches.length === 2) {
+          if (evt.targetTouches.length === 2 && !zoomed) {
             const touch1: any = evt.touches[0];
             const touch2: any = evt.touches[1];
             if (touch1 && touch2) {
@@ -516,6 +516,7 @@ export default function Map() {
         "touchmove",
         function touchEventHandler(evt: any) {
           evt.preventDefault();
+          dragged = true;
           if (
             evt.targetTouches.length === 2 &&
             evt.changedTouches.length === 2 &&
@@ -538,7 +539,6 @@ export default function Map() {
                 }
               }
             }
-            dragged = true;
             zoomed = false;
           } else if (
             evt.targetTouches.length === 1 &&
@@ -551,7 +551,6 @@ export default function Map() {
                 100;
               const offsetY =
                 ((touch.clientY - touch.target.offsetTop) / canvasSize.w) * 100;
-              dragged = true;
               handleDrag(orin.x, orin.y, offsetX, offsetY, lastX, lastY);
             }
           }
@@ -587,6 +586,7 @@ export default function Map() {
           }
           isDown = false;
           dragged = false;
+          zoomed = false;
         },
         false
       );
