@@ -476,11 +476,13 @@ export default function Map() {
       let distZoom = 0;
       let orin = { x: 0, y: 0 };
       let dragged = false;
+      let zoomed = false;
       canvas.addEventListener(
         "touchstart",
         function touchEventHandler(evt: any) {
           evt.preventDefault();
           if (evt.targetTouches.length === 2) {
+            zoomed = true;
             const touch1: any = evt.touches[0];
             const touch2: any = evt.touches[1];
             if (touch1 && touch2) {
@@ -533,10 +535,10 @@ export default function Map() {
                 }
               }
             }
-            dragged = true;
+            zoomed = true;
           } else if (evt.changedTouches.length === 1) {
             const touch: any = evt.changedTouches[0];
-            if (touch && isDown) {
+            if (touch && isDown && !zoomed) {
               const offsetX =
                 ((touch.clientX - touch.target.offsetLeft) / canvasSize.w) *
                 100;
@@ -554,7 +556,7 @@ export default function Map() {
         function touchEventHandler(evt: any) {
           evt.preventDefault();
           const touch: any = evt.changedTouches[0];
-          if (touch && !dragged) {
+          if (touch && !dragged && !zoomed) {
             const ctx = canvas.getContext("2d");
             const zoomScale = Math.pow(1.25, countMul);
             const offsetX =
@@ -575,6 +577,7 @@ export default function Map() {
           }
           isDown = false;
           dragged = false;
+          zoomed = false;
         },
         false
       );
