@@ -349,6 +349,22 @@ export default function Map() {
     }
   };
 
+  const handleInit = () => {
+    initEventListners();
+    localStorage.clear();
+    countMul = 2;
+    const zoomScale = Math.pow(1.25, countMul);
+    orinPos.x =
+      canvasWidth > canvasHeight
+        ? ((zoomScale - 1) * 50) / zoomScale
+        : ((zoomScale - 1) * 50 * canvasHeight) / (canvasWidth * zoomScale);
+    orinPos.y =
+      canvasWidth > canvasHeight
+        ? ((zoomScale - 1) * 50 * canvasWidth) / (canvasHeight * zoomScale)
+        : ((zoomScale - 1) * 50) / zoomScale;
+    handleDrawCanvas("init");
+  };
+
   const handleClaim = async (landX: any, landY: any, collectionID: any) => {
     console.log("claim button clicked");
     console.log(landX, landY, collectionID);
@@ -493,36 +509,6 @@ export default function Map() {
         false
       );
       canvas.addEventListener(
-        "touchend",
-        function touchEventHandler(evt: any) {
-          evt.preventDefault();
-          const touch: any = evt.changedTouches[0];
-          if (touch && !dragged) {
-            const ctx = canvas.getContext("2d");
-            const zoomScale = Math.pow(1.25, countMul);
-            const offsetX =
-              ((touch.clientX - touch.target.offsetLeft) / canvasSize.w) * 100;
-            const offsetY =
-              ((touch.clientY - touch.target.offsetTop) / canvasSize.w) * 100;
-            curPos.x = orinPos.x + offsetX / zoomScale;
-            curPos.y = orinPos.y + offsetY / zoomScale;
-            localStorage.setItem("curPoint", JSON.stringify(curPos));
-            draw(ctx);
-            alert("touchend");
-            const curJson = localStorage.getItem("curPoint");
-            if (curJson) {
-              const _curPoint = JSON.parse(curJson);
-              setClickedX(Math.ceil(_curPoint.x));
-              setClickedY(Math.ceil(_curPoint.y));
-              setIsOpenModal(true);
-            }
-          }
-          isDown = false;
-          dragged = false;
-        },
-        false
-      );
-      canvas.addEventListener(
         "touchmove",
         function touchEventHandler(evt: any) {
           evt.preventDefault();
@@ -553,16 +539,11 @@ export default function Map() {
               );
               if (distZoom > distZoom2) {
                 handleZoom(-3, offsetX, offsetY);
-                alert("zoom out");
               } else if (distZoom < distZoom2) {
                 handleZoom(3, offsetX, offsetY);
-                alert("zoom in");
               }
             }
-          } else if (
-            evt.targetTouches.length === 1 ||
-            evt.changedTouches.length === 1
-          ) {
+          } else if (evt.changedTouches.length === 1) {
             const touch: any = evt.changedTouches[0];
             if (touch && isDown) {
               const offsetX =
@@ -574,6 +555,35 @@ export default function Map() {
               handleDrag(orin.x, orin.y, offsetX, offsetY, lastX, lastY);
             }
           }
+        },
+        false
+      );
+      canvas.addEventListener(
+        "touchend",
+        function touchEventHandler(evt: any) {
+          evt.preventDefault();
+          const touch: any = evt.changedTouches[0];
+          if (touch && !dragged) {
+            const ctx = canvas.getContext("2d");
+            const zoomScale = Math.pow(1.25, countMul);
+            const offsetX =
+              ((touch.clientX - touch.target.offsetLeft) / canvasSize.w) * 100;
+            const offsetY =
+              ((touch.clientY - touch.target.offsetTop) / canvasSize.w) * 100;
+            curPos.x = orinPos.x + offsetX / zoomScale;
+            curPos.y = orinPos.y + offsetY / zoomScale;
+            localStorage.setItem("curPoint", JSON.stringify(curPos));
+            draw(ctx);
+            const curJson = localStorage.getItem("curPoint");
+            if (curJson) {
+              const _curPoint = JSON.parse(curJson);
+              setClickedX(Math.ceil(_curPoint.x));
+              setClickedY(Math.ceil(_curPoint.y));
+              setIsOpenModal(true);
+            }
+          }
+          isDown = false;
+          dragged = false;
         },
         false
       );
@@ -636,19 +646,7 @@ export default function Map() {
   };
 
   useEffect(() => {
-    initEventListners();
-    localStorage.clear();
-    countMul = 2;
-    const zoomScale = Math.pow(1.25, countMul);
-    orinPos.x =
-      canvasWidth > canvasHeight
-        ? ((zoomScale - 1) * 50) / zoomScale
-        : ((zoomScale - 1) * 50 * canvasHeight) / (canvasWidth * zoomScale);
-    orinPos.y =
-      canvasWidth > canvasHeight
-        ? ((zoomScale - 1) * 50 * canvasWidth) / (canvasHeight * zoomScale)
-        : ((zoomScale - 1) * 50) / zoomScale;
-    handleDrawCanvas("init");
+    handleInit();
   }, []);
 
   return (
