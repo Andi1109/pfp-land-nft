@@ -476,6 +476,7 @@ export default function Map() {
       let distZoom = 0;
       let orin = { x: 0, y: 0 };
       let dragged = false;
+      let zoomed = false;
       canvas.addEventListener(
         "touchstart",
         function touchEventHandler(evt: any) {
@@ -488,6 +489,7 @@ export default function Map() {
                 touch1.pageX - touch2.pageX,
                 touch1.pageY - touch2.pageY
               );
+              zoomed = true;
             }
           } else if (
             evt.targetTouches.length === 1 &&
@@ -516,7 +518,8 @@ export default function Map() {
           evt.preventDefault();
           if (
             evt.targetTouches.length === 2 &&
-            evt.changedTouches.length === 2
+            evt.changedTouches.length === 2 &&
+            zoomed
           ) {
             const touch1: any = evt.touches[0];
             const touch2: any = evt.touches[1];
@@ -536,6 +539,7 @@ export default function Map() {
               }
             }
             dragged = true;
+            zoomed = false;
           } else if (
             evt.targetTouches.length === 1 &&
             evt.changedTouches.length === 1
