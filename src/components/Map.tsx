@@ -489,7 +489,10 @@ export default function Map() {
                 touch1.pageY - touch2.pageY
               );
             }
-          } else if (evt.targetTouches.length === 1) {
+          } else if (
+            evt.targetTouches.length === 1 &&
+            evt.changedTouches.length === 1
+          ) {
             const touch: any = evt.changedTouches[0];
             if (touch) {
               const offsetX =
