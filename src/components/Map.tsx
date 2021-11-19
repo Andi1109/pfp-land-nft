@@ -477,10 +477,12 @@ export default function Map() {
       let orin = { x: 0, y: 0 };
       let dragged = false;
       let zoomed = false;
+      let touched = false;
       canvas.addEventListener(
         "touchstart",
         function touchEventHandler(evt: any) {
           evt.preventDefault();
+          touched = true;
           if (evt.targetTouches.length === 2) {
             zoomed = true;
             const touch1: any = evt.touches[0];
@@ -503,7 +505,6 @@ export default function Map() {
               lastY = offsetY;
               orin.x = orinPos.x;
               orin.y = orinPos.y;
-
               isDown = true;
             }
           }
@@ -514,6 +515,7 @@ export default function Map() {
         "touchmove",
         function touchEventHandler(evt: any) {
           evt.preventDefault();
+          touched = true;
           if (
             evt.targetTouches.length === 2 &&
             evt.changedTouches.length === 2 &&
@@ -560,6 +562,7 @@ export default function Map() {
         "touchend",
         function touchEventHandler(evt: any) {
           evt.preventDefault();
+          touched = true;
           const touch: any = evt.changedTouches[0];
           if (touch && !dragged) {
             const ctx = canvas.getContext("2d");
@@ -596,7 +599,7 @@ export default function Map() {
           lastY = offsetY;
           orin.x = orinPos.x;
           orin.y = orinPos.y;
-
+          touched = false;
           isDown = true;
         },
         false
@@ -604,7 +607,7 @@ export default function Map() {
       canvas.addEventListener(
         "mouseup",
         function (evt: any) {
-          if (!isMobile && !dragged) {
+          if (!isMobile && !dragged && !touched) {
             const curJson = localStorage.getItem("curPoint");
             if (curJson) {
               const _curPoint = JSON.parse(curJson);
