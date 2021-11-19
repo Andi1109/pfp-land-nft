@@ -491,6 +491,7 @@ export default function Map() {
       let orin = { x: 0, y: 0 };
       let dragged = false;
       let zoomed = false;
+      let cnt = 0;
       canvas.addEventListener(
         "touchstart",
         function touchEventHandler(evt: any) {
@@ -521,6 +522,7 @@ export default function Map() {
               orin.x = orinPos.x;
               orin.y = orinPos.y;
               isDown = true;
+              cnt = countMul;
             }
           }
         },
@@ -543,13 +545,16 @@ export default function Map() {
                 touch1.pageX - touch2.pageX,
                 touch1.pageY - touch2.pageY
               );
+              cnt = countMul;
               const curJson = localStorage.getItem("curPoint");
               if (curJson) {
                 const _curPoint = JSON.parse(curJson);
                 if (distZoom > distZoom2) {
                   handleZoom(-3, _curPoint.x, _curPoint.y);
+                  if (countMul === 0) cnt = -5;
                 } else if (distZoom < distZoom2) {
                   handleZoom(3, _curPoint.x, _curPoint.y);
+                  if (countMul === 14) cnt = 20;
                 }
               }
             }
@@ -577,7 +582,7 @@ export default function Map() {
           evt.preventDefault();
           if (evt.changedTouches.length === 1) {
             const touch: any = evt.changedTouches[0];
-            if (touch && !dragged) {
+            if (touch && !dragged && cnt === countMul) {
               const ctx = canvas.getContext("2d");
               const zoomScale = Math.pow(1.25, countMul);
               const offsetX =
