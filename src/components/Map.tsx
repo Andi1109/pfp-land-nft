@@ -516,7 +516,8 @@ export default function Map() {
           evt.preventDefault();
           if (
             evt.targetTouches.length === 2 &&
-            evt.changedTouches.length === 2
+            evt.changedTouches.length === 2 &&
+            zoomed
           ) {
             const touch1: any = evt.touches[0];
             const touch2: any = evt.touches[1];
@@ -535,10 +536,14 @@ export default function Map() {
                 }
               }
             }
-            zoomed = true;
-          } else if (evt.changedTouches.length === 1) {
+            zoomed = false;
+            dragged = true;
+          } else if (
+            evt.targetTouches.length === 1 &&
+            evt.changedTouches.length === 1
+          ) {
             const touch: any = evt.changedTouches[0];
-            if (touch && isDown && !zoomed) {
+            if (touch && isDown) {
               const offsetX =
                 ((touch.clientX - touch.target.offsetLeft) / canvasSize.w) *
                 100;
@@ -556,7 +561,7 @@ export default function Map() {
         function touchEventHandler(evt: any) {
           evt.preventDefault();
           const touch: any = evt.changedTouches[0];
-          if (touch && !dragged && !zoomed) {
+          if (touch && !dragged) {
             const ctx = canvas.getContext("2d");
             const zoomScale = Math.pow(1.25, countMul);
             const offsetX =
