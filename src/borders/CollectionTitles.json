@@ -525,14 +525,14 @@
     "rotate": false
   },
   {
-    "title": "Veefriends",
+    "title": "Bloot Elves",
     "originX": 38,
     "originY": 32,
     "size": 2,
     "rotate": false
   },
   {
-    "title": "Bloot Elves",
+    "title": "Veefriends",
     "originX": 38,
     "originY": 37,
     "size": 2,
@@ -819,7 +819,7 @@
     "rotate": false
   },
   {
-    "title": "Bloot Elves",
+    "title": "Veefriends",
     "originX": 79,
     "originY": 66,
     "size": 2,
@@ -833,7 +833,7 @@
     "rotate": false
   },
   {
-    "title": "Veefriends",
+    "title": "Bloot Elves",
     "originX": 70,
     "originY": 65,
     "size": 2,

@@ -435,12 +435,18 @@ export default function Map() {
     let deltaFact = 1;
     if (delta > 0) {
       deltaFact = 1.25;
+      if (countMul >= 14) {
+        countMul = 14;
+        return;
+      }
       countMul++;
-      if (countMul > 14) countMul = 14;
     } else if (delta < 0) {
       deltaFact = 0.8;
+      if (countMul <= 0) {
+        countMul = 0;
+        return;
+      }
       countMul--;
-      if (countMul < 0) countMul = 0;
     }
     const zoomScale = Math.pow(1.25, countMul);
     orinPos.x += ((deltaFact - 1) * posX) / zoomScale;
