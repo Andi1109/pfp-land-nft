@@ -493,7 +493,7 @@ export default function Map() {
             }
           } else if (evt.targetTouches.length === 1) {
             const touch: any = evt.changedTouches[0];
-            if (touch) {
+            if (touch && !zoomed) {
               const offsetX =
                 ((touch.clientX - touch.target.offsetLeft) / canvasSize.w) *
                 100;
