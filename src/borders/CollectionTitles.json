@@ -42,7 +42,7 @@
     "rotate": false
   },
   {
-    "title": "Roboto",
+    "title": "Robotos",
     "originX": 5,
     "originY": 61,
     "size": 2,
@@ -595,7 +595,7 @@
     "rotate": false
   },
   {
-    "title": "Roboto",
+    "title": "Robotos",
     "originX": 46,
     "originY": 37,
     "size": 2,
@@ -651,7 +651,7 @@
     "rotate": false
   },
   {
-    "title": "Roboto",
+    "title": "Robotos",
     "originX": 85,
     "originY": 15,
     "size": 2,
@@ -756,7 +756,7 @@
     "rotate": false
   },
   {
-    "title": "Roboto",
+    "title": "Robotos",
     "originX": 61,
     "originY": 75,
     "size": 2,
@@ -952,7 +952,7 @@
     "rotate": false
   },
   {
-    "title": "Center",
+    "title": "Metakey",
     "originX": 49.5,
     "originY": 49.5,
     "size": 1,
