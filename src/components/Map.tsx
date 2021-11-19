@@ -549,16 +549,17 @@ export default function Map() {
               const curJson = localStorage.getItem("curPoint");
               if (curJson) {
                 const _curPoint = JSON.parse(curJson);
-                if (distZoom > distZoom2) {
-                  handleZoom(-3, _curPoint.x, _curPoint.y);
-                  if (countMul === 0) cnt = -5;
-                } else if (distZoom < distZoom2) {
-                  handleZoom(3, _curPoint.x, _curPoint.y);
-                  if (countMul === 14) cnt = 20;
+                if (distZoom - distZoom2 > 40) {
+                  if (countMul === 0) {
+                    cnt = -5;
+                  } else handleZoom(-3, _curPoint.x, _curPoint.y);
+                } else if (distZoom2 - distZoom > 40) {
+                  if (countMul === 14) {
+                    cnt = 20;
+                  } else handleZoom(3, _curPoint.x, _curPoint.y);
                 }
               }
             }
-            zoomed = false;
           } else if (
             evt.targetTouches.length === 1 &&
             evt.changedTouches.length === 1
