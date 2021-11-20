@@ -18,8 +18,6 @@ import {
   AccordionPanel,
   AccordionIcon,
   Badge,
-  Avatar,
-  AvatarBadge,
 } from "@chakra-ui/react";
 import {
   GetOwnerOf,
@@ -38,6 +36,7 @@ import DerivedImage from "./DerivedImage";
 import ClaimedDerivedImage from "./ClaimedDerivedImage";
 import pairsJson from "../royal_derived_pair/pair.json";
 import collectionIDNamePairJson from "../collectionIDNamePair/pair.json";
+import OwnerAvatar from "./OwnerAvatar";
 
 type Props = {
   onClaim: Function;
@@ -275,6 +274,8 @@ export default function LandModal({
                       width={isMobile ? "100px" : "200px"}
                       height={isMobile ? "100px" : "200px"}
                       marginRight="10px"
+                      border="ridge"
+                      borderRadius="15px"
                     />
                   ) : (
                     <Image
@@ -283,6 +284,8 @@ export default function LandModal({
                       width={isMobile ? "100px" : "200px"}
                       height={isMobile ? "100px" : "200px"}
                       marginRight="10px"
+                      border="ridge"
+                      borderRadius="15px"
                     />
                   )
                 ) : (
@@ -291,8 +294,9 @@ export default function LandModal({
                     alt="Segun Adebayo"
                     width={isMobile ? "100px" : "150px"}
                     height={isMobile ? "100px" : "150px"}
-                    padding="15px"
                     margin={isMobile ? "7px" : "15px 25px 15px 20px"}
+                    border="ridge"
+                    borderRadius="15px"
                   />
                 )}
                 <Box
@@ -333,12 +337,10 @@ export default function LandModal({
                       padding="20px 10px 15px 5px"
                       margin="5px"
                     >
-                      <Avatar margin="auto 10px">
-                        <AvatarBadge boxSize="1.25em" bg="green.500" />
-                      </Avatar>
+                      <OwnerAvatar />
                       <Box
                         color="gray.500"
-                        margin={isMobile ? "auto" : "auto 25px"}
+                        margin={isMobile ? "auto 5px" : "auto 15px"}
                         fontWeight="1000"
                       >
                         Owner
