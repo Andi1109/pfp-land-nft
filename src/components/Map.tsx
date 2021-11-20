@@ -345,7 +345,7 @@ export default function Map() {
       const ctx = canvas.getContext("2d");
       ctx.resetTransform();
       ctx.clearRect(0, 0, canvasSize.w, canvasSize.w);
-      if (zoomtimed && countMul > 15) {
+      if (zoomtimed && countMul < 15) {
         for (let i = 0; i < countMul; i++) {
           ctx.transform(1.1, 0, 0, 1.1, 0, 0);
           draw(ctx);
@@ -370,10 +370,12 @@ export default function Map() {
     orinPos.x =
       canvasWidth > canvasHeight
         ? ((zoomScale - 1) * 50) / zoomScale
-        : ((zoomScale - 1) * 50 * canvasHeight) / (canvasWidth * zoomScale);
+        : ((zoomScale * canvasHeight - canvasWidth) * 50) /
+          (canvasHeight * zoomScale);
     orinPos.y =
       canvasWidth > canvasHeight
-        ? ((zoomScale - 1) * 50 * canvasWidth) / (canvasHeight * zoomScale)
+        ? ((zoomScale * canvasWidth - canvasHeight) * 50) /
+          (canvasWidth * zoomScale)
         : ((zoomScale - 1) * 50) / zoomScale;
     handleDrawCanvas();
   };
@@ -484,9 +486,8 @@ export default function Map() {
     lastY: any
   ) => {
     const zoomScale = Math.pow(1.1, countMul);
-    const zoomS = Math.pow(1.1, countMul);
-    const dx = (posX - lastX) / zoomS;
-    const dy = (posY - lastY) / zoomS;
+    const dx = (posX - lastX) / zoomScale;
+    const dy = (posY - lastY) / zoomScale;
 
     orinPos.x = orinX - dx;
     orinPos.y = orinY - dy;
