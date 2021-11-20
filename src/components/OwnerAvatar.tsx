@@ -1,5 +1,4 @@
 import { useEffect, useRef } from "react";
-import { useEthers } from "@usedapp/core";
 import Jazzicon from "@metamask/jazzicon";
 import styled from "@emotion/styled";
 
@@ -10,16 +9,25 @@ const StyledAvatar = styled.div`
   background-color: #3333cc;
 `;
 
-export default function OwnerAvatar() {
+const blackhole: any = "0x0000000000000000000000000000000000000000";
+
+type Props = {
+  ownerAddress: any;
+};
+
+export default function OwnerAvatar({ ownerAddress }: Props) {
   const ref = useRef<HTMLDivElement>();
-  const { account } = useEthers();
 
   useEffect(() => {
-    if (account && ref.current) {
+    if (ownerAddress && ref.current) {
       ref.current.innerHTML = "";
-      ref.current.appendChild(Jazzicon(48, parseInt(account.slice(2, 10), 16)));
+      if (ownerAddress !== blackhole) {
+        ref.current.appendChild(
+          Jazzicon(48, parseInt(ownerAddress.slice(2, 10), 16))
+        );
+      }
     }
-  }, [account]);
+  }, [ownerAddress]);
 
   return <StyledAvatar ref={ref as any} />;
 }
