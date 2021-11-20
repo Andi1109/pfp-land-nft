@@ -350,8 +350,7 @@ export default function LandModal({
                       display="flex"
                       alignItems="baseline"
                       justifyContent="space-around"
-                      marginBottom="15px"
-                      marginRight="3px"
+                      margin="0 3px 15px 3px"
                       color="gray"
                       fontSize={isMobile ? "14px" : "16px"}
                       fontWeight="1000"
