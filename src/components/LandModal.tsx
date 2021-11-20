@@ -337,7 +337,7 @@ export default function LandModal({
                       padding="20px 10px 15px 5px"
                       margin="5px"
                     >
-                      <OwnerAvatar />
+                      <OwnerAvatar ownerAddress={landOwnerValue} />
                       <Box
                         color="gray.500"
                         margin={isMobile ? "auto 5px" : "auto 15px"}
