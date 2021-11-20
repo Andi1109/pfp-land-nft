@@ -299,7 +299,7 @@ export default function Map() {
     const royalJson = localStorage.getItem("royalLands");
     const _royaled = royalJson !== null ? JSON.parse(royalJson) : royalLands;
     const ctx = canvas.getContext("2d");
-    const zoomScale = Math.pow(1.1, countMul);
+    const zoomScale = Math.pow(1.15, countMul);
     const limiw =
       canvasWidth > canvasHeight
         ? 100 / zoomScale
@@ -339,15 +339,17 @@ export default function Map() {
   };
 
   const handleDrawCanvas = () => {
-    const zoomScale = (Math.pow(1.1, countMul) * canvasSize.w) / 100;
+    const zoomScale = (Math.pow(1.15, countMul) * canvasSize.w) / 100;
     const canvas: any = canvasRef.current;
     if (canvas) {
       const ctx = canvas.getContext("2d");
       ctx.resetTransform();
       ctx.clearRect(0, 0, canvasSize.w, canvasSize.w);
-      if (zoomtimed && countMul < 15) {
-        for (let i = 0; i < countMul; i++) {
-          ctx.transform(1.1, 0, 0, 1.1, 0, 0);
+      if (zoomtimed && countMul <= 30) {
+        const cn = countMul < 5 ? 10 : Math.floor(30 / countMul);
+        const cv = Math.pow(1.15, countMul / cn);
+        for (let i = 0; i < cn; i++) {
+          ctx.transform(cv, 0, 0, cv, 0, 0);
           draw(ctx);
         }
         ctx.scale(canvasSize.w / 100, canvasSize.w / 100);
@@ -366,7 +368,7 @@ export default function Map() {
     initEventListners();
     localStorage.clear();
     countMul = 6;
-    const zoomScale = Math.pow(1.1, countMul);
+    const zoomScale = Math.pow(1.15, countMul);
     orinPos.x =
       canvasWidth > canvasHeight
         ? ((zoomScale - 1) * 50) / zoomScale
@@ -432,7 +434,7 @@ export default function Map() {
   };
 
   const limitOrinPos = () => {
-    const zoomScale = Math.pow(1.1, countMul);
+    const zoomScale = Math.pow(1.15, countMul);
     const limiw = (100 * (zoomScale - 1)) / zoomScale;
     const limih =
       (100 * (zoomScale * canvasSize.w - canvasSize.h)) /
@@ -452,21 +454,21 @@ export default function Map() {
     if (!zoomed) return;
     let deltaFact = 1;
     if (delta > 0) {
-      deltaFact = 1.1;
-      if (countMul >= 30) {
-        countMul = 30;
+      deltaFact = 1.15;
+      if (countMul >= 25) {
+        countMul = 25;
         return;
       }
       countMul++;
     } else if (delta < 0) {
-      deltaFact = 1 / 1.1;
+      deltaFact = 1 / 1.15;
       if (countMul <= 0) {
         countMul = 0;
         return;
       }
       countMul--;
     }
-    const zoomScale = Math.pow(1.1, countMul);
+    const zoomScale = Math.pow(1.15, countMul);
     orinPos.x += ((deltaFact - 1) * posX) / zoomScale;
     orinPos.y += ((deltaFact - 1) * posY) / zoomScale;
     limitOrinPos();
@@ -485,7 +487,7 @@ export default function Map() {
     lastX: any,
     lastY: any
   ) => {
-    const zoomScale = Math.pow(1.1, countMul);
+    const zoomScale = Math.pow(1.15, countMul);
     const dx = (posX - lastX) / zoomScale;
     const dy = (posY - lastY) / zoomScale;
 
@@ -512,7 +514,7 @@ export default function Map() {
       let lastY = 0;
       let distZoom = 0;
       let orin = { x: 0, y: 0 };
-      let dragged = false;
+      let dragged = true;
       let cnt = 20;
       canvas.addEventListener(
         "touchstart",
@@ -569,23 +571,29 @@ export default function Map() {
                 touch1.pageY - touch2.pageY
               );
               cnt = countMul;
-              const curJson = localStorage.getItem("curPoint");
-              if (curJson) {
-                const _curPoint = JSON.parse(curJson);
-                if (distZoom > distZoom2) {
-                  if (countMul <= 0) {
-                    cnt = -50;
-                  } else {
-                    zoomtimed = true;
-                    handleZoom(-3, _curPoint.x, _curPoint.y);
-                  }
-                } else if (distZoom < distZoom2) {
-                  if (countMul >= 30) {
-                    cnt = 100;
-                  } else {
-                    zoomtimed = true;
-                    handleZoom(3, _curPoint.x, _curPoint.y);
-                  }
+              const offsetX =
+                (((touch1.clientX + touch2.clientX) / 2 -
+                  touch1.target.offsetLeft) /
+                  canvasSize.w) *
+                100;
+              const offsetY =
+                (((touch1.clientY + touch2.clientY) / 2 -
+                  touch1.target.offsetTop) /
+                  canvasSize.w) *
+                100;
+              if (distZoom > distZoom2) {
+                if (countMul <= 0) {
+                  cnt = -50;
+                } else {
+                  zoomtimed = false;
+                  handleZoom(-3, offsetX, offsetY);
+                }
+              } else if (distZoom < distZoom2) {
+                if (countMul >= 25) {
+                  cnt = 100;
+                } else {
+                  zoomtimed = true;
+                  handleZoom(3, offsetX, offsetY);
                 }
               }
             }
@@ -615,7 +623,7 @@ export default function Map() {
             const touch: any = evt.changedTouches[0];
             if (touch && !dragged && cnt === countMul) {
               const ctx = canvas.getContext("2d");
-              const zoomScale = Math.pow(1.1, countMul);
+              const zoomScale = Math.pow(1.15, countMul);
               const offsetX =
                 ((touch.clientX - touch.target.offsetLeft) / canvasSize.w) *
                 100;
@@ -676,7 +684,7 @@ export default function Map() {
         function (evt: any) {
           if (!isDown) {
             const ctx = canvas.getContext("2d");
-            const zoomScale = Math.pow(1.1, countMul);
+            const zoomScale = Math.pow(1.15, countMul);
             const offsetX = (evt.offsetX / canvasSize.w) * 100;
             const offsetY = (evt.offsetY / canvasSize.w) * 100;
             curPos.x = orinPos.x + offsetX / zoomScale;
