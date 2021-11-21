@@ -39,6 +39,7 @@ export default function Map() {
 
   const [clickedX, setClickedX] = useState(30);
   const [clickedY, setClickedY] = useState(20);
+  const [canvasCursor, setCanvasCursor] = useState("pointer");
   const [totalLandsValue, setTotalLandsValue] = useState("");
   const [myTotalLandsValue, setMyTotalLandsValue] = useState("0");
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -455,12 +456,14 @@ export default function Map() {
     let deltaFact = 1;
     if (delta > 0) {
       deltaFact = 1.15;
+      setCanvasCursor("zoom-in");
       if (countMul >= 25) {
         countMul = 25;
         return;
       }
       countMul++;
     } else if (delta < 0) {
+      setCanvasCursor("zoom-out");
       deltaFact = 1 / 1.15;
       if (countMul <= 0) {
         countMul = 0;
@@ -487,6 +490,7 @@ export default function Map() {
     lastX: any,
     lastY: any
   ) => {
+    setCanvasCursor("grabbing");
     const zoomScale = Math.pow(1.15, countMul);
     const dx = (posX - lastX) / zoomScale;
     const dy = (posY - lastY) / zoomScale;
@@ -676,6 +680,7 @@ export default function Map() {
           }
           isDown = false;
           dragged = false;
+          setCanvasCursor("pointer");
         },
         false
       );
@@ -690,6 +695,7 @@ export default function Map() {
             curPos.x = orinPos.x + offsetX / zoomScale;
             curPos.y = orinPos.y + offsetY / zoomScale;
             draw(ctx);
+            setCanvasCursor("pointer");
             localStorage.setItem("curPoint", JSON.stringify(curPos));
           } else {
             const offsetX = (evt.offsetX / canvasSize.w) * 100;
@@ -711,7 +717,12 @@ export default function Map() {
 
   return (
     <>
-      <Box border="solid 1px" display="flex" alignItems="center">
+      <Box
+        border="solid 1px"
+        display="flex"
+        alignItems="center"
+        cursor={canvasCursor}
+      >
         <canvas
           ref={canvasRef}
           width={`${canvasWidth}`}
