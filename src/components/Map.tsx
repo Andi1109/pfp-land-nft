@@ -534,12 +534,9 @@ export default function Map() {
               );
               zoomed = true;
             }
-          } else if (
-            evt.targetTouches.length === 1 &&
-            evt.changedTouches.length === 1
-          ) {
+          } else if (evt.targetTouches.length === 1) {
             zoomed = false;
-            const touch: any = evt.changedTouches[0];
+            const touch: any = evt.targetTouches[0];
             if (touch) {
               const offsetX =
                 ((touch.clientX - touch.target.offsetLeft) / canvasSize.w) *
