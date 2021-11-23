@@ -37,8 +37,8 @@ export default function Map() {
   const toast = useToast();
   const { state, send: claimLand } = useContractMethod("claimLand");
 
-  const [clickedX, setClickedX] = useState(71);
-  const [clickedY, setClickedY] = useState(58);
+  const [clickedX, setClickedX] = useState(86);
+  const [clickedY, setClickedY] = useState(37);
   const [canvasCursor, setCanvasCursor] = useState("pointer");
   const [totalLandsValue, setTotalLandsValue] = useState("");
   const [myTotalLandsValue, setMyTotalLandsValue] = useState("0");
@@ -126,7 +126,7 @@ export default function Map() {
           msg = "You should be the owner of this NFT";
         else if (errMsg.includes("This royal NFT is already used"))
           msg = "This royal NFT is already used";
-        else msg = "Transaction can't be performed.";
+        else msg = errMsg;
         toast({
           description: msg,
           status: "warning",
