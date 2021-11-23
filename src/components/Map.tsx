@@ -37,8 +37,8 @@ export default function Map() {
   const toast = useToast();
   const { state, send: claimLand } = useContractMethod("claimLand");
 
-  const [clickedX, setClickedX] = useState(30);
-  const [clickedY, setClickedY] = useState(20);
+  const [clickedX, setClickedX] = useState(71);
+  const [clickedY, setClickedY] = useState(58);
   const [canvasCursor, setCanvasCursor] = useState("pointer");
   const [totalLandsValue, setTotalLandsValue] = useState("");
   const [myTotalLandsValue, setMyTotalLandsValue] = useState("0");
@@ -124,6 +124,8 @@ export default function Map() {
           msg = "You should be the owner of this land.";
         else if (errMsg.includes("You are not the owner of this tokenID"))
           msg = "You should be the owner of this NFT";
+        else if (errMsg.includes("This royal NFT is already used"))
+          msg = "This royal NFT is already used";
         else msg = "Transaction can't be performed.";
         toast({
           description: msg,
@@ -388,13 +390,8 @@ export default function Map() {
     console.log(landX, landY, collectionID);
     try {
       if (
-        collectionID === "0" ||
-        collectionID === "1" ||
-        collectionID === "2" ||
-        collectionID === "3" ||
-        collectionID === "139" ||
-        collectionID === "140" ||
-        collectionID === "141"
+        (parseInt(collectionID) >= 0 && parseInt(collectionID) <= 6) ||
+        (parseInt(collectionID) >= 39 && parseInt(collectionID) <= 46)
       )
         // collections for Honorary and metakey
         await claimLand(landX, landY, collectionID, {
