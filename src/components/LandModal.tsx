@@ -492,6 +492,7 @@ export default function LandModal({
                           marginBottom: "20px",
                           boxShadow: "none",
                         }}
+                        disabled={royalBalanceValue === 0}
                         onClick={handleChooseRoyalNFT}
                       >
                         Choose
@@ -567,6 +568,13 @@ export default function LandModal({
                           marginBottom: "20px",
                           boxShadow: "none",
                         }}
+                        disabled={
+                          pairsJson[jsonKeyValue]
+                            ? pairsJson[jsonKeyValue].length === 0
+                              ? true
+                              : false
+                            : true
+                        }
                         onClick={handleChooseDerivedNFT}
                       >
                         Add
