@@ -34,7 +34,7 @@ import { useState, useEffect } from "react";
 import RoyalImage from "./RoyalImage";
 import DerivedImage from "./DerivedImage";
 import ClaimedDerivedImage from "./ClaimedDerivedImage";
-import pairsJson from "../royal_derived_pair/pair.json";
+import { getRoyalDerivePair } from "../service/api";
 import collectionIDNamePairJson from "../collectionIDNamePair/pair.json";
 import OwnerAvatar from "./OwnerAvatar";
 
@@ -79,6 +79,7 @@ export default function LandModal({
     "updateLandDerivativeMetaData"
   );
 
+  const [pairsJson, setPairsJson] = useState({});
   const [imageURLValue, setImageURLValue] = useState("");
   const [myAccountValue, setMyAccountValue] = useState("");
   const [assetIDValue, setAssetIDValue] = useState("");
@@ -110,11 +111,22 @@ export default function LandModal({
     }
   };
 
+  const fetchPairsJson = async () => {
+    try {
+      const pairs = await getRoyalDerivePair();
+      setPairsJson(pairs);
+    } catch (e) {}
+  };
+
   if (royalTokenURIValue) {
     fetchImage(royalTokenURIValue).then((imageURL) => {
       if (imageURL) setImageURLValue(imageURL);
     });
   }
+
+  useEffect(() => {
+    fetchPairsJson();
+  }, []);
 
   useEffect(() => {
     setMyAccountValue(account ? account.toString() : "");
@@ -140,6 +152,11 @@ export default function LandModal({
     );
     setRoyalTokenIDValue(
       royalData && royalData.tokenID ? royalData.tokenID.toString() : "0"
+    );
+    console.log(
+      "royalCollectionIDValue, royalTokenIDValue",
+      royalCollectionIDValue,
+      royalTokenIDValue
     );
     setJsonKeyValue(royalCollectionIDValue + "_" + royalTokenIDValue);
   }, [royalData]);
