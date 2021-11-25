@@ -402,6 +402,14 @@ export default function LandModal({
                   </Badge>
                 </Box>
               )}
+              <Text
+                fontSize="lg"
+                fontWeight="bold"
+                color="#564af0"
+                textAlign="center"
+              >
+                Derivatives
+              </Text>
               <Box
                 overflowX="auto"
                 d="flex"
@@ -410,6 +418,8 @@ export default function LandModal({
                 pb="4px"
                 px="5px"
                 css={{
+                  border: "solid 2px #564af0",
+                  borderRadius: "10px",
                   "&::-webkit-scrollbar": {
                     width: "1px",
                   },
@@ -618,7 +628,7 @@ export default function LandModal({
               }
             >
               {isClaimed === "1" || collectionIDValue === ""
-                ? "Buy on OpenSea"
+                ? "View on OpenSea"
                 : "Mint"}
             </Button>
           </ModalFooter>
