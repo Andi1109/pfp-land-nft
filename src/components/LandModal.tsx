@@ -408,7 +408,11 @@ export default function LandModal({
                 color="#564af0"
                 textAlign="center"
               >
-                Derivatives
+                {isClaimed === "1" || collectionIDValue === ""
+                  ? derivativeBalanceValue > 0
+                    ? "Derivatives"
+                    : "No Derivatives"
+                  : ""}
               </Text>
               <Box
                 overflowX="auto"
@@ -418,7 +422,8 @@ export default function LandModal({
                 pb="4px"
                 px="5px"
                 css={{
-                  border: "solid 2px #564af0",
+                  border:
+                    derivativeBalanceValue > 0 ? "solid 2px #564af0" : "none",
                   borderRadius: "10px",
                   "&::-webkit-scrollbar": {
                     width: "1px",
