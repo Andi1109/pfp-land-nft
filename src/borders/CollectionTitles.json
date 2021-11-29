@@ -63,14 +63,21 @@
     "rotate": false
   },
   {
-    "title": "Mars Cats",
+    "title": "Koala",
     "originX": 5,
-    "originY": 82,
+    "originY": 81,
     "size": 2,
     "rotate": false
   },
   {
-    "title": "Voyage",
+    "title": "Intelligence",
+    "originX": 5,
+    "originY": 83,
+    "size": 1.8,
+    "rotate": false
+  },
+  {
+    "title": "Agency",
     "originX": 5,
     "originY": 85,
     "size": 2,
@@ -280,14 +287,21 @@
     "rotate": false
   },
   {
-    "title": "Mars Cats",
+    "title": "Koala",
     "originX": 95,
-    "originY": 83,
+    "originY": 81,
     "size": 2,
     "rotate": false
   },
   {
-    "title": "Voyage",
+    "title": "Intelligence",
+    "originX": 95,
+    "originY": 83,
+    "size": 1.8,
+    "rotate": false
+  },
+  {
+    "title": "Agency",
     "originX": 95,
     "originY": 85,
     "size": 2,
@@ -378,14 +392,14 @@
     "rotate": true
   },
   {
-    "title": "Bored Apes",
+    "title": "The Vogu",
     "originX": 16,
     "originY": 49.7,
     "size": 2,
     "rotate": false
   },
   {
-    "title": "The Vogu",
+    "title": "Bored Apes",
     "originX": 20,
     "originY": 56,
     "size": 2,
@@ -623,17 +637,24 @@
     "rotate": false
   },
   {
-    "title": "Mars Cats",
+    "title": "Koala",
     "originX": 38,
-    "originY": 66.5,
-    "size": 2,
+    "originY": 66,
+    "size": 1.7,
     "rotate": false
   },
   {
-    "title": "Voyage",
+    "title": "Intelligence",
     "originX": 38,
-    "originY": 68.5,
-    "size": 2,
+    "originY": 67.5,
+    "size": 1.7,
+    "rotate": false
+  },
+  {
+    "title": "Agency",
+    "originX": 38,
+    "originY": 69,
+    "size": 1.7,
     "rotate": false
   },
   {
@@ -707,8 +728,15 @@
     "rotate": false
   },
   {
-    "title": "Mars Cats Voyage",
-    "originX": 70,
+    "title": "Koala Intelligence",
+    "originX": 69,
+    "originY": 34,
+    "size": 2,
+    "rotate": true
+  },
+  {
+    "title": "Agency",
+    "originX": 71,
     "originY": 34,
     "size": 2,
     "rotate": true
@@ -742,16 +770,16 @@
     "rotate": false
   },
   {
-    "title": "The Vogu",
+    "title": "Bored Apes",
     "originX": 62,
     "originY": 46,
     "size": 2,
     "rotate": false
   },
   {
-    "title": "Bored Apes",
+    "title": "The Vogu",
     "originX": 63,
-    "originY": 50,
+    "originY": 49.7,
     "size": 2,
     "rotate": false
   },
