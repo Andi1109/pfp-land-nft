@@ -22,9 +22,9 @@ export default function DerivedImage({
   const [tokenURIValue, setTokenURIValue] = useState("");
   const [imageURLValue, setImageURLValue] = useState("");
 
-  if (index === 0 && collectionAddress && tokenID) {
-    onDerivedImageChanged(collectionAddress, tokenID);
-  }
+  // if (index === 0 && collectionAddress && tokenID) {
+  //   onDerivedImageChanged(collectionAddress, tokenID);
+  // }
 
   useEffect(() => {
     setTokenURIValue(tokenURI ? tokenURI.toString() : "");

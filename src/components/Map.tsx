@@ -37,8 +37,8 @@ export default function Map() {
   const toast = useToast();
   const { state, send: claimLand } = useContractMethod("claimLand");
 
-  const [clickedX, setClickedX] = useState(86);
-  const [clickedY, setClickedY] = useState(37);
+  const [clickedX, setClickedX] = useState(47);
+  const [clickedY, setClickedY] = useState(50);
   const [canvasCursor, setCanvasCursor] = useState("pointer");
   const [totalLandsValue, setTotalLandsValue] = useState("");
   const [myTotalLandsValue, setMyTotalLandsValue] = useState("0");
@@ -79,7 +79,7 @@ export default function Map() {
     switch (state.status) {
       case "Success":
         msg =
-          "Success. To see the latest information, please refresh your browser.";
+          "Success. To see the latest information, please refresh your browser. It might take long to load all information.";
         toast({
           description: msg,
           status: "success",
@@ -391,7 +391,7 @@ export default function Map() {
     try {
       if (
         (parseInt(collectionID) >= 0 && parseInt(collectionID) <= 6) ||
-        (parseInt(collectionID) >= 39 && parseInt(collectionID) <= 46)
+        (parseInt(collectionID) >= 38 && parseInt(collectionID) <= 44)
       )
         // collections for Honorary and metakey
         await claimLand(landX, landY, collectionID, {

@@ -32,9 +32,9 @@ export default function RoyalImage({
   const [tokenURIValue, setTokenURIValue] = useState("");
   const [imageURLValue, setImageURLValue] = useState("");
 
-  if (index === 0 && newCollectionIDValue && tokenIDValue) {
-    onRoyalImageChanged(newCollectionIDValue, tokenIDValue);
-  }
+  // if (index === 0 && newCollectionIDValue && tokenIDValue) {
+  //   onRoyalImageChanged(newCollectionIDValue, tokenIDValue);
+  // }
 
   useEffect(() => {
     setTokenURIValue(tokenURI ? tokenURI.toString() : "");
@@ -79,7 +79,6 @@ export default function RoyalImage({
               id={"royalNFT" + index}
               name="royalNFT"
               value={index}
-              defaultChecked={index === 0}
               onChange={handleRoyalImageChanged}
             />
             <label htmlFor={"royalNFT" + index}>
@@ -101,7 +100,6 @@ export default function RoyalImage({
               id={"royalNFT" + index}
               name="royalNFT"
               value={index}
-              defaultChecked={index === 0}
               onChange={handleRoyalImageChanged}
             />
             <label htmlFor={"royalNFT" + index}>
@@ -125,7 +123,6 @@ export default function RoyalImage({
             id={"royalNFT" + index}
             name="royalNFT"
             value={index}
-            defaultChecked={index === 0}
             onChange={handleRoyalImageChanged}
           />
           <label htmlFor={"royalNFT" + index}>

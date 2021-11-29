@@ -407,6 +407,7 @@ export default function LandModal({
                 fontWeight="bold"
                 color="#564af0"
                 textAlign="center"
+                marginTop="5"
               >
                 {isClaimed === "1" || collectionIDValue === ""
                   ? derivativeBalanceValue > 0
@@ -483,6 +484,9 @@ export default function LandModal({
                         padding: "0",
                       }}
                     >
+                      <Text fontSize="md" margin="auto" color="#564af0">
+                        Please choose one royal image to claim
+                      </Text>
                       {Array.from(
                         { length: parseInt(royalBalanceValue) },
                         (_, i) => 0 + i
@@ -553,6 +557,9 @@ export default function LandModal({
                         padding: "0",
                       }}
                     >
+                      <Text fontSize="md" margin="auto" color="#564af0">
+                        Please choose one derivative image to add
+                      </Text>
                       {Array.from(
                         {
                           length: pairsJson[jsonKeyValue]
