@@ -242,14 +242,16 @@ export default function Map() {
     const curJson = localStorage.getItem("curPoint");
     if (curJson) {
       const _curPoint = JSON.parse(curJson);
+      const curX = Math.ceil(_curPoint.x);
+      const curY = Math.ceil(_curPoint.y);
+      const strPoint = curX.toString() + "," + curY.toString();
       ctx.strokeStyle = "rgb(255, 255, 255, 0.8)";
       ctx.lineWidth = 0.1;
-      ctx.strokeRect(
-        Math.ceil(_curPoint.x) - 0.95,
-        Math.ceil(_curPoint.y) - 0.95,
-        0.9,
-        0.9
-      );
+      ctx.strokeRect(curX - 0.95, curY - 0.95, 0.9, 0.9);
+      ctx.textAlign = "left";
+      ctx.font = "0.8px changa";
+      ctx.fillStyle = "rgb(255, 255, 255, 0.8)";
+      ctx.fillText(strPoint, curX, curY - 1.5);
     }
   };
 
