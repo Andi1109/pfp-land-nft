@@ -250,7 +250,7 @@ export default function Map() {
       ctx.strokeRect(curX - 0.95, curY - 0.95, 0.9, 0.9);
       ctx.textAlign = "left";
       ctx.font = "0.8px changa";
-      ctx.fillStyle = "rgb(255, 255, 255, 0.8)";
+      ctx.fillStyle = "rgb(255, 255, 255, 0.9)";
       ctx.fillText(strPoint, curX, curY - 1.5);
     }
   };
