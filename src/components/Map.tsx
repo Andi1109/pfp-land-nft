@@ -21,6 +21,7 @@ export default function Map() {
   interface RoyalLand {
     x: number;
     y: number;
+    derivative: string;
     src: string;
   }
 
@@ -151,7 +152,10 @@ export default function Map() {
     if (
       _royalLands.filter(
         (e: any) =>
-          e.x === newLand.x && e.y === newLand.y && e.src === newLand.src
+          e.x === newLand.x &&
+          e.y === newLand.y &&
+          e.derivative === newLand.derivative &&
+          e.src === newLand.src
       ).length === 0 &&
       newLand.x >= 0 &&
       newLand.y >= 0 &&
@@ -327,6 +331,11 @@ export default function Map() {
           const img = new Image();
           img.src = imgsrc;
           ctx.drawImage(img, x - 1, y - 1, 1, 1);
+          if (_royaled[i].derivative > 0) {
+            ctx.strokeStyle = "rgb(61 51 255)";
+            ctx.lineWidth = 0.06;
+            ctx.strokeRect(x - 1, y - 1, 1, 1);
+          }
         }
       }
     }

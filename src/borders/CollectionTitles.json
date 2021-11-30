@@ -394,7 +394,7 @@
   {
     "title": "The Vogu",
     "originX": 16,
-    "originY": 49.7,
+    "originY": 49.6,
     "size": 2,
     "rotate": false
   },
@@ -611,14 +611,14 @@
   {
     "title": "Cool Cats",
     "originX": 37,
-    "originY": 53.5,
+    "originY": 53,
     "size": 2,
     "rotate": false
   },
   {
     "title": "Doodles",
     "originX": 38,
-    "originY": 58,
+    "originY": 57.5,
     "size": 2,
     "rotate": false
   },
@@ -793,21 +793,21 @@
   {
     "title": "Metahero",
     "originX": 61,
-    "originY": 58,
+    "originY": 57.5,
     "size": 2,
     "rotate": false
   },
   {
     "title": "Woodies",
     "originX": 61,
-    "originY": 63,
+    "originY": 62.5,
     "size": 2,
     "rotate": false
   },
   {
     "title": "Animetas",
     "originX": 61,
-    "originY": 68,
+    "originY": 67.5,
     "size": 2,
     "rotate": false
   },
