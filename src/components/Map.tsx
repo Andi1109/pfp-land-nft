@@ -25,7 +25,7 @@ export default function Map() {
     src: string;
   }
 
-  let nogif = 0;
+  let numGif = 0;
   let isDown = false;
   let orinPos: Land = { x: 0, y: 0 };
   let curPos: Land = { x: 0, y: 0 };
@@ -245,9 +245,11 @@ export default function Map() {
     }
   };
 
-  const drawPointerOutLine = (ctx: any) => {
+  const drawPointerOutLine = () => {
+    const canvas: any = canvasRef.current;
     const curJson = localStorage.getItem("curPoint");
-    if (curJson) {
+    if (curJson && canvas) {
+      const ctx = canvas.getContext("2d");
       const _curPoint = JSON.parse(curJson);
       const curX = Math.ceil(_curPoint.x);
       const curY = Math.ceil(_curPoint.y);
@@ -257,7 +259,7 @@ export default function Map() {
       ctx.strokeRect(curX - 0.95, curY - 0.95, 0.9, 0.9);
       ctx.textAlign = "left";
       ctx.font = "0.8px changa";
-      ctx.fillStyle = "rgb(255, 255, 255, 0.9)";
+      ctx.fillStyle = "rgb(255, 255, 255, 0.8)";
       ctx.fillText(strPoint, curX, curY - 1.5);
     }
   };
@@ -335,6 +337,50 @@ export default function Map() {
             const img = new Image();
             img.src = imgsrc;
             ctx.drawImage(img, x - 1, y - 1, 1, 1);
+            if (_royaled[i].derivative > 0) {
+              const imgGif = new Image();
+              imgGif.src = "/Deriv_Gradient/deriv(0).png";
+              ctx.drawImage(imgGif, x - 1, y - 1, 1, 1);
+            }
+          }
+        }
+      }
+    }
+  };
+
+  const drawDerivativeLand = () => {
+    const canvas: any = canvasRef.current;
+    if (canvas) {
+      const royalJson = localStorage.getItem("royalLands");
+      const _royaled = royalJson !== null ? JSON.parse(royalJson) : royalLands;
+      const ctx = canvas.getContext("2d");
+      const zoomScale = Math.pow(1.15, countMul);
+      const limiw =
+        canvasWidth > canvasHeight
+          ? 100 / zoomScale
+          : (100 * canvasSize.h) / (zoomScale * canvasSize.w);
+      const limih =
+        canvasWidth < canvasHeight
+          ? 100 / zoomScale
+          : (100 * canvasSize.h) / (zoomScale * canvasSize.w);
+      for (let i = 0; i < _royaled.length; i++) {
+        const x = _royaled[i].x;
+        const y = _royaled[i].y;
+        if (
+          x >= orinPos.x &&
+          x <= orinPos.x + limiw &&
+          y >= orinPos.y &&
+          y <= orinPos.y + limih
+        ) {
+          const imgsrc = _royaled[i].src ? _royaled[i].src : "";
+          if (imgsrc !== "" && _royaled[i].derivative > 0) {
+            const img = new Image();
+            img.src = "/Deriv_Gradient/deriv(" + numGif.toString() + ").png";
+            ctx.drawImage(img, x - 1, y - 1, 1, 1);
+            numGif = numGif + 1;
+            if (numGif >= 60) {
+              numGif = 0;
+            }
           }
         }
       }
@@ -349,7 +395,7 @@ export default function Map() {
     drawMyClaimedLand();
     drawCollectionBorders(ctx);
     drawRoyalLand();
-    drawPointerOutLine(ctx);
+    // drawPointerOutLine();
   };
 
   const handleDrawCanvas = () => {
@@ -379,7 +425,6 @@ export default function Map() {
   };
 
   const handleInit = () => {
-    initEventListners();
     localStorage.clear();
     countMul = 6;
     const zoomScale = Math.pow(1.15, countMul);
@@ -515,48 +560,11 @@ export default function Map() {
 
   handleAnimation();
 
-  function drawDerivative() {
-    const canvas: any = canvasRef.current;
-    if (canvas) {
-      const ctx = canvas.getContext("2d");
-      const royalJson = localStorage.getItem("royalLands");
-      const _royaled = royalJson !== null ? JSON.parse(royalJson) : royalLands;
-      const zoomScale = Math.pow(1.15, countMul);
-      const limiw =
-        canvasWidth > canvasHeight
-          ? 100 / zoomScale
-          : (100 * canvasSize.h) / (zoomScale * canvasSize.w);
-      const limih =
-        canvasWidth < canvasHeight
-          ? 100 / zoomScale
-          : (100 * canvasSize.h) / (zoomScale * canvasSize.w);
-      for (let i = 0; i < _royaled.length; i++) {
-        const x = _royaled[i].x;
-        const y = _royaled[i].y;
-        if (
-          x >= orinPos.x &&
-          x <= orinPos.x + limiw &&
-          y >= orinPos.y &&
-          y <= orinPos.y + limih
-        ) {
-          const imgsrc = _royaled[i].src ? _royaled[i].src : "";
-          if (imgsrc !== "" && _royaled[i].derivative > 0) {
-            const img = new Image();
-            img.src =
-              "/Deriv_Gradient/Deriv Gradient00" + nogif.toString() + ".png";
-            ctx.drawImage(img, x - 1, y - 1, 1, 1);
-            nogif++;
-            if (nogif >= 60) nogif = 0;
-          }
-        }
-      }
-    }
-  }
-
   function handleAnimation() {
     requestAnimationFrame(handleAnimation);
     drawRoyalLand();
-    drawDerivative();
+    drawDerivativeLand();
+    drawPointerOutLine();
   }
 
   const handleCloseModal = () => {
@@ -776,6 +784,7 @@ export default function Map() {
   };
 
   useEffect(() => {
+    initEventListners();
     handleInit();
   }, []);
 
