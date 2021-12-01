@@ -158,8 +158,10 @@ export default function Map() {
           e.derivative === newLand.derivative &&
           e.src === newLand.src
       ).length === 0 &&
-      newLand.x >= 0 &&
-      newLand.y >= 0 &&
+      newLand.x <= 100 &&
+      newLand.y <= 100 &&
+      newLand.x > 0 &&
+      newLand.y > 0 &&
       newLand.src
     ) {
       _royalLands.push(newLand);
@@ -173,8 +175,8 @@ export default function Map() {
     if (
       _claimedLands.filter((e: any) => e.x === newLand.x && e.y === newLand.y)
         .length === 0 &&
-      newLand.x >= 0 &&
-      newLand.y >= 0
+      newLand.x > 0 &&
+      newLand.y > 0
     ) {
       _claimedLands.push(newLand);
       setClaimedLands(_claimedLands);
@@ -187,8 +189,8 @@ export default function Map() {
     if (
       _myClaimedLands.filter((e: any) => e.x === newLand.x && e.y === newLand.y)
         .length === 0 &&
-      newLand.x >= 0 &&
-      newLand.y >= 0
+      newLand.x > 0 &&
+      newLand.y > 0
     ) {
       _myClaimedLands.push(newLand);
       setMyClaimedLands(_myClaimedLands);
@@ -347,6 +349,7 @@ export default function Map() {
     drawMyClaimedLand();
     drawCollectionBorders(ctx);
     drawRoyalLand();
+    drawDerivative();
     drawPointerOutLine(ctx);
   };
 
