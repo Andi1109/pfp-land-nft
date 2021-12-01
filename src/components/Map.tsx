@@ -349,7 +349,6 @@ export default function Map() {
     drawMyClaimedLand();
     drawCollectionBorders(ctx);
     drawRoyalLand();
-    drawDerivative();
     drawPointerOutLine(ctx);
   };
 
@@ -543,7 +542,8 @@ export default function Map() {
           const imgsrc = _royaled[i].src ? _royaled[i].src : "";
           if (imgsrc !== "" && _royaled[i].derivative > 0) {
             const img = new Image();
-            img.src = "/gif/gif(" + nogif.toString() + ").png";
+            img.src =
+              "/Deriv_Gradient/Deriv Gradient00" + nogif.toString() + ".png";
             ctx.drawImage(img, x - 1, y - 1, 1, 1);
             nogif++;
             if (nogif >= 60) nogif = 0;
@@ -555,6 +555,7 @@ export default function Map() {
 
   function handleAnimation() {
     requestAnimationFrame(handleAnimation);
+    drawRoyalLand();
     drawDerivative();
   }
 
@@ -738,15 +739,28 @@ export default function Map() {
         "mousemove",
         function (evt: any) {
           if (!isDown) {
-            const ctx = canvas.getContext("2d");
-            const zoomScale = Math.pow(1.15, countMul);
-            const offsetX = (evt.offsetX / canvasSize.w) * 100;
-            const offsetY = (evt.offsetY / canvasSize.w) * 100;
-            curPos.x = orinPos.x + offsetX / zoomScale;
-            curPos.y = orinPos.y + offsetY / zoomScale;
-            draw(ctx);
-            setCanvasCursor("pointer");
-            localStorage.setItem("curPoint", JSON.stringify(curPos));
+            const curJson = localStorage.getItem("curPoint");
+            if (curJson) {
+              const ctx = canvas.getContext("2d");
+              const zoomScale = Math.pow(1.15, countMul);
+              const offsetX = (evt.offsetX / canvasSize.w) * 100;
+              const offsetY = (evt.offsetY / canvasSize.w) * 100;
+              curPos.x = orinPos.x + offsetX / zoomScale;
+              curPos.y = orinPos.y + offsetY / zoomScale;
+              const _curPoint = JSON.parse(curJson);
+              const curX = Math.ceil(_curPoint.x);
+              const curY = Math.ceil(_curPoint.y);
+              if (
+                Math.ceil(curPos.x) === curX &&
+                Math.ceil(curPos.y) === curY
+              ) {
+                setCanvasCursor("pointer");
+              } else {
+                localStorage.setItem("curPoint", JSON.stringify(curPos));
+                draw(ctx);
+                setCanvasCursor("pointer");
+              }
+            }
           } else {
             const offsetX = (evt.offsetX / canvasSize.w) * 100;
             const offsetY = (evt.offsetY / canvasSize.w) * 100;
