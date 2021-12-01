@@ -25,6 +25,7 @@ export default function Map() {
     src: string;
   }
 
+  let nogif = 0;
   let isDown = false;
   let orinPos: Land = { x: 0, y: 0 };
   let curPos: Land = { x: 0, y: 0 };
@@ -38,8 +39,8 @@ export default function Map() {
   const toast = useToast();
   const { state, send: claimLand } = useContractMethod("claimLand");
 
-  const [clickedX, setClickedX] = useState(47);
-  const [clickedY, setClickedY] = useState(50);
+  const [clickedX, setClickedX] = useState(73);
+  const [clickedY, setClickedY] = useState(56);
   const [canvasCursor, setCanvasCursor] = useState("pointer");
   const [totalLandsValue, setTotalLandsValue] = useState("");
   const [myTotalLandsValue, setMyTotalLandsValue] = useState("0");
@@ -305,36 +306,33 @@ export default function Map() {
 
   const drawRoyalLand = () => {
     const canvas: any = canvasRef.current;
-    const royalJson = localStorage.getItem("royalLands");
-    const _royaled = royalJson !== null ? JSON.parse(royalJson) : royalLands;
-    const ctx = canvas.getContext("2d");
-    const zoomScale = Math.pow(1.15, countMul);
-    const limiw =
-      canvasWidth > canvasHeight
-        ? 100 / zoomScale
-        : (100 * canvasSize.h) / (zoomScale * canvasSize.w);
-    const limih =
-      canvasWidth < canvasHeight
-        ? 100 / zoomScale
-        : (100 * canvasSize.h) / (zoomScale * canvasSize.w);
-    for (let i = 0; i < _royaled.length; i++) {
-      const x = _royaled[i].x;
-      const y = _royaled[i].y;
-      if (
-        x >= orinPos.x &&
-        x <= orinPos.x + limiw &&
-        y >= orinPos.y &&
-        y <= orinPos.y + limih
-      ) {
-        const imgsrc = _royaled[i].src ? _royaled[i].src : "";
-        if (imgsrc !== "") {
-          const img = new Image();
-          img.src = imgsrc;
-          ctx.drawImage(img, x - 1, y - 1, 1, 1);
-          if (_royaled[i].derivative > 0) {
-            ctx.strokeStyle = "rgb(61 51 255)";
-            ctx.lineWidth = 0.06;
-            ctx.strokeRect(x - 1, y - 1, 1, 1);
+    if (canvas) {
+      const royalJson = localStorage.getItem("royalLands");
+      const _royaled = royalJson !== null ? JSON.parse(royalJson) : royalLands;
+      const ctx = canvas.getContext("2d");
+      const zoomScale = Math.pow(1.15, countMul);
+      const limiw =
+        canvasWidth > canvasHeight
+          ? 100 / zoomScale
+          : (100 * canvasSize.h) / (zoomScale * canvasSize.w);
+      const limih =
+        canvasWidth < canvasHeight
+          ? 100 / zoomScale
+          : (100 * canvasSize.h) / (zoomScale * canvasSize.w);
+      for (let i = 0; i < _royaled.length; i++) {
+        const x = _royaled[i].x;
+        const y = _royaled[i].y;
+        if (
+          x >= orinPos.x &&
+          x <= orinPos.x + limiw &&
+          y >= orinPos.y &&
+          y <= orinPos.y + limih
+        ) {
+          const imgsrc = _royaled[i].src ? _royaled[i].src : "";
+          if (imgsrc !== "") {
+            const img = new Image();
+            img.src = imgsrc;
+            ctx.drawImage(img, x - 1, y - 1, 1, 1);
           }
         }
       }
@@ -512,6 +510,50 @@ export default function Map() {
     localStorage.setItem("curPoint", JSON.stringify(curPos));
     handleDrawCanvas();
   };
+
+  handleAnimation();
+
+  function drawDerivative() {
+    const canvas: any = canvasRef.current;
+    if (canvas) {
+      const ctx = canvas.getContext("2d");
+      const royalJson = localStorage.getItem("royalLands");
+      const _royaled = royalJson !== null ? JSON.parse(royalJson) : royalLands;
+      const zoomScale = Math.pow(1.15, countMul);
+      const limiw =
+        canvasWidth > canvasHeight
+          ? 100 / zoomScale
+          : (100 * canvasSize.h) / (zoomScale * canvasSize.w);
+      const limih =
+        canvasWidth < canvasHeight
+          ? 100 / zoomScale
+          : (100 * canvasSize.h) / (zoomScale * canvasSize.w);
+      for (let i = 0; i < _royaled.length; i++) {
+        const x = _royaled[i].x;
+        const y = _royaled[i].y;
+        if (
+          x >= orinPos.x &&
+          x <= orinPos.x + limiw &&
+          y >= orinPos.y &&
+          y <= orinPos.y + limih
+        ) {
+          const imgsrc = _royaled[i].src ? _royaled[i].src : "";
+          if (imgsrc !== "" && _royaled[i].derivative > 0) {
+            const img = new Image();
+            img.src = "/gif/gif(" + nogif.toString() + ").png";
+            ctx.drawImage(img, x - 1, y - 1, 1, 1);
+            nogif++;
+            if (nogif >= 60) nogif = 0;
+          }
+        }
+      }
+    }
+  }
+
+  function handleAnimation() {
+    requestAnimationFrame(handleAnimation);
+    drawDerivative();
+  }
 
   const handleCloseModal = () => {
     setIsOpenModal(false);
