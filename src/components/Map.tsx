@@ -21,9 +21,11 @@ export default function Map() {
   interface RoyalLand {
     x: number;
     y: number;
+    derivative: string;
     src: string;
   }
 
+  let numGif = 0;
   let isDown = false;
   let orinPos: Land = { x: 0, y: 0 };
   let curPos: Land = { x: 0, y: 0 };
@@ -37,8 +39,8 @@ export default function Map() {
   const toast = useToast();
   const { state, send: claimLand } = useContractMethod("claimLand");
 
-  const [clickedX, setClickedX] = useState(47);
-  const [clickedY, setClickedY] = useState(50);
+  const [clickedX, setClickedX] = useState(73);
+  const [clickedY, setClickedY] = useState(56);
   const [canvasCursor, setCanvasCursor] = useState("pointer");
   const [totalLandsValue, setTotalLandsValue] = useState("");
   const [myTotalLandsValue, setMyTotalLandsValue] = useState("0");
@@ -151,10 +153,15 @@ export default function Map() {
     if (
       _royalLands.filter(
         (e: any) =>
-          e.x === newLand.x && e.y === newLand.y && e.src === newLand.src
+          e.x === newLand.x &&
+          e.y === newLand.y &&
+          e.derivative === newLand.derivative &&
+          e.src === newLand.src
       ).length === 0 &&
-      newLand.x >= 0 &&
-      newLand.y >= 0 &&
+      newLand.x <= 100 &&
+      newLand.y <= 100 &&
+      newLand.x > 0 &&
+      newLand.y > 0 &&
       newLand.src
     ) {
       _royalLands.push(newLand);
@@ -168,8 +175,8 @@ export default function Map() {
     if (
       _claimedLands.filter((e: any) => e.x === newLand.x && e.y === newLand.y)
         .length === 0 &&
-      newLand.x >= 0 &&
-      newLand.y >= 0
+      newLand.x > 0 &&
+      newLand.y > 0
     ) {
       _claimedLands.push(newLand);
       setClaimedLands(_claimedLands);
@@ -182,8 +189,8 @@ export default function Map() {
     if (
       _myClaimedLands.filter((e: any) => e.x === newLand.x && e.y === newLand.y)
         .length === 0 &&
-      newLand.x >= 0 &&
-      newLand.y >= 0
+      newLand.x > 0 &&
+      newLand.y > 0
     ) {
       _myClaimedLands.push(newLand);
       setMyClaimedLands(_myClaimedLands);
@@ -238,9 +245,11 @@ export default function Map() {
     }
   };
 
-  const drawPointerOutLine = (ctx: any) => {
+  const drawPointerOutLine = () => {
+    const canvas: any = canvasRef.current;
     const curJson = localStorage.getItem("curPoint");
-    if (curJson) {
+    if (curJson && canvas) {
+      const ctx = canvas.getContext("2d");
       const _curPoint = JSON.parse(curJson);
       const curX = Math.ceil(_curPoint.x);
       const curY = Math.ceil(_curPoint.y);
@@ -250,7 +259,7 @@ export default function Map() {
       ctx.strokeRect(curX - 0.95, curY - 0.95, 0.9, 0.9);
       ctx.textAlign = "left";
       ctx.font = "0.8px changa";
-      ctx.fillStyle = "rgb(255, 255, 255, 0.9)";
+      ctx.fillStyle = "rgb(255, 255, 255, 0.8)";
       ctx.fillText(strPoint, curX, curY - 1.5);
     }
   };
@@ -301,32 +310,78 @@ export default function Map() {
 
   const drawRoyalLand = () => {
     const canvas: any = canvasRef.current;
-    const royalJson = localStorage.getItem("royalLands");
-    const _royaled = royalJson !== null ? JSON.parse(royalJson) : royalLands;
-    const ctx = canvas.getContext("2d");
-    const zoomScale = Math.pow(1.15, countMul);
-    const limiw =
-      canvasWidth > canvasHeight
-        ? 100 / zoomScale
-        : (100 * canvasSize.h) / (zoomScale * canvasSize.w);
-    const limih =
-      canvasWidth < canvasHeight
-        ? 100 / zoomScale
-        : (100 * canvasSize.h) / (zoomScale * canvasSize.w);
-    for (let i = 0; i < _royaled.length; i++) {
-      const x = _royaled[i].x;
-      const y = _royaled[i].y;
-      if (
-        x >= orinPos.x &&
-        x <= orinPos.x + limiw &&
-        y >= orinPos.y &&
-        y <= orinPos.y + limih
-      ) {
-        const imgsrc = _royaled[i].src ? _royaled[i].src : "";
-        if (imgsrc !== "") {
-          const img = new Image();
-          img.src = imgsrc;
-          ctx.drawImage(img, x - 1, y - 1, 1, 1);
+    if (canvas) {
+      const royalJson = localStorage.getItem("royalLands");
+      const _royaled = royalJson !== null ? JSON.parse(royalJson) : royalLands;
+      const ctx = canvas.getContext("2d");
+      const zoomScale = Math.pow(1.15, countMul);
+      const limiw =
+        canvasWidth > canvasHeight
+          ? 100 / zoomScale
+          : (100 * canvasSize.h) / (zoomScale * canvasSize.w);
+      const limih =
+        canvasWidth < canvasHeight
+          ? 100 / zoomScale
+          : (100 * canvasSize.h) / (zoomScale * canvasSize.w);
+      for (let i = 0; i < _royaled.length; i++) {
+        const x = _royaled[i].x;
+        const y = _royaled[i].y;
+        if (
+          x >= orinPos.x &&
+          x <= orinPos.x + limiw &&
+          y >= orinPos.y &&
+          y <= orinPos.y + limih
+        ) {
+          const imgsrc = _royaled[i].src ? _royaled[i].src : "";
+          if (imgsrc !== "") {
+            const img = new Image();
+            img.src = imgsrc;
+            ctx.drawImage(img, x - 1, y - 1, 1, 1);
+            if (_royaled[i].derivative > 0) {
+              const imgGif = new Image();
+              imgGif.src = "/Deriv_Gradient/deriv(0).png";
+              ctx.drawImage(imgGif, x - 1, y - 1, 1, 1);
+            }
+          }
+        }
+      }
+    }
+  };
+
+  const drawDerivativeLand = () => {
+    const canvas: any = canvasRef.current;
+    if (canvas) {
+      const royalJson = localStorage.getItem("royalLands");
+      const _royaled = royalJson !== null ? JSON.parse(royalJson) : royalLands;
+      const ctx = canvas.getContext("2d");
+      const zoomScale = Math.pow(1.15, countMul);
+      const limiw =
+        canvasWidth > canvasHeight
+          ? 100 / zoomScale
+          : (100 * canvasSize.h) / (zoomScale * canvasSize.w);
+      const limih =
+        canvasWidth < canvasHeight
+          ? 100 / zoomScale
+          : (100 * canvasSize.h) / (zoomScale * canvasSize.w);
+      for (let i = 0; i < _royaled.length; i++) {
+        const x = _royaled[i].x;
+        const y = _royaled[i].y;
+        if (
+          x >= orinPos.x &&
+          x <= orinPos.x + limiw &&
+          y >= orinPos.y &&
+          y <= orinPos.y + limih
+        ) {
+          const imgsrc = _royaled[i].src ? _royaled[i].src : "";
+          if (imgsrc !== "" && _royaled[i].derivative > 0) {
+            const img = new Image();
+            img.src = "/Deriv_Gradient/deriv(" + numGif.toString() + ").png";
+            ctx.drawImage(img, x - 1, y - 1, 1, 1);
+            numGif = numGif + 1;
+            if (numGif >= 60) {
+              numGif = 0;
+            }
+          }
         }
       }
     }
@@ -340,7 +395,7 @@ export default function Map() {
     drawMyClaimedLand();
     drawCollectionBorders(ctx);
     drawRoyalLand();
-    drawPointerOutLine(ctx);
+    // drawPointerOutLine();
   };
 
   const handleDrawCanvas = () => {
@@ -370,7 +425,6 @@ export default function Map() {
   };
 
   const handleInit = () => {
-    initEventListners();
     localStorage.clear();
     countMul = 6;
     const zoomScale = Math.pow(1.15, countMul);
@@ -503,6 +557,15 @@ export default function Map() {
     localStorage.setItem("curPoint", JSON.stringify(curPos));
     handleDrawCanvas();
   };
+
+  handleAnimation();
+
+  function handleAnimation() {
+    requestAnimationFrame(handleAnimation);
+    drawRoyalLand();
+    drawDerivativeLand();
+    drawPointerOutLine();
+  }
 
   const handleCloseModal = () => {
     setIsOpenModal(false);
@@ -684,15 +747,28 @@ export default function Map() {
         "mousemove",
         function (evt: any) {
           if (!isDown) {
-            const ctx = canvas.getContext("2d");
-            const zoomScale = Math.pow(1.15, countMul);
-            const offsetX = (evt.offsetX / canvasSize.w) * 100;
-            const offsetY = (evt.offsetY / canvasSize.w) * 100;
-            curPos.x = orinPos.x + offsetX / zoomScale;
-            curPos.y = orinPos.y + offsetY / zoomScale;
-            draw(ctx);
-            setCanvasCursor("pointer");
-            localStorage.setItem("curPoint", JSON.stringify(curPos));
+            const curJson = localStorage.getItem("curPoint");
+            if (curJson) {
+              const ctx = canvas.getContext("2d");
+              const zoomScale = Math.pow(1.15, countMul);
+              const offsetX = (evt.offsetX / canvasSize.w) * 100;
+              const offsetY = (evt.offsetY / canvasSize.w) * 100;
+              curPos.x = orinPos.x + offsetX / zoomScale;
+              curPos.y = orinPos.y + offsetY / zoomScale;
+              const _curPoint = JSON.parse(curJson);
+              const curX = Math.ceil(_curPoint.x);
+              const curY = Math.ceil(_curPoint.y);
+              if (
+                Math.ceil(curPos.x) === curX &&
+                Math.ceil(curPos.y) === curY
+              ) {
+                setCanvasCursor("pointer");
+              } else {
+                localStorage.setItem("curPoint", JSON.stringify(curPos));
+                draw(ctx);
+                setCanvasCursor("pointer");
+              }
+            }
           } else {
             const offsetX = (evt.offsetX / canvasSize.w) * 100;
             const offsetY = (evt.offsetY / canvasSize.w) * 100;
@@ -708,6 +784,7 @@ export default function Map() {
   };
 
   useEffect(() => {
+    initEventListners();
     handleInit();
   }, []);
 
