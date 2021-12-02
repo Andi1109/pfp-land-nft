@@ -10,7 +10,6 @@ import tierBordersJson from "../borders/TierBorders.json";
 import LandModal from "./LandModal";
 import { utils } from "ethers";
 import { useEthers } from "@usedapp/core";
-import "./font.css";
 
 export default function Map() {
   interface Land {
@@ -25,7 +24,7 @@ export default function Map() {
     src: string;
   }
 
-  let numGif = 0;
+  let nogif = 0;
   let isDown = false;
   let orinPos: Land = { x: 0, y: 0 };
   let curPos: Land = { x: 0, y: 0 };
@@ -46,7 +45,7 @@ export default function Map() {
   const [myTotalLandsValue, setMyTotalLandsValue] = useState("0");
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [claimedLands, setClaimedLands] = useState<Land[]>([]);
-  const [myClaimedLands, setMyClaimedLands] = useState<Land[]>([]);
+  // const [myClaimedLands, setMyClaimedLands] = useState<Land[]>([]);
   const [royalLands, setRoyalLands] = useState<RoyalLand[]>([]);
 
   const canvasRef = useRef(null);
@@ -184,19 +183,19 @@ export default function Map() {
     localStorage.setItem("claimedLands", JSON.stringify(_claimedLands));
   };
 
-  const appendMyClaimedLands = (newLand: Land) => {
-    let _myClaimedLands = JSON.parse(JSON.stringify(myClaimedLands));
-    if (
-      _myClaimedLands.filter((e: any) => e.x === newLand.x && e.y === newLand.y)
-        .length === 0 &&
-      newLand.x > 0 &&
-      newLand.y > 0
-    ) {
-      _myClaimedLands.push(newLand);
-      setMyClaimedLands(_myClaimedLands);
-    }
-    localStorage.setItem("myClaimedLands", JSON.stringify(_myClaimedLands));
-  };
+  // const appendMyClaimedLands = (newLand: Land) => {
+  //   let _myClaimedLands = JSON.parse(JSON.stringify(myClaimedLands));
+  //   if (
+  //     _myClaimedLands.filter((e: any) => e.x === newLand.x && e.y === newLand.y)
+  //       .length === 0 &&
+  //     newLand.x > 0 &&
+  //     newLand.y > 0
+  //   ) {
+  //     _myClaimedLands.push(newLand);
+  //     setMyClaimedLands(_myClaimedLands);
+  //   }
+  //   localStorage.setItem("myClaimedLands", JSON.stringify(_myClaimedLands));
+  // };
 
   const drawTiers = (ctx: any) => {
     for (let i = 0; i < tierBordersJson.length; i++) {
@@ -245,11 +244,9 @@ export default function Map() {
     }
   };
 
-  const drawPointerOutLine = () => {
-    const canvas: any = canvasRef.current;
+  const drawPointerOutLine = (ctx: any) => {
     const curJson = localStorage.getItem("curPoint");
-    if (curJson && canvas) {
-      const ctx = canvas.getContext("2d");
+    if (curJson) {
       const _curPoint = JSON.parse(curJson);
       const curX = Math.ceil(_curPoint.x);
       const curY = Math.ceil(_curPoint.y);
@@ -258,8 +255,8 @@ export default function Map() {
       ctx.lineWidth = 0.1;
       ctx.strokeRect(curX - 0.95, curY - 0.95, 0.9, 0.9);
       ctx.textAlign = "left";
-      ctx.font = "0.8px changa";
-      ctx.fillStyle = "rgb(255, 255, 255, 0.8)";
+      ctx.font = "0.8px Changa One";
+      ctx.fillStyle = "rgb(255, 255, 255, 0.9)";
       ctx.fillText(strPoint, curX, curY - 1.5);
     }
   };
@@ -273,7 +270,7 @@ export default function Map() {
       const titleObj = collectionTitlesJson[i];
       ctx.save();
       ctx.translate(titleObj.originX, titleObj.originY);
-      ctx.font = titleObj.size + "px changa";
+      ctx.font = titleObj.size + "px Changa One";
       if (titleObj.rotate) ctx.rotate(-Math.PI / 2);
       ctx.fillText(titleObj.title, 0, 0);
       ctx.restore();
@@ -293,20 +290,20 @@ export default function Map() {
     }
   };
 
-  const drawMyClaimedLand = () => {
-    const canvas: any = canvasRef.current;
-    const myClaimJson = localStorage.getItem("myClaimedLands");
-    const _myClaimed =
-      myClaimJson !== null ? JSON.parse(myClaimJson) : myClaimedLands;
-    if (canvas && _myClaimed.length > 0) {
-      const ctx = canvas.getContext("2d");
-      for (let i = 0; i < _myClaimed.length; i++) {
-        ctx.strokeStyle = "rgba(255, 0, 0, 1)";
-        ctx.lineWidth = 0.3;
-        ctx.strokeRect(_myClaimed[i].x - 1, _myClaimed[i].y - 1, 1, 1);
-      }
-    }
-  };
+  // const drawMyClaimedLand = () => {
+  //   const canvas: any = canvasRef.current;
+  //   const myClaimJson = localStorage.getItem("myClaimedLands");
+  //   const _myClaimed =
+  //     myClaimJson !== null ? JSON.parse(myClaimJson) : myClaimedLands;
+  //   if (canvas && _myClaimed.length > 0) {
+  //     const ctx = canvas.getContext("2d");
+  //     for (let i = 0; i < _myClaimed.length; i++) {
+  //       ctx.strokeStyle = "rgba(255, 0, 0, 1)";
+  //       ctx.lineWidth = 0.3;
+  //       ctx.strokeRect(_myClaimed[i].x - 1, _myClaimed[i].y - 1, 1, 1);
+  //     }
+  //   }
+  // };
 
   const drawRoyalLand = () => {
     const canvas: any = canvasRef.current;
@@ -338,48 +335,9 @@ export default function Map() {
             img.src = imgsrc;
             ctx.drawImage(img, x - 1, y - 1, 1, 1);
             if (_royaled[i].derivative > 0) {
-              const imgGif = new Image();
-              imgGif.src = "/Deriv_Gradient/deriv(0).png";
-              ctx.drawImage(imgGif, x - 1, y - 1, 1, 1);
-            }
-          }
-        }
-      }
-    }
-  };
-
-  const drawDerivativeLand = () => {
-    const canvas: any = canvasRef.current;
-    if (canvas) {
-      const royalJson = localStorage.getItem("royalLands");
-      const _royaled = royalJson !== null ? JSON.parse(royalJson) : royalLands;
-      const ctx = canvas.getContext("2d");
-      const zoomScale = Math.pow(1.15, countMul);
-      const limiw =
-        canvasWidth > canvasHeight
-          ? 100 / zoomScale
-          : (100 * canvasSize.h) / (zoomScale * canvasSize.w);
-      const limih =
-        canvasWidth < canvasHeight
-          ? 100 / zoomScale
-          : (100 * canvasSize.h) / (zoomScale * canvasSize.w);
-      for (let i = 0; i < _royaled.length; i++) {
-        const x = _royaled[i].x;
-        const y = _royaled[i].y;
-        if (
-          x >= orinPos.x &&
-          x <= orinPos.x + limiw &&
-          y >= orinPos.y &&
-          y <= orinPos.y + limih
-        ) {
-          const imgsrc = _royaled[i].src ? _royaled[i].src : "";
-          if (imgsrc !== "" && _royaled[i].derivative > 0) {
-            const img = new Image();
-            img.src = "/Deriv_Gradient/deriv(" + numGif.toString() + ").png";
-            ctx.drawImage(img, x - 1, y - 1, 1, 1);
-            numGif = numGif + 1;
-            if (numGif >= 60) {
-              numGif = 0;
+              const img2 = new Image();
+              img2.src = "/Deriv_Gradient/deriv(0).png";
+              ctx.drawImage(img2, x - 1, y - 1, 1, 1);
             }
           }
         }
@@ -392,10 +350,11 @@ export default function Map() {
     drawLandBorders(ctx);
     drawClaimedLand();
     drawCollectionTitles(ctx);
-    drawMyClaimedLand();
+    // drawMyClaimedLand();
     drawCollectionBorders(ctx);
     drawRoyalLand();
-    // drawPointerOutLine();
+    drawDerivative();
+    drawPointerOutLine(ctx);
   };
 
   const handleDrawCanvas = () => {
@@ -425,6 +384,7 @@ export default function Map() {
   };
 
   const handleInit = () => {
+    // initEventListners();
     localStorage.clear();
     countMul = 6;
     const zoomScale = Math.pow(1.15, countMul);
@@ -560,11 +520,47 @@ export default function Map() {
 
   handleAnimation();
 
+  function drawDerivative() {
+    const canvas: any = canvasRef.current;
+    if (canvas) {
+      const ctx = canvas.getContext("2d");
+      const royalJson = localStorage.getItem("royalLands");
+      const _royaled = royalJson !== null ? JSON.parse(royalJson) : royalLands;
+      const zoomScale = Math.pow(1.15, countMul);
+      const limiw =
+        canvasWidth > canvasHeight
+          ? 100 / zoomScale
+          : (100 * canvasSize.h) / (zoomScale * canvasSize.w);
+      const limih =
+        canvasWidth < canvasHeight
+          ? 100 / zoomScale
+          : (100 * canvasSize.h) / (zoomScale * canvasSize.w);
+      for (let i = 0; i < _royaled.length; i++) {
+        const x = _royaled[i].x;
+        const y = _royaled[i].y;
+        if (
+          x >= orinPos.x &&
+          x <= orinPos.x + limiw &&
+          y >= orinPos.y &&
+          y <= orinPos.y + limih
+        ) {
+          const imgsrc = _royaled[i].src ? _royaled[i].src : "";
+          if (imgsrc !== "" && _royaled[i].derivative > 0) {
+            const img = new Image();
+            img.src = "/Deriv_Gradient/deriv(" + nogif.toString() + ").png";
+            ctx.drawImage(img, x - 1, y - 1, 1, 1);
+            nogif++;
+            if (nogif >= 60) nogif = 0;
+          }
+        }
+      }
+    }
+  }
+
   function handleAnimation() {
     requestAnimationFrame(handleAnimation);
     drawRoyalLand();
-    drawDerivativeLand();
-    drawPointerOutLine();
+    drawDerivative();
   }
 
   const handleCloseModal = () => {
