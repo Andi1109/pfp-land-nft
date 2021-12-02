@@ -354,7 +354,7 @@ export default function Map() {
             ctx.drawImage(img, x - 1, y - 1, 1, 1);
             if (_royaled[i].derivative > 0) {
               const img2 = new Image();
-              img2.src = "/Deriv_Gradient/deriv(0).png";
+              img2.src = "/assets/Deriv_Gradient/deriv(0).png";
               ctx.drawImage(img2, x - 1, y - 1, 1, 1);
             }
           }
@@ -567,7 +567,8 @@ export default function Map() {
           const _nogif = noJson !== null ? JSON.parse(noJson) : 0;
           if (imgsrc !== "" && _royaled[i].derivative > 0) {
             const img = new Image();
-            img.src = "/Deriv_Gradient/deriv(" + _nogif.toString() + ").png";
+            img.src =
+              "/assets/Deriv_Gradient/deriv(" + _nogif.toString() + ").png";
             ctx.drawImage(img, x - 1, y - 1, 1, 1);
           }
         }
