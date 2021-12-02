@@ -45,7 +45,7 @@ export default function Map() {
   const [myTotalLandsValue, setMyTotalLandsValue] = useState("0");
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [claimedLands, setClaimedLands] = useState<Land[]>([]);
-  const [myClaimedLands, setMyClaimedLands] = useState<Land[]>([]);
+  // const [myClaimedLands, setMyClaimedLands] = useState<Land[]>([]);
   const [royalLands, setRoyalLands] = useState<RoyalLand[]>([]);
 
   const canvasRef = useRef(null);
@@ -183,19 +183,19 @@ export default function Map() {
     localStorage.setItem("claimedLands", JSON.stringify(_claimedLands));
   };
 
-  const appendMyClaimedLands = (newLand: Land) => {
-    let _myClaimedLands = JSON.parse(JSON.stringify(myClaimedLands));
-    if (
-      _myClaimedLands.filter((e: any) => e.x === newLand.x && e.y === newLand.y)
-        .length === 0 &&
-      newLand.x > 0 &&
-      newLand.y > 0
-    ) {
-      _myClaimedLands.push(newLand);
-      setMyClaimedLands(_myClaimedLands);
-    }
-    localStorage.setItem("myClaimedLands", JSON.stringify(_myClaimedLands));
-  };
+  // const appendMyClaimedLands = (newLand: Land) => {
+  //   let _myClaimedLands = JSON.parse(JSON.stringify(myClaimedLands));
+  //   if (
+  //     _myClaimedLands.filter((e: any) => e.x === newLand.x && e.y === newLand.y)
+  //       .length === 0 &&
+  //     newLand.x > 0 &&
+  //     newLand.y > 0
+  //   ) {
+  //     _myClaimedLands.push(newLand);
+  //     setMyClaimedLands(_myClaimedLands);
+  //   }
+  //   localStorage.setItem("myClaimedLands", JSON.stringify(_myClaimedLands));
+  // };
 
   const drawTiers = (ctx: any) => {
     for (let i = 0; i < tierBordersJson.length; i++) {
@@ -290,20 +290,20 @@ export default function Map() {
     }
   };
 
-  const drawMyClaimedLand = () => {
-    const canvas: any = canvasRef.current;
-    const myClaimJson = localStorage.getItem("myClaimedLands");
-    const _myClaimed =
-      myClaimJson !== null ? JSON.parse(myClaimJson) : myClaimedLands;
-    if (canvas && _myClaimed.length > 0) {
-      const ctx = canvas.getContext("2d");
-      for (let i = 0; i < _myClaimed.length; i++) {
-        ctx.strokeStyle = "rgba(255, 0, 0, 1)";
-        ctx.lineWidth = 0.3;
-        ctx.strokeRect(_myClaimed[i].x - 1, _myClaimed[i].y - 1, 1, 1);
-      }
-    }
-  };
+  // const drawMyClaimedLand = () => {
+  //   const canvas: any = canvasRef.current;
+  //   const myClaimJson = localStorage.getItem("myClaimedLands");
+  //   const _myClaimed =
+  //     myClaimJson !== null ? JSON.parse(myClaimJson) : myClaimedLands;
+  //   if (canvas && _myClaimed.length > 0) {
+  //     const ctx = canvas.getContext("2d");
+  //     for (let i = 0; i < _myClaimed.length; i++) {
+  //       ctx.strokeStyle = "rgba(255, 0, 0, 1)";
+  //       ctx.lineWidth = 0.3;
+  //       ctx.strokeRect(_myClaimed[i].x - 1, _myClaimed[i].y - 1, 1, 1);
+  //     }
+  //   }
+  // };
 
   const drawRoyalLand = () => {
     const canvas: any = canvasRef.current;
@@ -350,7 +350,7 @@ export default function Map() {
     drawLandBorders(ctx);
     drawClaimedLand();
     drawCollectionTitles(ctx);
-    drawMyClaimedLand();
+    // drawMyClaimedLand();
     drawCollectionBorders(ctx);
     drawRoyalLand();
     drawDerivative();
