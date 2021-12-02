@@ -1,0 +1,115 @@
+.connectBox {
+  display: flex;
+  align-items: center;
+  background: #2d3748;
+  border-radius: 0.75rem;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.balText {
+  color: white;
+  font-size: 16px;
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+.connectbtn {
+  display: flex;
+  background-color: #2a4365;
+  border: 1px solid transparent;
+  border-radius: 0.75rem;
+  padding: 12px;
+  margin: 1px;
+  height: 38px;
+  align-items: center;
+}
+
+.connectbtn:hover {
+  border: 1px solid #4299e1;
+  font-size: 16px;
+  background-color: #2d3748;
+}
+
+.handlebtn {
+  color: #63b3ed;
+  background-color: #2a4365;
+}
+
+.handlebtn:active {
+  background-color: #2a4365;
+  border-color: #2d3748;
+}
+
+.accountAdd {
+  color: white;
+  margin-right: 8px;
+}
+
+.menu {
+  display: none;
+  margin-left: 15px;
+}
+
+.menubtn {
+  background-color: #fff;
+  height: 30px !important;
+}
+
+.link {
+  display: flex;
+  position: absolute;
+  right: 5vw;
+}
+
+.linkImg {
+  margin-left: 1rem;
+  width: 1.5.5rem;
+  height: 2.5rem;
+}
+
+@media screen and (max-width: 540px) {
+  .navbar {
+    align-items: center;
+    height: 34px;
+  }
+
+  .balText {
+    padding: 5px;
+  }
+
+  .connectBox {
+    position: absolute;
+    left: 5vw;
+    height: 30px;
+  }
+
+  .connectbtn {
+    height: 28px;
+    font-size: 12px;
+    padding: 6px;
+  }
+
+  .balText {
+    font-size: 12px;
+    margin: 0;
+  }
+
+  .link {
+    position: absolute;
+    right: 5vw;
+    display: flex;
+  }
+
+  .linkImg {
+    margin-left: 0.5rem;
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+}
+
+/* @media screen and (max-width: 360px) {
+  .connectBox {
+    width: min-content;
+  }
+} */

@@ -81,7 +81,7 @@ export default function Map() {
       nogif++;
       if (nogif >= 60) nogif = 0;
       localStorage.setItem("nogif", JSON.stringify(nogif));
-    }, 70);
+    }, 30);
     return () => clearInterval(interval);
   }, []);
 
@@ -698,7 +698,8 @@ export default function Map() {
           if (evt.changedTouches.length === 1) {
             const touch: any = evt.changedTouches[0];
             if (touch && !dragged && cnt === countMul) {
-              const ctx = canvas.getContext("2d");
+              const canvas1: any = canvasRef1.current;
+              const ctx = canvas1.getContext("2d");
               const zoomScale = Math.pow(1.15, countMul);
               const offsetX =
                 ((touch.clientX - touch.target.offsetLeft) / canvasSize.w) *
@@ -808,20 +809,18 @@ export default function Map() {
         alignItems="center"
         cursor={canvasCursor}
       >
-        <div style={{ position: "relative" }}>
-          <canvas
-            ref={canvasRef1}
-            id="lay01"
-            width={`${canvasWidth}`}
-            height={`${canvasHeight}`}
-          ></canvas>
-          <canvas
-            ref={canvasRef2}
-            id="lay02"
-            width={`${canvasWidth}`}
-            height={`${canvasHeight}`}
-          ></canvas>
-        </div>
+        <canvas
+          ref={canvasRef1}
+          id="lay01"
+          width={`${canvasWidth}`}
+          height={`${canvasHeight}`}
+        ></canvas>
+        <canvas
+          ref={canvasRef2}
+          id="lay02"
+          width={`${canvasWidth}`}
+          height={`${canvasHeight}`}
+        ></canvas>
         {Array.from({ length: parseInt(totalLandsValue) }, (_, i) => 0 + i).map(
           (index) => {
             const landDiv = (
