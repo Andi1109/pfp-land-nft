@@ -2,7 +2,7 @@ import { useRef, useState, useEffect } from "react";
 import { Box, useToast } from "@chakra-ui/react";
 import { GetTotalSupply, GetBalanceOf, useContractMethod } from "../hooks";
 import LandDetail from "./LandDetail";
-import MyLandDetail from "./MyLandDetail";
+// import MyLandDetail from "./MyLandDetail";
 import LandRoyal from "./LandRoyal";
 import collectionBordersJson from "../borders/CollectionBorders.json";
 import collectionTitlesJson from "../borders/CollectionTitles.json";
@@ -809,7 +809,7 @@ export default function Map() {
             return landDiv;
           }
         )}
-        {Array.from(
+        {/* {Array.from(
           { length: parseInt(myTotalLandsValue) },
           (_, i) => 0 + i
         ).map((index) => {
@@ -822,7 +822,7 @@ export default function Map() {
             />
           );
           return landDiv;
-        })}
+        })} */}
         {Array.from({ length: parseInt(totalLandsValue) }, (_, i) => 0 + i).map(
           (index) => {
             const landDiv = (
