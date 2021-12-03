@@ -19,6 +19,9 @@ function App() {
     <ChakraProvider theme={theme}>
       <Layout>
         <Flex className="navbar">
+          <Link className="logolink" href="http://mypfp.land">
+            <Image className="linkImg" src="/assets/mypfp_icon.png" />
+          </Link>
           <ConnectButton handleOpenModal={onOpen} />
           <div className="link">
             <Link href="https://twitter.com/myPFPland">

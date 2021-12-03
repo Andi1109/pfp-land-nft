@@ -56,6 +56,15 @@
   height: 30px !important;
 }
 
+.logolink {
+  position: absolute;
+  left: 5vw;
+}
+
+.logolink .linkImg {
+  margin: 0;
+}
+
 .link {
   display: flex;
   position: absolute;
@@ -80,7 +89,7 @@
 
   .connectBox {
     position: absolute;
-    left: 5vw;
+    left: 15vw;
     height: 30px;
   }
 
@@ -108,8 +117,8 @@
   }
 }
 
-/* @media screen and (max-width: 360px) {
+@media screen and (max-width: 320px) {
   .connectBox {
     width: min-content;
   }
-} */
+}

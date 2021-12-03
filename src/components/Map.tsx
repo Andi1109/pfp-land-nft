@@ -1,9 +1,11 @@
 import { useRef, useState, useEffect } from "react";
 import { Box, useToast } from "@chakra-ui/react";
 import { GetTotalSupply, GetBalanceOf, useContractMethod } from "../hooks";
+import { MoveDirection } from "react-tsparticles";
 import LandDetail from "./LandDetail";
 // import MyLandDetail from "./MyLandDetail";
 import LandRoyal from "./LandRoyal";
+import ParticleDiv from "./ParticleDiv";
 import collectionBordersJson from "../borders/CollectionBorders.json";
 import collectionTitlesJson from "../borders/CollectionTitles.json";
 import tierBordersJson from "../borders/TierBorders.json";
@@ -39,6 +41,8 @@ export default function Map() {
   const toast = useToast();
   const { state, send: claimLand } = useContractMethod("claimLand");
 
+  const [strMove, setStrMove] = useState<MoveDirection>(MoveDirection.right);
+  const [valSize, setValSize] = useState(39.5);
   const [clickedX, setClickedX] = useState(73);
   const [clickedY, setClickedY] = useState(56);
   const [canvasCursor, setCanvasCursor] = useState("pointer");
@@ -583,7 +587,7 @@ export default function Map() {
     window.addEventListener("resize", updateSize);
 
     const canvas: any = canvasRef2.current;
-    const particle: any = document.getElementById("particles-js");
+    const particle: any = document.getElementById("particleDiv");
     if (canvas && particle) {
       let lastX = 0;
       let lastY = 0;
@@ -817,6 +821,7 @@ export default function Map() {
           width={`${canvasWidth}`}
           height={`${canvasHeight}`}
         ></canvas>
+        <ParticleDiv strMove={strMove} valSize={valSize} />
         {Array.from({ length: parseInt(totalLandsValue) }, (_, i) => 0 + i).map(
           (index) => {
             const landDiv = (

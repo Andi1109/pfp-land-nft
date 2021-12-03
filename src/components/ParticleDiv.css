@@ -1,9 +1,5 @@
-/* ---- particles.js container ---- */
-
-#particles-js {
+#particleDiv {
   position: absolute;
-  left: 5vw;
-  top: 7.5vh;
   width: 90vw;
   height: 90vh;
   background-color: transparent;
@@ -13,8 +9,12 @@
   background-repeat: no-repeat;
 }
 
+#particleDiv canvas {
+  position: relative !important;
+}
+
 @media (hover: none) {
-  #particles-js {
+  #particleDiv {
     z-index: 1;
   }
 }
