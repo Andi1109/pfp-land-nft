@@ -562,7 +562,6 @@ export default function Map() {
     orinPos.x = orinX - dx;
     orinPos.y = orinY - dy;
     limitOrinPos();
-
     curPos.x = orinPos.x + posX / zoomScale;
     curPos.y = orinPos.y + posY / zoomScale;
     localStorage.setItem("curPoint", JSON.stringify(curPos));
@@ -716,6 +715,7 @@ export default function Map() {
           }
           isDown = false;
           dragged = false;
+          localStorage.setItem("move", "right");
           zoomed = false;
         },
         false
@@ -748,6 +748,7 @@ export default function Map() {
           }
           isDown = false;
           dragged = false;
+          localStorage.setItem("move", "right");
           setCanvasCursor("pointer");
         },
         false
