@@ -2,18 +2,19 @@ import Particles, { MoveDirection } from "react-tsparticles";
 import "./ParticleDiv.css";
 
 type Props = {
+  divid: string;
   strMove: MoveDirection;
   valSize: number;
 };
 
-export default function ParticleDiv({ strMove, valSize }: Props) {
+export default function ParticleDiv({ divid, strMove, valSize }: Props) {
   return (
     <Particles
-      id="particleDiv"
+      id={divid}
       options={{
         particles: {
           number: {
-            value: 40,
+            value: 40 / valSize,
             density: {
               enable: true,
               value_area: 800,
@@ -48,7 +49,7 @@ export default function ParticleDiv({ strMove, valSize }: Props) {
             },
           },
           size: {
-            value: valSize,
+            value: valSize * 39.5,
             random: false,
             anim: {
               enable: false,
@@ -105,7 +106,7 @@ export default function ParticleDiv({ strMove, valSize }: Props) {
               opacity: 8,
             },
             repulse: {
-              distance: 100,
+              distance: 100 * valSize,
             },
             push: {
               particles_nb: 4,
@@ -115,7 +116,7 @@ export default function ParticleDiv({ strMove, valSize }: Props) {
             },
           },
         },
-        retina_detect: true,
+        retina_detect: false,
       }}
     />
   );

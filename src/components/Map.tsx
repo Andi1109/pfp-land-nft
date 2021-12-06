@@ -42,7 +42,7 @@ export default function Map() {
   const { state, send: claimLand } = useContractMethod("claimLand");
 
   const [strMove, setStrMove] = useState<MoveDirection>(MoveDirection.right);
-  const [valSize, setValSize] = useState(39.5);
+  const [valSize, setValSize] = useState(1);
   const [clickedX, setClickedX] = useState(73);
   const [clickedY, setClickedY] = useState(56);
   const [canvasCursor, setCanvasCursor] = useState("pointer");
@@ -454,6 +454,7 @@ export default function Map() {
           (canvasWidth * zoomScale)
         : ((zoomScale - 1) * 50) / zoomScale;
     handleDrawCanvas();
+    // setValSize(zoomScale);
   };
 
   const handleClaim = async (landX: any, landY: any, collectionID: any) => {
@@ -548,6 +549,10 @@ export default function Map() {
     curPos.y = orinPos.y + posY / zoomScale;
     localStorage.setItem("curPoint", JSON.stringify(curPos));
     handleDrawCanvas();
+    // if (zoomed) {
+    // const zoomScale = Math.pow(1.15, countMul);
+    // setValSize(zoomScale);
+    // }
   };
 
   const handleDrag = (
@@ -562,6 +567,12 @@ export default function Map() {
     const zoomScale = Math.pow(1.15, countMul);
     const dx = (posX - lastX) / zoomScale;
     const dy = (posY - lastY) / zoomScale;
+    // let mvCNT = 0;
+    // if (dx > 0.3) mvCNT = 1;
+    // else if (dx < -0.3) mvCNT = 2;
+    // if (dy > 0.3) mvCNT += 3;
+    // else if (dy < -0.3) mvCNT += 6;
+    // setMoveDirection(mvCNT);
 
     orinPos.x = orinX - dx;
     orinPos.y = orinY - dy;
@@ -570,6 +581,37 @@ export default function Map() {
     curPos.y = orinPos.y + posY / zoomScale;
     localStorage.setItem("curPoint", JSON.stringify(curPos));
     handleDrawCanvas();
+  };
+
+  const setMoveDirection = (val: number) => {
+    switch (val) {
+      case 1:
+        setStrMove(MoveDirection.right);
+        break;
+      case 2:
+        setStrMove(MoveDirection.left);
+        break;
+      case 3:
+        setStrMove(MoveDirection.bottom);
+        break;
+      case 4:
+        setStrMove(MoveDirection.bottomRight);
+        break;
+      case 5:
+        setStrMove(MoveDirection.bottomLeft);
+        break;
+      case 6:
+        setStrMove(MoveDirection.top);
+        break;
+      case 7:
+        setStrMove(MoveDirection.topRight);
+        break;
+      case 8:
+        setStrMove(MoveDirection.topLeft);
+        break;
+      default:
+        break;
+    }
   };
 
   handleAnimation();
@@ -719,7 +761,7 @@ export default function Map() {
           }
           isDown = false;
           dragged = false;
-          localStorage.setItem("move", "right");
+          // setStrMove(MoveDirection.right);
           zoomed = false;
         },
         false
@@ -752,7 +794,7 @@ export default function Map() {
           }
           isDown = false;
           dragged = false;
-          localStorage.setItem("move", "right");
+          // setStrMove(MoveDirection.right);
           setCanvasCursor("pointer");
         },
         false
@@ -821,7 +863,7 @@ export default function Map() {
           width={`${canvasWidth}`}
           height={`${canvasHeight}`}
         ></canvas>
-        <ParticleDiv strMove={strMove} valSize={valSize} />
+        <ParticleDiv divid="particleDiv" strMove={strMove} valSize={valSize} />
         {Array.from({ length: parseInt(totalLandsValue) }, (_, i) => 0 + i).map(
           (index) => {
             const landDiv = (
