@@ -1,15 +1,18 @@
 import { useRef, useState, useEffect } from "react";
 import { Box, useToast } from "@chakra-ui/react";
 import { GetTotalSupply, GetBalanceOf, useContractMethod } from "../hooks";
+import { MoveDirection } from "react-tsparticles";
 import LandDetail from "./LandDetail";
 // import MyLandDetail from "./MyLandDetail";
 import LandRoyal from "./LandRoyal";
+import ParticleDiv from "./ParticleDiv";
 import collectionBordersJson from "../borders/CollectionBorders.json";
 import collectionTitlesJson from "../borders/CollectionTitles.json";
 import tierBordersJson from "../borders/TierBorders.json";
 import LandModal from "./LandModal";
 import { utils } from "ethers";
 import { useEthers } from "@usedapp/core";
+import "./Map.css";
 
 export default function Map() {
   interface Land {
@@ -38,6 +41,8 @@ export default function Map() {
   const toast = useToast();
   const { state, send: claimLand } = useContractMethod("claimLand");
 
+  const [strMove, setStrMove] = useState<MoveDirection>(MoveDirection.right);
+  const [valSize, setValSize] = useState(1);
   const [clickedX, setClickedX] = useState(73);
   const [clickedY, setClickedY] = useState(56);
   const [canvasCursor, setCanvasCursor] = useState("pointer");
@@ -48,7 +53,8 @@ export default function Map() {
   // const [myClaimedLands, setMyClaimedLands] = useState<Land[]>([]);
   const [royalLands, setRoyalLands] = useState<RoyalLand[]>([]);
 
-  const canvasRef = useRef(null);
+  const canvasRef1 = useRef(null);
+  const canvasRef2 = useRef(null);
   const isMobile = window.screen.width <= window.screen.height ? true : false;
   const canvasHeight = Math.round(window.innerHeight / (100 / 90));
   const canvasWidth = Math.round(window.innerWidth / (100 / 90));
@@ -73,6 +79,15 @@ export default function Map() {
   useEffect(() => {
     doPostTransaction(state);
   }, [state]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      nogif++;
+      if (nogif >= 60) nogif = 0;
+      localStorage.setItem("nogif", JSON.stringify(nogif));
+    }, 30);
+    return () => clearInterval(interval);
+  }, []);
 
   const doPostTransaction = (state: any) => {
     let msg = "";
@@ -244,9 +259,16 @@ export default function Map() {
     }
   };
 
-  const drawPointerOutLine = (ctx: any) => {
+  const drawPointerOutLine = () => {
+    const canvas: any = canvasRef2.current;
+    const zoomScale = (Math.pow(1.15, countMul) * canvasSize.w) / 100;
     const curJson = localStorage.getItem("curPoint");
-    if (curJson) {
+    if (canvas && curJson) {
+      const ctx = canvas.getContext("2d");
+      ctx.resetTransform();
+      ctx.clearRect(0, 0, canvasSize.w, canvasSize.w);
+      ctx.scale(zoomScale, zoomScale);
+      ctx.transform(1, 0, 0, 1, -orinPos.x, -orinPos.y);
       const _curPoint = JSON.parse(curJson);
       const curX = Math.ceil(_curPoint.x);
       const curY = Math.ceil(_curPoint.y);
@@ -277,12 +299,10 @@ export default function Map() {
     }
   };
 
-  const drawClaimedLand = () => {
-    const canvas: any = canvasRef.current;
+  const drawClaimedLand = (ctx: any) => {
     const claimJson = localStorage.getItem("claimedLands");
     const _claimed = claimJson !== null ? JSON.parse(claimJson) : claimedLands;
-    if (canvas && _claimed.length > 0) {
-      const ctx = canvas.getContext("2d");
+    if (_claimed.length > 0) {
       for (let i = 0; i < _claimed.length; i++) {
         ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
         ctx.fillRect(_claimed[i].x - 1, _claimed[i].y - 1, 1, 1);
@@ -290,13 +310,11 @@ export default function Map() {
     }
   };
 
-  // const drawMyClaimedLand = () => {
-  //   const canvas: any = canvasRef.current;
+  // const drawMyClaimedLand = (ctx) => {
   //   const myClaimJson = localStorage.getItem("myClaimedLands");
   //   const _myClaimed =
   //     myClaimJson !== null ? JSON.parse(myClaimJson) : myClaimedLands;
-  //   if (canvas && _myClaimed.length > 0) {
-  //     const ctx = canvas.getContext("2d");
+  //   if (_myClaimed.length > 0) {
   //     for (let i = 0; i < _myClaimed.length; i++) {
   //       ctx.strokeStyle = "rgba(255, 0, 0, 1)";
   //       ctx.lineWidth = 0.3;
@@ -305,12 +323,51 @@ export default function Map() {
   //   }
   // };
 
-  const drawRoyalLand = () => {
-    const canvas: any = canvasRef.current;
+  function drawRoyalLand(ctx: any) {
+    const royalJson = localStorage.getItem("royalLands");
+    const _royaled = royalJson !== null ? JSON.parse(royalJson) : royalLands;
+    const zoomScale = Math.pow(1.15, countMul);
+    const limiw =
+      canvasWidth > canvasHeight
+        ? 100 / zoomScale
+        : (100 * canvasSize.h) / (zoomScale * canvasSize.w);
+    const limih =
+      canvasWidth < canvasHeight
+        ? 100 / zoomScale
+        : (100 * canvasSize.h) / (zoomScale * canvasSize.w);
+    for (let i = 0; i < _royaled.length; i++) {
+      const x = _royaled[i].x;
+      const y = _royaled[i].y;
+      if (
+        x >= orinPos.x &&
+        x <= orinPos.x + limiw &&
+        y >= orinPos.y &&
+        y <= orinPos.y + limih
+      ) {
+        const imgsrc = _royaled[i].src ? _royaled[i].src : "";
+        if (imgsrc !== "") {
+          const img = new Image();
+          img.onload = function () {
+            ctx.drawImage(img, x - 1, y - 1, 1, 1);
+          };
+          img.src = imgsrc;
+          ctx.drawImage(img, x - 1, y - 1, 1, 1);
+          if (_royaled[i].derivative > 0) {
+            const img2 = new Image();
+            img2.src = "/assets/Deriv_Gradient/deriv(0).png";
+            ctx.drawImage(img2, x - 1, y - 1, 1, 1);
+          }
+        }
+      }
+    }
+  }
+
+  function drawDerivative() {
+    const canvas: any = canvasRef1.current;
     if (canvas) {
+      const ctx = canvas.getContext("2d");
       const royalJson = localStorage.getItem("royalLands");
       const _royaled = royalJson !== null ? JSON.parse(royalJson) : royalLands;
-      const ctx = canvas.getContext("2d");
       const zoomScale = Math.pow(1.15, countMul);
       const limiw =
         canvasWidth > canvasHeight
@@ -330,36 +387,34 @@ export default function Map() {
           y <= orinPos.y + limih
         ) {
           const imgsrc = _royaled[i].src ? _royaled[i].src : "";
-          if (imgsrc !== "") {
+          const noJson = localStorage.getItem("nogif");
+          const _nogif = noJson !== null ? JSON.parse(noJson) : 0;
+          if (imgsrc !== "" && _royaled[i].derivative > 0) {
             const img = new Image();
-            img.src = imgsrc;
+            img.src =
+              "/assets/Deriv_Gradient/deriv(" + _nogif.toString() + ").png";
             ctx.drawImage(img, x - 1, y - 1, 1, 1);
-            if (_royaled[i].derivative > 0) {
-              const img2 = new Image();
-              img2.src = "/Deriv_Gradient/deriv(0).png";
-              ctx.drawImage(img2, x - 1, y - 1, 1, 1);
-            }
           }
         }
       }
     }
-  };
+  }
 
   const draw = (ctx: any) => {
     drawTiers(ctx);
     drawLandBorders(ctx);
-    drawClaimedLand();
+    drawClaimedLand(ctx);
     drawCollectionTitles(ctx);
-    // drawMyClaimedLand();
+    // drawMyClaimedLand(ctx);
     drawCollectionBorders(ctx);
-    drawRoyalLand();
+    drawRoyalLand(ctx);
     drawDerivative();
-    drawPointerOutLine(ctx);
+    drawPointerOutLine();
   };
 
   const handleDrawCanvas = () => {
     const zoomScale = (Math.pow(1.15, countMul) * canvasSize.w) / 100;
-    const canvas: any = canvasRef.current;
+    const canvas: any = canvasRef1.current;
     if (canvas) {
       const ctx = canvas.getContext("2d");
       ctx.resetTransform();
@@ -399,6 +454,7 @@ export default function Map() {
           (canvasWidth * zoomScale)
         : ((zoomScale - 1) * 50) / zoomScale;
     handleDrawCanvas();
+    // setValSize(zoomScale);
   };
 
   const handleClaim = async (landX: any, landY: any, collectionID: any) => {
@@ -493,6 +549,10 @@ export default function Map() {
     curPos.y = orinPos.y + posY / zoomScale;
     localStorage.setItem("curPoint", JSON.stringify(curPos));
     handleDrawCanvas();
+    // if (zoomed) {
+    // const zoomScale = Math.pow(1.15, countMul);
+    // setValSize(zoomScale);
+    // }
   };
 
   const handleDrag = (
@@ -507,59 +567,57 @@ export default function Map() {
     const zoomScale = Math.pow(1.15, countMul);
     const dx = (posX - lastX) / zoomScale;
     const dy = (posY - lastY) / zoomScale;
+    // let mvCNT = 0;
+    // if (dx > 0.3) mvCNT = 1;
+    // else if (dx < -0.3) mvCNT = 2;
+    // if (dy > 0.3) mvCNT += 3;
+    // else if (dy < -0.3) mvCNT += 6;
+    // setMoveDirection(mvCNT);
 
     orinPos.x = orinX - dx;
     orinPos.y = orinY - dy;
     limitOrinPos();
-
     curPos.x = orinPos.x + posX / zoomScale;
     curPos.y = orinPos.y + posY / zoomScale;
     localStorage.setItem("curPoint", JSON.stringify(curPos));
     handleDrawCanvas();
   };
 
-  handleAnimation();
-
-  function drawDerivative() {
-    const canvas: any = canvasRef.current;
-    if (canvas) {
-      const ctx = canvas.getContext("2d");
-      const royalJson = localStorage.getItem("royalLands");
-      const _royaled = royalJson !== null ? JSON.parse(royalJson) : royalLands;
-      const zoomScale = Math.pow(1.15, countMul);
-      const limiw =
-        canvasWidth > canvasHeight
-          ? 100 / zoomScale
-          : (100 * canvasSize.h) / (zoomScale * canvasSize.w);
-      const limih =
-        canvasWidth < canvasHeight
-          ? 100 / zoomScale
-          : (100 * canvasSize.h) / (zoomScale * canvasSize.w);
-      for (let i = 0; i < _royaled.length; i++) {
-        const x = _royaled[i].x;
-        const y = _royaled[i].y;
-        if (
-          x >= orinPos.x &&
-          x <= orinPos.x + limiw &&
-          y >= orinPos.y &&
-          y <= orinPos.y + limih
-        ) {
-          const imgsrc = _royaled[i].src ? _royaled[i].src : "";
-          if (imgsrc !== "" && _royaled[i].derivative > 0) {
-            const img = new Image();
-            img.src = "/Deriv_Gradient/deriv(" + nogif.toString() + ").png";
-            ctx.drawImage(img, x - 1, y - 1, 1, 1);
-            nogif++;
-            if (nogif >= 60) nogif = 0;
-          }
-        }
-      }
+  const setMoveDirection = (val: number) => {
+    switch (val) {
+      case 1:
+        setStrMove(MoveDirection.right);
+        break;
+      case 2:
+        setStrMove(MoveDirection.left);
+        break;
+      case 3:
+        setStrMove(MoveDirection.bottom);
+        break;
+      case 4:
+        setStrMove(MoveDirection.bottomRight);
+        break;
+      case 5:
+        setStrMove(MoveDirection.bottomLeft);
+        break;
+      case 6:
+        setStrMove(MoveDirection.top);
+        break;
+      case 7:
+        setStrMove(MoveDirection.topRight);
+        break;
+      case 8:
+        setStrMove(MoveDirection.topLeft);
+        break;
+      default:
+        break;
     }
-  }
+  };
+
+  handleAnimation();
 
   function handleAnimation() {
     requestAnimationFrame(handleAnimation);
-    drawRoyalLand();
     drawDerivative();
   }
 
@@ -570,8 +628,9 @@ export default function Map() {
   const initEventListners = () => {
     window.addEventListener("resize", updateSize);
 
-    const canvas: any = canvasRef.current;
-    if (canvas) {
+    const canvas: any = canvasRef2.current;
+    const particle: any = document.getElementById("particleDiv");
+    if (canvas && particle) {
       let lastX = 0;
       let lastY = 0;
       let distZoom = 0;
@@ -681,7 +740,6 @@ export default function Map() {
           if (evt.changedTouches.length === 1) {
             const touch: any = evt.changedTouches[0];
             if (touch && !dragged && cnt === countMul) {
-              const ctx = canvas.getContext("2d");
               const zoomScale = Math.pow(1.15, countMul);
               const offsetX =
                 ((touch.clientX - touch.target.offsetLeft) / canvasSize.w) *
@@ -691,7 +749,7 @@ export default function Map() {
               curPos.x = orinPos.x + offsetX / zoomScale;
               curPos.y = orinPos.y + offsetY / zoomScale;
               localStorage.setItem("curPoint", JSON.stringify(curPos));
-              draw(ctx);
+              drawPointerOutLine();
               const curJson = localStorage.getItem("curPoint");
               if (curJson) {
                 const _curPoint = JSON.parse(curJson);
@@ -703,11 +761,12 @@ export default function Map() {
           }
           isDown = false;
           dragged = false;
+          // setStrMove(MoveDirection.right);
           zoomed = false;
         },
         false
       );
-      canvas.addEventListener(
+      particle.addEventListener(
         "mousedown",
         function (evt: any) {
           const offsetX = Math.ceil((evt.offsetX / canvasSize.w) * 100);
@@ -721,10 +780,10 @@ export default function Map() {
         },
         false
       );
-      canvas.addEventListener(
+      particle.addEventListener(
         "mouseup",
         function (evt: any) {
-          if (!isMobile && !dragged) {
+          if (!dragged) {
             const curJson = localStorage.getItem("curPoint");
             if (curJson) {
               const _curPoint = JSON.parse(curJson);
@@ -735,17 +794,17 @@ export default function Map() {
           }
           isDown = false;
           dragged = false;
+          // setStrMove(MoveDirection.right);
           setCanvasCursor("pointer");
         },
         false
       );
-      canvas.addEventListener(
+      particle.addEventListener(
         "mousemove",
         function (evt: any) {
           if (!isDown) {
             const curJson = localStorage.getItem("curPoint");
             if (curJson) {
-              const ctx = canvas.getContext("2d");
               const zoomScale = Math.pow(1.15, countMul);
               const offsetX = (evt.offsetX / canvasSize.w) * 100;
               const offsetY = (evt.offsetY / canvasSize.w) * 100;
@@ -761,7 +820,7 @@ export default function Map() {
                 setCanvasCursor("pointer");
               } else {
                 localStorage.setItem("curPoint", JSON.stringify(curPos));
-                draw(ctx);
+                drawPointerOutLine();
                 setCanvasCursor("pointer");
               }
             }
@@ -774,8 +833,8 @@ export default function Map() {
         },
         false
       );
-      canvas.addEventListener("DOMMouseScroll", handleScroll, false);
-      canvas.addEventListener("mousewheel", handleScroll, false);
+      particle.addEventListener("DOMMouseScroll", handleScroll, false);
+      particle.addEventListener("mousewheel", handleScroll, false);
     }
   };
 
@@ -793,10 +852,18 @@ export default function Map() {
         cursor={canvasCursor}
       >
         <canvas
-          ref={canvasRef}
+          ref={canvasRef1}
+          id="lay01"
           width={`${canvasWidth}`}
           height={`${canvasHeight}`}
-        />
+        ></canvas>
+        <canvas
+          ref={canvasRef2}
+          id="lay02"
+          width={`${canvasWidth}`}
+          height={`${canvasHeight}`}
+        ></canvas>
+        <ParticleDiv divid="particleDiv" strMove={strMove} valSize={valSize} />
         {Array.from({ length: parseInt(totalLandsValue) }, (_, i) => 0 + i).map(
           (index) => {
             const landDiv = (

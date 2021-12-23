@@ -1,0 +1,20 @@
+#particleDiv {
+  position: absolute;
+  width: 90vw;
+  height: 90vh;
+  background-color: transparent;
+  z-index: 2;
+  background-size: cover;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+}
+
+#particleDiv canvas {
+  position: relative !important;
+}
+
+@media (hover: none) {
+  #particleDiv {
+    z-index: 1;
+  }
+}

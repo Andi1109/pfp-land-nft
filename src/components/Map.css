@@ -1,0 +1,18 @@
+canvas[id="lay01"] {
+  /* position: absolute; */
+  z-index: 0;
+  background-color: transparent;
+}
+
+canvas[id="lay02"] {
+  position: absolute;
+  z-index: 1;
+  pointer-events: visibleStroke;
+  background-color: transparent;
+}
+
+@media (hover: none) {
+  canvas[id="lay02"] {
+    z-index: 2;
+  }
+}
