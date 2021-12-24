@@ -3,7 +3,6 @@ import { Box, useToast } from "@chakra-ui/react";
 import { GetTotalSupply, GetBalanceOf, useContractMethod } from "../hooks";
 import { MoveDirection } from "react-tsparticles";
 import LandDetail from "./LandDetail";
-// import MyLandDetail from "./MyLandDetail";
 import LandRoyal from "./LandRoyal";
 import ParticleDiv from "./ParticleDiv";
 import collectionBordersJson from "../borders/CollectionBorders.json";
@@ -13,6 +12,7 @@ import LandModal from "./LandModal";
 import { utils } from "ethers";
 import { useEthers } from "@usedapp/core";
 import "./Map.css";
+import { getClaimedLands, getRoyalLands } from "../service/api";
 
 export default function Map() {
   interface Land {
@@ -50,7 +50,6 @@ export default function Map() {
   const [myTotalLandsValue, setMyTotalLandsValue] = useState("0");
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [claimedLands, setClaimedLands] = useState<Land[]>([]);
-  // const [myClaimedLands, setMyClaimedLands] = useState<Land[]>([]);
   const [royalLands, setRoyalLands] = useState<RoyalLand[]>([]);
 
   const canvasRef1 = useRef(null);
@@ -63,6 +62,31 @@ export default function Map() {
       ? { w: canvasHeight, h: canvasWidth }
       : { w: canvasWidth, h: canvasHeight }
   );
+
+  const updateClaimedLands = async () => {
+    const _claimedLands = await getClaimedLands();
+    setClaimedLands(_claimedLands);
+    localStorage.setItem("claimedLands", JSON.stringify(_claimedLands));
+  };
+
+  const updateRoyalLands = async () => {
+    const _royalLands = await getRoyalLands();
+    setRoyalLands(_royalLands);
+    localStorage.setItem("royalLands", JSON.stringify(_royalLands));
+  };
+
+  useEffect(() => {
+    updateClaimedLands();
+    updateRoyalLands();
+    const intervalId = setInterval(() => {
+      try {
+        updateClaimedLands();
+        updateRoyalLands();
+      } catch (e) {}
+    }, 60000);
+
+    return () => clearInterval(intervalId);
+  }, []);
 
   useEffect(() => {
     if (totalLands && totalLands.toString() !== totalLandsValue) {
@@ -161,7 +185,7 @@ export default function Map() {
       setCanvasSize({ w: mheight, h: mwidth });
     } else setCanvasSize({ w: mwidth, h: mheight });
   };
-
+  /*
   const appendRoyalLands = (newLand: RoyalLand) => {
     let _royalLands = JSON.parse(JSON.stringify(royalLands));
     if (
@@ -197,21 +221,7 @@ export default function Map() {
     }
     localStorage.setItem("claimedLands", JSON.stringify(_claimedLands));
   };
-
-  // const appendMyClaimedLands = (newLand: Land) => {
-  //   let _myClaimedLands = JSON.parse(JSON.stringify(myClaimedLands));
-  //   if (
-  //     _myClaimedLands.filter((e: any) => e.x === newLand.x && e.y === newLand.y)
-  //       .length === 0 &&
-  //     newLand.x > 0 &&
-  //     newLand.y > 0
-  //   ) {
-  //     _myClaimedLands.push(newLand);
-  //     setMyClaimedLands(_myClaimedLands);
-  //   }
-  //   localStorage.setItem("myClaimedLands", JSON.stringify(_myClaimedLands));
-  // };
-
+*/
   const drawTiers = (ctx: any) => {
     for (let i = 0; i < tierBordersJson.length; i++) {
       if (i === 0) ctx.fillStyle = "#9966ff";
@@ -310,19 +320,6 @@ export default function Map() {
     }
   };
 
-  // const drawMyClaimedLand = (ctx) => {
-  //   const myClaimJson = localStorage.getItem("myClaimedLands");
-  //   const _myClaimed =
-  //     myClaimJson !== null ? JSON.parse(myClaimJson) : myClaimedLands;
-  //   if (_myClaimed.length > 0) {
-  //     for (let i = 0; i < _myClaimed.length; i++) {
-  //       ctx.strokeStyle = "rgba(255, 0, 0, 1)";
-  //       ctx.lineWidth = 0.3;
-  //       ctx.strokeRect(_myClaimed[i].x - 1, _myClaimed[i].y - 1, 1, 1);
-  //     }
-  //   }
-  // };
-
   function drawRoyalLand(ctx: any) {
     const royalJson = localStorage.getItem("royalLands");
     const _royaled = royalJson !== null ? JSON.parse(royalJson) : royalLands;
@@ -405,7 +402,6 @@ export default function Map() {
     drawLandBorders(ctx);
     drawClaimedLand(ctx);
     drawCollectionTitles(ctx);
-    // drawMyClaimedLand(ctx);
     drawCollectionBorders(ctx);
     drawRoyalLand(ctx);
     drawDerivative();
@@ -439,7 +435,6 @@ export default function Map() {
   };
 
   const handleInit = () => {
-    // initEventListners();
     localStorage.clear();
     countMul = 6;
     const zoomScale = Math.pow(1.15, countMul);
@@ -454,7 +449,6 @@ export default function Map() {
           (canvasWidth * zoomScale)
         : ((zoomScale - 1) * 50) / zoomScale;
     handleDrawCanvas();
-    // setValSize(zoomScale);
   };
 
   const handleClaim = async (landX: any, landY: any, collectionID: any) => {
@@ -549,10 +543,6 @@ export default function Map() {
     curPos.y = orinPos.y + posY / zoomScale;
     localStorage.setItem("curPoint", JSON.stringify(curPos));
     handleDrawCanvas();
-    // if (zoomed) {
-    // const zoomScale = Math.pow(1.15, countMul);
-    // setValSize(zoomScale);
-    // }
   };
 
   const handleDrag = (
@@ -567,12 +557,6 @@ export default function Map() {
     const zoomScale = Math.pow(1.15, countMul);
     const dx = (posX - lastX) / zoomScale;
     const dy = (posY - lastY) / zoomScale;
-    // let mvCNT = 0;
-    // if (dx > 0.3) mvCNT = 1;
-    // else if (dx < -0.3) mvCNT = 2;
-    // if (dy > 0.3) mvCNT += 3;
-    // else if (dy < -0.3) mvCNT += 6;
-    // setMoveDirection(mvCNT);
 
     orinPos.x = orinX - dx;
     orinPos.y = orinY - dy;
@@ -581,37 +565,6 @@ export default function Map() {
     curPos.y = orinPos.y + posY / zoomScale;
     localStorage.setItem("curPoint", JSON.stringify(curPos));
     handleDrawCanvas();
-  };
-
-  const setMoveDirection = (val: number) => {
-    switch (val) {
-      case 1:
-        setStrMove(MoveDirection.right);
-        break;
-      case 2:
-        setStrMove(MoveDirection.left);
-        break;
-      case 3:
-        setStrMove(MoveDirection.bottom);
-        break;
-      case 4:
-        setStrMove(MoveDirection.bottomRight);
-        break;
-      case 5:
-        setStrMove(MoveDirection.bottomLeft);
-        break;
-      case 6:
-        setStrMove(MoveDirection.top);
-        break;
-      case 7:
-        setStrMove(MoveDirection.topRight);
-        break;
-      case 8:
-        setStrMove(MoveDirection.topLeft);
-        break;
-      default:
-        break;
-    }
   };
 
   handleAnimation();
@@ -761,7 +714,6 @@ export default function Map() {
           }
           isDown = false;
           dragged = false;
-          // setStrMove(MoveDirection.right);
           zoomed = false;
         },
         false
@@ -794,7 +746,6 @@ export default function Map() {
           }
           isDown = false;
           dragged = false;
-          // setStrMove(MoveDirection.right);
           setCanvasCursor("pointer");
         },
         false
@@ -864,7 +815,7 @@ export default function Map() {
           height={`${canvasHeight}`}
         ></canvas>
         <ParticleDiv divid="particleDiv" strMove={strMove} valSize={valSize} />
-        {Array.from({ length: parseInt(totalLandsValue) }, (_, i) => 0 + i).map(
+        {/* {Array.from({ length: parseInt(totalLandsValue) }, (_, i) => 0 + i).map(
           (index) => {
             const landDiv = (
               <LandDetail
@@ -875,22 +826,8 @@ export default function Map() {
             );
             return landDiv;
           }
-        )}
-        {/* {Array.from(
-          { length: parseInt(myTotalLandsValue) },
-          (_, i) => 0 + i
-        ).map((index) => {
-          const landDiv = (
-            <MyLandDetail
-              owner={account}
-              index={index}
-              key={index}
-              onFoundLand={appendMyClaimedLands}
-            />
-          );
-          return landDiv;
-        })} */}
-        {Array.from({ length: parseInt(totalLandsValue) }, (_, i) => 0 + i).map(
+        )} */}
+        {/* {Array.from({ length: parseInt(totalLandsValue) }, (_, i) => 0 + i).map(
           (index) => {
             const landDiv = (
               <LandRoyal
@@ -901,7 +838,7 @@ export default function Map() {
             );
             return landDiv;
           }
-        )}
+        )} */}
       </Box>
       <LandModal
         isOpenModal={isOpenModal}
