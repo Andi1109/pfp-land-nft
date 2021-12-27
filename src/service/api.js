@@ -1,4 +1,8 @@
+import axios from "axios";
+
 const apiServer = "http://localhost:3001/api";
+const claimedLandURL = apiServer + "/claimedlands";
+const royalLandURL = apiServer + "/royalLands";
 
 export async function getRoyalDerivePair() {
   let pairsJson;
@@ -16,13 +20,10 @@ export async function getRoyalDerivePair() {
 }
 
 export async function getClaimedLands() {
-  let claimedLandsJson = [
-    { x: 30, y: 41 },
-    { x: 29, y: 41 },
-    { x: 50, y: 50 },
-    { x: 50, y: 49 },
-  ];
-  await fetch(apiServer)
+  let claimedLandsJson = {
+    claimed: [],
+  };
+  await fetch(claimedLandURL)
     .then(function (res) {
       return res.json();
     })
@@ -32,25 +33,26 @@ export async function getClaimedLands() {
     .catch(function (err) {
       console.log(err, " error");
     });
-  return claimedLandsJson;
+  return claimedLandsJson.claimed;
+}
+
+export async function setClaimedLand(x, y) {
+  await axios
+    .post(claimedLandURL, { claimedLand: { x, y } })
+    .then((res) => {
+      console.log(res);
+    })
+    .catch(function (err) {
+      console.log(err, " error");
+    });
+  return;
 }
 
 export async function getRoyalLands() {
-  let royalLandsJson = [
-    {
-      x: 50,
-      y: 50,
-      src: "https://gateway.pinata.cloud/ipfs/QmUjzbAh47BX9RgC8eLmCGQZoYpLVYfvtz2Yj1GEQqsTNs",
-      derivative: "1",
-    },
-    {
-      x: 50,
-      y: 49,
-      src: "https://gateway.pinata.cloud/ipfs/QmUjzbAh47BX9RgC8eLmCGQZoYpLVYfvtz2Yj1GEQqsTNs",
-      derivative: "0",
-    },
-  ];
-  await fetch(apiServer)
+  let royalLandsJson = {
+    royalLands: [],
+  };
+  await fetch(royalLandURL)
     .then(function (res) {
       return res.json();
     })
@@ -60,5 +62,5 @@ export async function getRoyalLands() {
     .catch(function (err) {
       console.log(err, " error");
     });
-  return royalLandsJson;
+  return royalLandsJson.royalLands;
 }

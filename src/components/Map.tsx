@@ -12,7 +12,7 @@ import LandModal from "./LandModal";
 import { utils } from "ethers";
 import { useEthers } from "@usedapp/core";
 import "./Map.css";
-import { getClaimedLands, getRoyalLands } from "../service/api";
+import { getClaimedLands, getRoyalLands, setClaimedLand } from "../service/api";
 
 export default function Map() {
   interface Land {
@@ -43,8 +43,8 @@ export default function Map() {
 
   const [strMove, setStrMove] = useState<MoveDirection>(MoveDirection.right);
   const [valSize, setValSize] = useState(1);
-  const [clickedX, setClickedX] = useState(73);
-  const [clickedY, setClickedY] = useState(56);
+  const [clickedX, setClickedX] = useState(0);
+  const [clickedY, setClickedY] = useState(0);
   const [canvasCursor, setCanvasCursor] = useState("pointer");
   const [totalLandsValue, setTotalLandsValue] = useState("");
   const [myTotalLandsValue, setMyTotalLandsValue] = useState("0");
@@ -73,6 +73,7 @@ export default function Map() {
     const _royalLands = await getRoyalLands();
     setRoyalLands(_royalLands);
     localStorage.setItem("royalLands", JSON.stringify(_royalLands));
+    handleDrawCanvas();
   };
 
   useEffect(() => {
@@ -83,7 +84,7 @@ export default function Map() {
         updateClaimedLands();
         updateRoyalLands();
       } catch (e) {}
-    }, 60000);
+    }, 10000);
 
     return () => clearInterval(intervalId);
   }, []);
@@ -118,8 +119,8 @@ export default function Map() {
     console.log(state);
     switch (state.status) {
       case "Success":
-        msg =
-          "Success. To see the latest information, please refresh your browser. It might take long to load all information.";
+        recordSuccess();
+        msg = "Success.";
         toast({
           description: msg,
           status: "success",
@@ -175,6 +176,15 @@ export default function Map() {
           isClosable: true,
         });
         break;
+    }
+  };
+
+  const recordSuccess = () => {
+    const pendingLands = localStorage.getItem("pendingLands");
+    const parsedLands = pendingLands !== null ? JSON.parse(pendingLands) : null;
+    console.log("parsedLands===", parsedLands);
+    if (parsedLands) {
+      setClaimedLand(parsedLands.x, parsedLands.y);
     }
   };
 
@@ -454,6 +464,10 @@ export default function Map() {
   const handleClaim = async (landX: any, landY: any, collectionID: any) => {
     console.log("claim button clicked");
     console.log(landX, landY, collectionID);
+
+    const pendingLands = { x: landX, y: landY };
+    localStorage.setItem("pendingLands", JSON.stringify(pendingLands));
+
     try {
       if (
         (parseInt(collectionID) >= 0 && parseInt(collectionID) <= 6) ||
