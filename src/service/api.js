@@ -1,8 +1,10 @@
 import axios from "axios";
 
-const apiServer = "http://localhost:3001/api";
+// const apiServer = "http://localhost:3001/api";
+const apiServer = "https://api.blootelves.family/api";
 const claimedLandURL = apiServer + "/claimedlands";
 const royalLandURL = apiServer + "/royalLands";
+const derivativeLandURL = apiServer + "/derivativeLands";
 
 export async function getRoyalDerivePair() {
   let pairsJson;
@@ -37,8 +39,10 @@ export async function getClaimedLands() {
 }
 
 export async function setClaimedLand(x, y) {
+  const hash = await sha256(x + "" + y);
+  const headers = { secret: hash };
   await axios
-    .post(claimedLandURL, { claimedLand: { x, y } })
+    .post(claimedLandURL, { claimedLand: { x, y } }, { headers: headers })
     .then((res) => {
       console.log(res);
     })
@@ -63,4 +67,55 @@ export async function getRoyalLands() {
       console.log(err, " error");
     });
   return royalLandsJson.royalLands;
+}
+
+export async function setClaimedRoyal(x, y, src) {
+  const hash = await sha256(x + "" + y);
+  const headers = { secret: hash };
+
+  await axios
+    .post(
+      royalLandURL,
+      { royalLand: { x, y, src, derivative: "0" } },
+      { headers: headers }
+    )
+    .then((res) => {
+      console.log(res);
+    })
+    .catch(function (err) {
+      console.log(err, " error");
+    });
+  return;
+}
+
+export async function setClaimedDerivative(x, y) {
+  const hash = await sha256(x + "" + y);
+  const headers = { secret: hash };
+
+  await axios
+    .post(derivativeLandURL, { derivativeLand: { x, y } }, { headers: headers })
+    .then((res) => {
+      console.log(res);
+    })
+    .catch(function (err) {
+      console.log(err, " error");
+    });
+  return;
+}
+
+async function sha256(message) {
+  // encode as UTF-8
+  const msgBuffer = new TextEncoder().encode(message);
+
+  // hash the message
+  const hashBuffer = await crypto.subtle.digest("SHA-256", msgBuffer);
+
+  // convert ArrayBuffer to Array
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+
+  // convert bytes to hex string
+  const hashHex = hashArray
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+  return hashHex;
 }

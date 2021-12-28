@@ -60,7 +60,7 @@ export default function RoyalImage({
   };
 
   const handleRoyalImageChanged = () => {
-    onRoyalImageChanged(newCollectionIDValue, tokenIDValue);
+    onRoyalImageChanged(newCollectionIDValue, tokenIDValue, imageURLValue);
   };
 
   if (tokenURIValue) {

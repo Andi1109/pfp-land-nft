@@ -2,8 +2,6 @@ import { useRef, useState, useEffect } from "react";
 import { Box, useToast } from "@chakra-ui/react";
 import { GetTotalSupply, GetBalanceOf, useContractMethod } from "../hooks";
 import { MoveDirection } from "react-tsparticles";
-import LandDetail from "./LandDetail";
-import LandRoyal from "./LandRoyal";
 import ParticleDiv from "./ParticleDiv";
 import collectionBordersJson from "../borders/CollectionBorders.json";
 import collectionTitlesJson from "../borders/CollectionTitles.json";
@@ -12,7 +10,13 @@ import LandModal from "./LandModal";
 import { utils } from "ethers";
 import { useEthers } from "@usedapp/core";
 import "./Map.css";
-import { getClaimedLands, getRoyalLands, setClaimedLand } from "../service/api";
+import {
+  getClaimedLands,
+  getRoyalLands,
+  setClaimedLand,
+  setClaimedRoyal,
+  setClaimedDerivative,
+} from "../service/api";
 
 export default function Map() {
   interface Land {
@@ -84,7 +88,7 @@ export default function Map() {
         updateClaimedLands();
         updateRoyalLands();
       } catch (e) {}
-    }, 10000);
+    }, 300000);
 
     return () => clearInterval(intervalId);
   }, []);
@@ -180,11 +184,35 @@ export default function Map() {
   };
 
   const recordSuccess = () => {
-    const pendingLands = localStorage.getItem("pendingLands");
-    const parsedLands = pendingLands !== null ? JSON.parse(pendingLands) : null;
-    console.log("parsedLands===", parsedLands);
-    if (parsedLands) {
-      setClaimedLand(parsedLands.x, parsedLands.y);
+    const typeItem = localStorage.getItem("pendingAPITypes");
+    const type = typeItem !== null ? JSON.parse(typeItem) : 0;
+    if (type > 0) {
+      if (type === 1) {
+        const pendingLands = localStorage.getItem("pendingLands");
+        const parsedLands =
+          pendingLands !== null ? JSON.parse(pendingLands) : null;
+        if (parsedLands) {
+          setClaimedLand(parsedLands.x, parsedLands.y);
+        }
+      } else if (type === 2) {
+        const pendingRoyals = localStorage.getItem("pendingRoyals");
+        const parsedRoyals =
+          pendingRoyals !== null ? JSON.parse(pendingRoyals) : null;
+        if (parsedRoyals) {
+          setClaimedRoyal(
+            parsedRoyals.x,
+            parsedRoyals.y,
+            parsedRoyals.imageSrc
+          );
+        }
+      } else if (type === 3) {
+        const pendingDerivatives = localStorage.getItem("pendingDerivatives");
+        const parsedDerivatives =
+          pendingDerivatives !== null ? JSON.parse(pendingDerivatives) : null;
+        if (parsedDerivatives) {
+          setClaimedDerivative(parsedDerivatives.x, parsedDerivatives.y);
+        }
+      }
     }
   };
 
@@ -195,43 +223,7 @@ export default function Map() {
       setCanvasSize({ w: mheight, h: mwidth });
     } else setCanvasSize({ w: mwidth, h: mheight });
   };
-  /*
-  const appendRoyalLands = (newLand: RoyalLand) => {
-    let _royalLands = JSON.parse(JSON.stringify(royalLands));
-    if (
-      _royalLands.filter(
-        (e: any) =>
-          e.x === newLand.x &&
-          e.y === newLand.y &&
-          e.derivative === newLand.derivative &&
-          e.src === newLand.src
-      ).length === 0 &&
-      newLand.x <= 100 &&
-      newLand.y <= 100 &&
-      newLand.x > 0 &&
-      newLand.y > 0 &&
-      newLand.src
-    ) {
-      _royalLands.push(newLand);
-      setRoyalLands(_royalLands);
-    }
-    localStorage.setItem("royalLands", JSON.stringify(_royalLands));
-  };
 
-  const appendClaimedLands = (newLand: Land) => {
-    let _claimedLands = JSON.parse(JSON.stringify(claimedLands));
-    if (
-      _claimedLands.filter((e: any) => e.x === newLand.x && e.y === newLand.y)
-        .length === 0 &&
-      newLand.x > 0 &&
-      newLand.y > 0
-    ) {
-      _claimedLands.push(newLand);
-      setClaimedLands(_claimedLands);
-    }
-    localStorage.setItem("claimedLands", JSON.stringify(_claimedLands));
-  };
-*/
   const drawTiers = (ctx: any) => {
     for (let i = 0; i < tierBordersJson.length; i++) {
       if (i === 0) ctx.fillStyle = "#9966ff";
@@ -466,6 +458,7 @@ export default function Map() {
     console.log(landX, landY, collectionID);
 
     const pendingLands = { x: landX, y: landY };
+    localStorage.setItem("pendingAPITypes", JSON.stringify(1));
     localStorage.setItem("pendingLands", JSON.stringify(pendingLands));
 
     try {
@@ -829,30 +822,6 @@ export default function Map() {
           height={`${canvasHeight}`}
         ></canvas>
         <ParticleDiv divid="particleDiv" strMove={strMove} valSize={valSize} />
-        {/* {Array.from({ length: parseInt(totalLandsValue) }, (_, i) => 0 + i).map(
-          (index) => {
-            const landDiv = (
-              <LandDetail
-                index={index}
-                key={index}
-                onFoundLand={appendClaimedLands}
-              />
-            );
-            return landDiv;
-          }
-        )} */}
-        {/* {Array.from({ length: parseInt(totalLandsValue) }, (_, i) => 0 + i).map(
-          (index) => {
-            const landDiv = (
-              <LandRoyal
-                index={index}
-                key={index}
-                onFoundLand={appendRoyalLands}
-              />
-            );
-            return landDiv;
-          }
-        )} */}
       </Box>
       <LandModal
         isOpenModal={isOpenModal}

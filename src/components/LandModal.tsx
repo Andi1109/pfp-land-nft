@@ -94,6 +94,7 @@ export default function LandModal({
   const [selectedRoyalCollectionID, setSelectedRoyalCollectionID] =
     useState<String>();
   const [selectedRoyalTokenID, setSelectedRoyalTokenID] = useState<String>();
+  const [selectedImageURL, setSelectedImageURL] = useState<String>();
   const [
     selectedDerivedCollectionAddress,
     setSelectedDerivedCollectionAddress,
@@ -196,13 +197,18 @@ export default function LandModal({
 
   const handleBuy = () => {
     console.log("buy button clicked");
-    window.open("https://opensea.io/collection/mypfpland", "_blank").focus();
+    window.open("https://opensea.io/collection/mypfpland-v2", "_blank").focus();
     onCloseModal();
   };
 
-  const onRoyalImageChanged = (collectionID: any, tokenID: any) => {
+  const onRoyalImageChanged = (
+    collectionID: any,
+    tokenID: any,
+    imageURL: any
+  ) => {
     setSelectedRoyalCollectionID(collectionID);
     setSelectedRoyalTokenID(tokenID);
+    setSelectedImageURL(imageURL);
   };
 
   const onDerivedImageChanged = (collectionAddress: any, tokenID: any) => {
@@ -213,7 +219,13 @@ export default function LandModal({
   const handleChooseRoyalNFT = async () => {
     console.log("selectedRoyalCollectionID", selectedRoyalCollectionID);
     console.log("selectedRoyalTokenID", selectedRoyalTokenID);
+    console.log("selectedImageURL", selectedImageURL);
     onCloseModal();
+
+    const pendingRoyals = { x: landX, y: landY, imageSrc: selectedImageURL };
+    localStorage.setItem("pendingAPITypes", JSON.stringify(2));
+    localStorage.setItem("pendingRoyals", JSON.stringify(pendingRoyals));
+
     try {
       await updateRoyal(
         landX,
@@ -231,6 +243,14 @@ export default function LandModal({
 
   const handleChooseDerivedNFT = async () => {
     onCloseModal();
+
+    const pendingDerivatives = { x: landX, y: landY };
+    localStorage.setItem("pendingAPITypes", JSON.stringify(3));
+    localStorage.setItem(
+      "pendingDerivatives",
+      JSON.stringify(pendingDerivatives)
+    );
+
     try {
       await updateDerived(
         landX,
