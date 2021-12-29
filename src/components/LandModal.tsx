@@ -102,10 +102,19 @@ export default function LandModal({
   const [selectedDerivedTokenID, setSelectedDerivedTokenID] =
     useState<String>();
 
+  const convertUrlForIpfs = (uri: any) => {
+    if (uri.includes("ipfs://")) {
+      return "https://gateway.pinata.cloud/ipfs/" + uri.split("//")[1];
+    } else {
+      return uri;
+    }
+  };
+
   const fetchImage = async (uri: any) => {
     if (uri) {
+      const converted = convertUrlForIpfs(uri);
       try {
-        return fetch(uri)
+        return fetch(converted)
           .then((response) => response.json())
           .then((data) => data.image);
       } catch (e) {}
@@ -121,7 +130,10 @@ export default function LandModal({
 
   if (royalTokenURIValue) {
     fetchImage(royalTokenURIValue).then((imageURL) => {
-      if (imageURL) setImageURLValue(imageURL);
+      if (imageURL) {
+        const converted = convertUrlForIpfs(imageURL);
+        setImageURLValue(converted);
+      }
     });
   }
 

@@ -30,8 +30,17 @@ export default function DerivedImage({
     setTokenURIValue(tokenURI ? tokenURI.toString() : "");
   }, [tokenURI]);
 
+  const convertUrlForIpfs = (uri: any) => {
+    if (uri.includes("ipfs://")) {
+      return "https://gateway.pinata.cloud/ipfs/" + uri.split("//")[1];
+    } else {
+      return uri;
+    }
+  };
+
   const fetchImage = async (uri: any) => {
-    return fetch(uri)
+    const converted = convertUrlForIpfs(uri);
+    return fetch(converted)
       .then((response) => response.json())
       .then((data) => data.image);
   };
@@ -42,7 +51,10 @@ export default function DerivedImage({
 
   if (tokenURIValue) {
     fetchImage(tokenURIValue).then((imageURL) => {
-      if (imageURL) setImageURLValue(imageURL);
+      if (imageURL) {
+        const converted = convertUrlForIpfs(imageURL);
+        setImageURLValue(converted);
+      }
     });
   }
 
