@@ -5,6 +5,7 @@ const apiServer = "https://api.blootelves.family/api";
 const claimedLandURL = apiServer + "/claimedlands";
 const royalLandURL = apiServer + "/royalLands";
 const derivativeLandURL = apiServer + "/derivativeLands";
+const honoraryRoyalURL = apiServer + "/honoraryRoyals";
 
 export async function getRoyalDerivePair() {
   let pairsJson;
@@ -101,6 +102,25 @@ export async function setClaimedDerivative(x, y) {
       console.log(err, " error");
     });
   return;
+}
+
+export async function getHonoraryRoyals(owner) {
+  let result = [];
+  console.log(owner);
+
+  await axios
+    .get(honoraryRoyalURL, {
+      params: { owner },
+    })
+    .then((res) => {
+      result = res.data.honoraryRoyals;
+    })
+    .catch(function (err) {
+      console.log(err, " error");
+      result = [];
+    });
+
+  return result;
 }
 
 async function sha256(message) {

@@ -32,9 +32,10 @@ import { utils } from "ethers";
 import { useEthers } from "@usedapp/core";
 import { useState, useEffect } from "react";
 import RoyalImage from "./RoyalImage";
+import RoyalImageHonorary from "./RoyalImageHonorary";
 import DerivedImage from "./DerivedImage";
 import ClaimedDerivedImage from "./ClaimedDerivedImage";
-import { getRoyalDerivePair } from "../service/api";
+import { getRoyalDerivePair, getHonoraryRoyals } from "../service/api";
 import collectionIDNamePairJson from "../collectionIDNamePair/pair.json";
 import OwnerAvatar from "./OwnerAvatar";
 
@@ -59,6 +60,12 @@ export default function LandModal({
   landX,
   landY,
 }: Props) {
+  interface HonoraryRoyalMetaData {
+    collectionId: number;
+    tokenId: number;
+    image: string;
+  }
+
   const isClaimed = checkClaimedLand(landX, landY);
 
   const { account } = useEthers();
@@ -80,6 +87,9 @@ export default function LandModal({
   );
 
   const [pairsJson, setPairsJson] = useState({});
+  const [honoraryRoyals, setHonoraryRoyals] = useState<HonoraryRoyalMetaData[]>(
+    []
+  );
   const [imageURLValue, setImageURLValue] = useState("");
   const [myAccountValue, setMyAccountValue] = useState("");
   const [assetIDValue, setAssetIDValue] = useState("");
@@ -153,8 +163,19 @@ export default function LandModal({
     setLandOwnerValue(landOwner ? landOwner.toString() : "loading...");
   }, [landOwner]);
 
-  useEffect(() => {
+  useEffect(async () => {
     setCollectionIDValue(collectionID ? collectionID.toString() : "");
+    if (
+      collectionID &&
+      parseInt(collectionID.toString()) < 7 &&
+      landOwnerValue !== "loading..." &&
+      landOwnerValue !== "0x0000000000000000000000000000000000000000"
+      // myAccountValue === landOwnerValue
+    ) {
+      const honoraryRoyals = await getHonoraryRoyals(landOwnerValue);
+      console.log("===", honoraryRoyals);
+      setHonoraryRoyals(honoraryRoyals);
+    }
   }, [collectionID]);
 
   useEffect(() => {
@@ -493,7 +514,7 @@ export default function LandModal({
                   marginTop: "20px",
                   boxShadow: "none",
                 }}
-                hidden={myAccountValue === landOwnerValue ? false : true}
+                // hidden={myAccountValue === landOwnerValue ? false : true}
               >
                 <AccordionItem>
                   <h2>
@@ -519,20 +540,41 @@ export default function LandModal({
                       <Text fontSize="md" margin="auto" color="#564af0">
                         Please choose one royal image to claim
                       </Text>
-                      {Array.from(
-                        { length: parseInt(royalBalanceValue) },
-                        (_, i) => 0 + i
-                      ).map((index) => {
-                        return (
-                          <RoyalImage
-                            account={account}
-                            index={index}
-                            collectionID={collectionIDValue}
-                            onRoyalImageChanged={onRoyalImageChanged}
-                            key={index}
-                          />
-                        );
-                      })}
+                      <Text fontSize="sm" margin="auto" color="#808080">
+                        It takes some time to load all the images
+                      </Text>
+                      {collectionIDValue < 7
+                        ? Array.from(
+                            { length: parseInt(honoraryRoyals.length) },
+                            (_, i) => 0 + i
+                          ).map((index) => {
+                            return (
+                              <RoyalImageHonorary
+                                index={index}
+                                collectionID={
+                                  honoraryRoyals[index].collectionId
+                                }
+                                tokenID={honoraryRoyals[index].tokenId}
+                                imageURLValue={honoraryRoyals[index].image}
+                                onRoyalImageChanged={onRoyalImageChanged}
+                                key={index}
+                              />
+                            );
+                          })
+                        : Array.from(
+                            { length: parseInt(royalBalanceValue) },
+                            (_, i) => 0 + i
+                          ).map((index) => {
+                            return (
+                              <RoyalImage
+                                account={landOwnerValue}
+                                index={index}
+                                collectionID={collectionIDValue}
+                                onRoyalImageChanged={onRoyalImageChanged}
+                                key={index}
+                              />
+                            );
+                          })}
                       <Button
                         style={{
                           backgroundColor: "transparent",

@@ -1,85 +1,27 @@
 import { useState, useEffect } from "react";
 import { Box, Image } from "@chakra-ui/react";
-import { GetRoyalTokenOfOwnerByIndex, GetLandMetaData } from "../hooks";
 import "./RoyalImage.css";
 
 type Props = {
-  account: any;
   index: any;
   collectionID: any;
+  tokenID: any;
+  imageURLValue: any;
   onRoyalImageChanged: any;
 };
 
-export default function RoyalImage({
-  account,
+export default function RoyalImageHonorary({
   index,
   collectionID,
+  tokenID,
+  imageURLValue,
   onRoyalImageChanged,
 }: Props) {
-  const royalMetaData = GetRoyalTokenOfOwnerByIndex(
-    account,
-    index,
-    collectionID
-  );
-
-  const tokenURI = GetLandMetaData(
-    royalMetaData.newCollectionID,
-    royalMetaData.tokenID
-  );
-
-  const [newCollectionIDValue, setNewCollectionIDValue] = useState("");
-  const [tokenIDValue, setTokenIDValue] = useState("");
-  const [tokenURIValue, setTokenURIValue] = useState("");
-  const [imageURLValue, setImageURLValue] = useState("");
-
-  // if (index === 0 && newCollectionIDValue && tokenIDValue) {
-  //   onRoyalImageChanged(newCollectionIDValue, tokenIDValue);
-  // }
-
-  useEffect(() => {
-    setTokenURIValue(tokenURI ? tokenURI.toString() : "");
-  }, [tokenURI]);
-
-  useEffect(() => {
-    setNewCollectionIDValue(
-      royalMetaData && royalMetaData.newCollectionID
-        ? royalMetaData.newCollectionID.toString()
-        : ""
-    );
-    setTokenIDValue(
-      royalMetaData && royalMetaData.tokenID
-        ? royalMetaData.tokenID.toString()
-        : ""
-    );
-  }, [royalMetaData]);
-
-  const convertUrlForIpfs = (uri: any) => {
-    if (uri.includes("ipfs://")) {
-      return "https://gateway.pinata.cloud/ipfs/" + uri.split("//")[1];
-    } else {
-      return uri;
-    }
-  };
-
-  const fetchImage = async (uri: any) => {
-    const converted = convertUrlForIpfs(uri);
-    return fetch(converted, { mode: "cors" })
-      .then((response) => response.json())
-      .then((data) => data.image);
-  };
+  console.log(collectionID, tokenID, imageURLValue);
 
   const handleRoyalImageChanged = () => {
-    onRoyalImageChanged(newCollectionIDValue, tokenIDValue, imageURLValue);
+    onRoyalImageChanged(collectionID, tokenID, imageURLValue);
   };
-
-  if (tokenURIValue) {
-    fetchImage(tokenURIValue).then((imageURL) => {
-      if (imageURL) {
-        const converted = convertUrlForIpfs(imageURL);
-        setImageURLValue(converted);
-      }
-    });
-  }
 
   return (
     <div style={{ margin: "10px auto" }}>

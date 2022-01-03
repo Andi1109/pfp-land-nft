@@ -124,7 +124,7 @@ export default function Map() {
     switch (state.status) {
       case "Success":
         recordSuccess();
-        msg = "Success.";
+        msg = "Success. Your assets will be shown soon.";
         toast({
           description: msg,
           status: "success",
