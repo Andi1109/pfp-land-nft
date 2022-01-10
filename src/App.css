@@ -59,10 +59,16 @@
 .logolink {
   position: absolute;
   left: 5vw;
+  display: flex;
+  align-items: center;
 }
 
 .logolink .linkImg {
   margin: 0;
+}
+
+.refreshText {
+  margin-left: 15px;
 }
 
 .link {

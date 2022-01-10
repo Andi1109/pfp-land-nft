@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // const apiServer = "http://localhost:3001/api";
-const apiServer = "https://api.blootelves.family/api";
+const apiServer = "https://api.mypfp.land/api";
 const claimedLandURL = apiServer + "/claimedlands";
 const royalLandURL = apiServer + "/royalLands";
 const derivativeLandURL = apiServer + "/derivativeLands";

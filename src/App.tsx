@@ -4,6 +4,7 @@ import {
   Flex,
   Link,
   Image,
+  Text,
 } from "@chakra-ui/react";
 import theme from "./theme";
 import Layout from "./components/Layout";
@@ -19,9 +20,14 @@ function App() {
     <ChakraProvider theme={theme}>
       <Layout>
         <Flex className="navbar">
-          <Link className="logolink" href="http://mypfp.land">
-            <Image className="linkImg" src="/assets/mypfp_icon.png" />
-          </Link>
+          <div className="logolink">
+            <Link href="http://mypfp.land">
+              <Image className="linkImg" src="/assets/mypfp_icon.png" />
+            </Link>
+            <Text color="white" className="refreshText">
+              Map version Alpha 0.5. Refreshes every 5 minutes
+            </Text>
+          </div>
           <ConnectButton handleOpenModal={onOpen} />
           <div className="link">
             <Link href="https://twitter.com/myPFPland">

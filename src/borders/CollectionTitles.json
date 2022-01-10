@@ -966,7 +966,7 @@
     "rotate": true
   },
   {
-    "title": "Animetas",
+    "title": "Bored Apes",
     "originX": 87.5,
     "originY": 68,
     "size": 2,
@@ -1026,13 +1026,6 @@
     "originX": 52.5,
     "originY": 53.25,
     "size": 1.4,
-    "rotate": false
-  },
-  {
-    "title": "Metakey",
-    "originX": 49.5,
-    "originY": 49.45,
-    "size": 0.9,
     "rotate": false
   }
 ]

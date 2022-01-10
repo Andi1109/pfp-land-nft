@@ -63,7 +63,6 @@ export default function LandModal({
   interface HonoraryRoyalMetaData {
     collectionId: number;
     tokenId: number;
-    image: string;
   }
 
   const isClaimed = checkClaimedLand(landX, landY);
@@ -169,8 +168,8 @@ export default function LandModal({
       collectionID &&
       parseInt(collectionID.toString()) < 7 &&
       landOwnerValue !== "loading..." &&
-      landOwnerValue !== "0x0000000000000000000000000000000000000000"
-      // myAccountValue === landOwnerValue
+      landOwnerValue !== "0x0000000000000000000000000000000000000000" &&
+      myAccountValue === landOwnerValue
     ) {
       const honoraryRoyals = await getHonoraryRoyals(landOwnerValue);
       console.log("===", honoraryRoyals);
@@ -514,7 +513,7 @@ export default function LandModal({
                   marginTop: "20px",
                   boxShadow: "none",
                 }}
-                // hidden={myAccountValue === landOwnerValue ? false : true}
+                hidden={myAccountValue === landOwnerValue ? false : true}
               >
                 <AccordionItem>
                   <h2>
@@ -543,8 +542,9 @@ export default function LandModal({
                       <Text fontSize="sm" margin="auto" color="#808080">
                         It takes some time to load all the images
                       </Text>
-                      {collectionIDValue < 7
-                        ? Array.from(
+                      {myAccountValue === landOwnerValue ? (
+                        collectionIDValue < 7 ? (
+                          Array.from(
                             { length: parseInt(honoraryRoyals.length) },
                             (_, i) => 0 + i
                           ).map((index) => {
@@ -555,13 +555,13 @@ export default function LandModal({
                                   honoraryRoyals[index].collectionId
                                 }
                                 tokenID={honoraryRoyals[index].tokenId}
-                                imageURLValue={honoraryRoyals[index].image}
                                 onRoyalImageChanged={onRoyalImageChanged}
                                 key={index}
                               />
                             );
                           })
-                        : Array.from(
+                        ) : (
+                          Array.from(
                             { length: parseInt(royalBalanceValue) },
                             (_, i) => 0 + i
                           ).map((index) => {
@@ -574,7 +574,11 @@ export default function LandModal({
                                 key={index}
                               />
                             );
-                          })}
+                          })
+                        )
+                      ) : (
+                        <div></div>
+                      )}
                       <Button
                         style={{
                           backgroundColor: "transparent",
