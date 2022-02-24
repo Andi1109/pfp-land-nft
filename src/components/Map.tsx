@@ -4,7 +4,7 @@ import { GetTotalSupply, GetBalanceOf, useContractMethod } from "../hooks";
 import { MoveDirection } from "react-tsparticles";
 import ParticleDiv from "./ParticleDiv";
 import collectionBordersJson from "../borders/CollectionBorders.json";
-import collectionTitlesJson from "../borders/CollectionTitles.json";
+import collectionTitlesJson from "../borders/CollectionTitles_new.json";
 import tierBordersJson from "../borders/TierBorders.json";
 import LandModal from "./LandModal";
 import { utils } from "ethers";

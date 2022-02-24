@@ -1,0 +1,765 @@
+[
+  {
+    "title": "Area1",
+    "originX": 5,
+    "originY": 6,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area11",
+    "originX": 5,
+    "originY": 17,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area13",
+    "originX": 5,
+    "originY": 28,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area15",
+    "originX": 5,
+    "originY": 38.5,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area17",
+    "originX": 5,
+    "originY": 50,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area19",
+    "originX": 5,
+    "originY": 61,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area21",
+    "originX": 5,
+    "originY": 73,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area23",
+    "originX": 5,
+    "originY": 83.5,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area25",
+    "originX": 5,
+    "originY": 95,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area2",
+    "originX": 15,
+    "originY": 6,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area3",
+    "originX": 25,
+    "originY": 6,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area4",
+    "originX": 35,
+    "originY": 6,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area5",
+    "originX": 45,
+    "originY": 6,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area6",
+    "originX": 55,
+    "originY": 6,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area7",
+    "originX": 65,
+    "originY": 6,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area8",
+    "originX": 75,
+    "originY": 6,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area9",
+    "originX": 85,
+    "originY": 6,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area10",
+    "originX": 95,
+    "originY": 6,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area12",
+    "originX": 95,
+    "originY": 17,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area14",
+    "originX": 95,
+    "originY": 28,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area16",
+    "originX": 95,
+    "originY": 38.5,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area18",
+    "originX": 95,
+    "originY": 50,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area20",
+    "originX": 95,
+    "originY": 61,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area22",
+    "originX": 95,
+    "originY": 73,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area24",
+    "originX": 95,
+    "originY": 83.5,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area34",
+    "originX": 95,
+    "originY": 95,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area35",
+    "originX": 17,
+    "originY": 15,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area41",
+    "originX": 12,
+    "originY": 29,
+    "size": 2,
+    "rotate": true
+  },
+  {
+    "title": "Area36",
+    "originX": 29,
+    "originY": 15,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area37",
+    "originX": 41,
+    "originY": 15,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area46",
+    "originX": 38,
+    "originY": 24,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area42",
+    "originX": 20,
+    "originY": 24,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area43",
+    "originX": 20,
+    "originY": 34,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area44",
+    "originX": 20,
+    "originY": 44,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area45",
+    "originX": 29,
+    "originY": 33,
+    "size": 2,
+    "rotate": true
+  },
+  {
+    "title": "Area56",
+    "originX": 16,
+    "originY": 49.6,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area59",
+    "originX": 20,
+    "originY": 56,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area60",
+    "originX": 20,
+    "originY": 65,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area61",
+    "originX": 20,
+    "originY": 75,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area58",
+    "originX": 12,
+    "originY": 71,
+    "size": 2,
+    "rotate": true
+  },
+  {
+    "title": "Area62",
+    "originX": 29,
+    "originY": 65,
+    "size": 2,
+    "rotate": true
+  },
+  {
+    "title": "Area71",
+    "originX": 16,
+    "originY": 85,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area72",
+    "originX": 29,
+    "originY": 83,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area63",
+    "originX": 38,
+    "originY": 75,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area73",
+    "originX": 39,
+    "originY": 85,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area26",
+    "originX": 15,
+    "originY": 95,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area27",
+    "originX": 25,
+    "originY": 95,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area28",
+    "originX": 35,
+    "originY": 95,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area29",
+    "originX": 45,
+    "originY": 95,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area30",
+    "originX": 55,
+    "originY": 95,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area31",
+    "originX": 65,
+    "originY": 95,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area32",
+    "originX": 75,
+    "originY": 95,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area33",
+    "originX": 85,
+    "originY": 95,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area47",
+    "originX": 50,
+    "originY": 22,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area78",
+    "originX": 38,
+    "originY": 31.5,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area79",
+    "originX": 38,
+    "originY": 36.5,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area80",
+    "originX": 38,
+    "originY": 41.5,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area81",
+    "originX": 38,
+    "originY": 46,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area82",
+    "originX": 38,
+    "originY": 49.6,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area83",
+    "originX": 38,
+    "originY": 53,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area84",
+    "originX": 38,
+    "originY": 57.5,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area85",
+    "originX": 38,
+    "originY": 62.5,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area86",
+    "originX": 38,
+    "originY": 67.5,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area87",
+    "originX": 46,
+    "originY": 37,
+    "size": 2,
+    "rotate": true
+  },
+  {
+    "title": "Area88",
+    "originX": 49.5,
+    "originY": 37,
+    "size": 2,
+    "rotate": true
+  },
+  {
+    "title": "Area89",
+    "originX": 53,
+    "originY": 37,
+    "size": 2,
+    "rotate": true
+  },
+  {
+    "title": "Area90",
+    "originX": 46,
+    "originY": 63,
+    "size": 2,
+    "rotate": true
+  },
+  {
+    "title": "Area91",
+    "originX": 49.6,
+    "originY": 63,
+    "size": 2,
+    "rotate": true
+  },
+  {
+    "title": "Area92",
+    "originX": 53.2,
+    "originY": 63,
+    "size": 2,
+    "rotate": true
+  },
+  {
+    "title": "Area38",
+    "originX": 60,
+    "originY": 15,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area39",
+    "originX": 73.5,
+    "originY": 15,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area40",
+    "originX": 85,
+    "originY": 15,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area48",
+    "originX": 61,
+    "originY": 24,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area49",
+    "originX": 70,
+    "originY": 34,
+    "size": 2,
+    "rotate": true
+  },
+  {
+    "title": "Area93",
+    "originX": 61,
+    "originY": 31.5,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area94",
+    "originX": 61,
+    "originY": 36.5,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area95",
+    "originX": 61,
+    "originY": 41.5,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area96",
+    "originX": 61,
+    "originY": 46,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area97",
+    "originX": 61,
+    "originY": 49.6,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area98",
+    "originX": 61,
+    "originY": 53,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area99",
+    "originX": 61,
+    "originY": 57.5,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area100",
+    "originX": 61,
+    "originY": 62.5,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area101",
+    "originX": 61,
+    "originY": 67.5,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area64",
+    "originX": 49.5,
+    "originY": 78,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area74",
+    "originX": 49.5,
+    "originY": 86,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area65",
+    "originX": 61,
+    "originY": 75,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area75",
+    "originX": 60,
+    "originY": 85,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area50",
+    "originX": 79,
+    "originY": 24,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area51",
+    "originX": 79,
+    "originY": 34,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area52",
+    "originX": 79,
+    "originY": 44,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area57",
+    "originX": 83.5,
+    "originY": 49.6,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area67",
+    "originX": 79,
+    "originY": 55,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area68",
+    "originX": 79,
+    "originY": 66,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area69",
+    "originX": 79,
+    "originY": 75,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area66",
+    "originX": 70,
+    "originY": 65,
+    "size": 2,
+    "rotate": true
+  },
+  {
+    "title": "Area76",
+    "originX": 70,
+    "originY": 83,
+    "size": 1.8,
+    "rotate": false
+  },
+  {
+    "title": "Area77",
+    "originX": 83,
+    "originY": 85,
+    "size": 2,
+    "rotate": false
+  },
+  {
+    "title": "Area53",
+    "originX": 87.5,
+    "originY": 25.5,
+    "size": 1.5,
+    "rotate": false
+  },
+  {
+    "title": "Area54",
+    "originX": 87.5,
+    "originY": 30.5,
+    "size": 1.5,
+    "rotate": false
+  },
+  {
+    "title": "Area55",
+    "originX": 87.5,
+    "originY": 37,
+    "size": 1.5,
+    "rotate": true
+  },
+  {
+    "title": "Area70",
+    "originX": 87.5,
+    "originY": 68,
+    "size": 2,
+    "rotate": true
+  },
+  {
+    "title": "Honorary",
+    "originX": 46.5,
+    "originY": 45.75,
+    "size": 1.1,
+    "rotate": false
+  },
+  {
+    "title": "Elves",
+    "originX": 46.5,
+    "originY": 47.25,
+    "size": 1.4,
+    "rotate": false
+  },
+  {
+    "title": "Honorary",
+    "originX": 46.5,
+    "originY": 51.75,
+    "size": 1.1,
+    "rotate": false
+  },
+  {
+    "title": "Elves",
+    "originX": 46.5,
+    "originY": 53.25,
+    "size": 1.4,
+    "rotate": false
+  },
+  {
+    "title": "Honorary",
+    "originX": 52.5,
+    "originY": 45.75,
+    "size": 1.1,
+    "rotate": false
+  },
+  {
+    "title": "Elves",
+    "originX": 52.5,
+    "originY": 47.25,
+    "size": 1.4,
+    "rotate": false
+  },
+  {
+    "title": "Honorary",
+    "originX": 52.5,
+    "originY": 51.75,
+    "size": 1.1,
+    "rotate": false
+  },
+  {
+    "title": "Elves",
+    "originX": 52.5,
+    "originY": 53.25,
+    "size": 1.4,
+    "rotate": false
+  }
+]

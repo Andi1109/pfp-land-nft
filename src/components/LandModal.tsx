@@ -36,7 +36,7 @@ import RoyalImageHonorary from "./RoyalImageHonorary";
 import DerivedImage from "./DerivedImage";
 import ClaimedDerivedImage from "./ClaimedDerivedImage";
 import { getRoyalDerivePair, getHonoraryRoyals } from "../service/api";
-import collectionIDNamePairJson from "../collectionIDNamePair/pair.json";
+import collectionIDNamePairJson from "../collectionIDNamePair/pair_new.json";
 import OwnerAvatar from "./OwnerAvatar";
 
 type Props = {
