@@ -808,6 +808,7 @@ export default function Map() {
         display="flex"
         alignItems="center"
         cursor={canvasCursor}
+        className="mapBox"
       >
         <canvas
           ref={canvasRef1}

@@ -1,3 +1,7 @@
+.mapBox {
+  margin-top: 4vh;
+}
+
 canvas[id="lay01"] {
   /* position: absolute; */
   z-index: 0;
