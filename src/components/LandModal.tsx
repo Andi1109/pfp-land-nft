@@ -164,17 +164,17 @@ export default function LandModal({
 
   useEffect(async () => {
     setCollectionIDValue(collectionID ? collectionID.toString() : "");
-    if (
-      collectionID &&
-      parseInt(collectionID.toString()) < 7 &&
-      landOwnerValue !== "loading..." &&
-      landOwnerValue !== "0x0000000000000000000000000000000000000000" &&
-      myAccountValue === landOwnerValue
-    ) {
-      const honoraryRoyals = await getHonoraryRoyals(landOwnerValue);
-      console.log("===", honoraryRoyals);
-      setHonoraryRoyals(honoraryRoyals);
-    }
+    // if (
+    //   collectionID &&
+    //   parseInt(collectionID.toString()) < 7 &&
+    //   landOwnerValue !== "loading..." &&
+    //   landOwnerValue !== "0x0000000000000000000000000000000000000000" &&
+    //   myAccountValue === landOwnerValue
+    // ) {
+    //   const honoraryRoyals = await getHonoraryRoyals(landOwnerValue);
+    //   console.log("===", honoraryRoyals);
+    //   setHonoraryRoyals(honoraryRoyals);
+    // }
   }, [collectionID]);
 
   useEffect(() => {

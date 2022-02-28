@@ -110,20 +110,32 @@
   height: 2.5rem;
 }
 
+.minttext-connect-button {
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
 @media screen and (max-width: 540px) {
   .navbar {
     align-items: center;
     height: 34px;
   }
 
-  .balText {
-    padding: 5px;
+  .connectBox {
+    display: flex;
+    align-items: center;
+    background: #2d3748;
+    border-radius: 0.75rem;
+    margin-top: 25px;
   }
 
-  .connectBox {
-    position: absolute;
-    left: 15vw;
-    height: 30px;
+  .batchMintCount {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto 5px;
   }
 
   .connectbtn {
@@ -133,20 +145,31 @@
   }
 
   .balText {
+    padding: 5px;
     font-size: 12px;
     margin: 0;
   }
 
   .link {
-    position: absolute;
-    right: 5vw;
+    display: none !important;
+  }
+
+  .batchmint {
     display: flex;
+    align-items: center;
+    margin-top: 25px;
   }
 
   .linkImg {
     margin-left: 0.5rem;
     width: 1.5rem;
     height: 1.5rem;
+  }
+
+  .mintBtn {
+    padding: auto !important;
+    height: 30px !important;
+    width: 45px !important;
   }
 }
 

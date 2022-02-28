@@ -47,22 +47,36 @@ function App() {
     <ChakraProvider theme={theme}>
       <Layout>
         <Flex className="navbar">
-          <div className="logolink">
+          <Flex className="logolink">
             <Link href="http://mypfp.land">
               <Image className="linkImg" src="/assets/mypfp_icon.png" />
             </Link>
-            <Text color="white" className="refreshText">
+            <Text
+              color="white"
+              className="refreshText"
+              fontSize={{ base: "0px", md: "0px", lg: "18px" }}
+            >
               Map version Alpha 0.5. Refreshes every 5 minutes
             </Text>
-            <Text color="yellow" className="refreshText">
-              Click on land to mint
-            </Text>
-            <ConnectButton handleOpenModal={onOpen} />
-            <div className="batchmint">
-              <Text color="yellow" className="refreshText">
+            <Flex className="minttext-connect-button">
+              <Text
+                color="yellow"
+                className="refreshText"
+                fontSize={{ base: "0px", md: "0px", lg: "18px" }}
+              >
+                Click on land to mint
+              </Text>
+              <ConnectButton handleOpenModal={onOpen} />
+            </Flex>
+            <Flex className="batchmint">
+              <Text
+                color="yellow"
+                className="refreshText"
+                fontSize={{ base: "0px", md: "0px", lg: "18px" }}
+              >
                 Batch Mint:
               </Text>
-              <div className="batchMintCount">
+              <Flex className="batchMintCount">
                 <Button
                   colorScheme="teal"
                   size="xs"
@@ -80,7 +94,7 @@ function App() {
                 >
                   +
                 </Button>
-              </div>
+              </Flex>
               <Button
                 colorScheme="teal"
                 size="md"
@@ -89,9 +103,9 @@ function App() {
               >
                 Mint
               </Button>
-            </div>
-          </div>
-          <div className="link">
+            </Flex>
+          </Flex>
+          <Flex className="link">
             <Link href="https://twitter.com/myPFPland">
               <Image className="linkImg" src="/assets/twitter_icon.png" />
             </Link>
@@ -101,7 +115,7 @@ function App() {
             <Link href="https://opensea.io/collection/mypfpland-v2">
               <Image className="linkImg" src="/assets/opensea_icon.png" />
             </Link>
-          </div>
+          </Flex>
         </Flex>
         <AccountModal isOpen={isOpen} onClose={onClose} />
         <Map />

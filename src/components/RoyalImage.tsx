@@ -76,6 +76,7 @@ export default function RoyalImage({
     fetchImage(tokenURIValue).then((imageURL) => {
       if (imageURL) {
         const converted = convertUrlForIpfs(imageURL);
+        console.log("==========", converted);
         setImageURLValue(converted);
       }
     });
