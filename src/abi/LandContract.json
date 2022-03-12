@@ -111,6 +111,16 @@
     "type": "function"
   },
   {
+    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "name": "addrToTVHead",
+    "outputs": [
+      { "internalType": "uint256", "name": "collectionID", "type": "uint256" },
+      { "internalType": "uint256", "name": "tokenID", "type": "uint256" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "allowMetadataForAllReserved",
     "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
@@ -141,6 +151,15 @@
     "name": "baseURI",
     "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "numOfLands", "type": "uint256" }
+    ],
+    "name": "batchMintLands",
+    "outputs": [],
+    "stateMutability": "payable",
     "type": "function"
   },
   {
@@ -200,7 +219,7 @@
           { "internalType": "uint256", "name": "x", "type": "uint256" },
           { "internalType": "uint256", "name": "y", "type": "uint256" }
         ],
-        "internalType": "struct MyPFPlandv3.Point",
+        "internalType": "struct MyPFPlandv4.Point",
         "name": "leftBottom",
         "type": "tuple"
       },
@@ -209,7 +228,7 @@
           { "internalType": "uint256", "name": "x", "type": "uint256" },
           { "internalType": "uint256", "name": "y", "type": "uint256" }
         ],
-        "internalType": "struct MyPFPlandv3.Point",
+        "internalType": "struct MyPFPlandv4.Point",
         "name": "rightTop",
         "type": "tuple"
       }
@@ -254,6 +273,32 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_currentCollectionID",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_currentTierID",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_collectionIDLimit",
+        "type": "uint256"
+      },
+      { "internalType": "uint256", "name": "_tierIDLimit", "type": "uint256" },
+      { "internalType": "uint256", "name": "_currentMintX", "type": "uint256" },
+      { "internalType": "uint256", "name": "_currentMintY", "type": "uint256" }
+    ],
+    "name": "initBatchMintVariables",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "initialize",
     "outputs": [],
@@ -277,7 +322,7 @@
           { "internalType": "uint256", "name": "x", "type": "uint256" },
           { "internalType": "uint256", "name": "y", "type": "uint256" }
         ],
-        "internalType": "struct MyPFPlandv3.Point",
+        "internalType": "struct MyPFPlandv4.Point",
         "name": "point",
         "type": "tuple"
       },
@@ -288,7 +333,7 @@
               { "internalType": "uint256", "name": "x", "type": "uint256" },
               { "internalType": "uint256", "name": "y", "type": "uint256" }
             ],
-            "internalType": "struct MyPFPlandv3.Point",
+            "internalType": "struct MyPFPlandv4.Point",
             "name": "leftBottom",
             "type": "tuple"
           },
@@ -297,12 +342,12 @@
               { "internalType": "uint256", "name": "x", "type": "uint256" },
               { "internalType": "uint256", "name": "y", "type": "uint256" }
             ],
-            "internalType": "struct MyPFPlandv3.Point",
+            "internalType": "struct MyPFPlandv4.Point",
             "name": "rightTop",
             "type": "tuple"
           }
         ],
-        "internalType": "struct MyPFPlandv3.Rectangle",
+        "internalType": "struct MyPFPlandv4.Rectangle",
         "name": "area",
         "type": "tuple"
       }
@@ -568,6 +613,21 @@
   {
     "inputs": [
       {
+        "internalType": "uint256[]",
+        "name": "collectionID",
+        "type": "uint256[]"
+      },
+      { "internalType": "uint256[]", "name": "tierID", "type": "uint256[]" },
+      { "internalType": "uint256", "name": "count", "type": "uint256" }
+    ],
+    "name": "setBatchCollectionTier",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "address[]",
         "name": "_blacklist",
         "type": "address[]"
@@ -696,6 +756,16 @@
       { "internalType": "bool", "name": "_pauseClaimingToy", "type": "bool" }
     ],
     "name": "setPauseClaimingToy",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "collectionID", "type": "uint256" },
+      { "internalType": "uint256", "name": "tokenID", "type": "uint256" }
+    ],
+    "name": "setTVHead",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

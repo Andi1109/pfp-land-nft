@@ -26,7 +26,7 @@ function App() {
   const handleBatchMint = async () => {
     try {
       await batchMint(batchMintValue, {
-        value: utils.parseEther("0"),
+        value: utils.parseEther((batchMintValue * 0.08).toString()),
       });
     } catch (error) {
       console.log(error);
@@ -56,7 +56,7 @@ function App() {
               className="refreshText"
               fontSize={{ base: "0px", md: "0px", lg: "18px" }}
             >
-              Map version Alpha 0.5. Refreshes every 5 minutes
+              Map version Alpha 0.6. Refreshes every 5 minutes
             </Text>
             <Flex className="minttext-connect-button">
               <Text

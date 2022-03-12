@@ -462,17 +462,14 @@ export default function Map() {
     localStorage.setItem("pendingLands", JSON.stringify(pendingLands));
 
     try {
-      if (
-        (parseInt(collectionID) >= 0 && parseInt(collectionID) <= 6) ||
-        (parseInt(collectionID) >= 38 && parseInt(collectionID) <= 44)
-      )
+      if (parseInt(collectionID) >= 0 && parseInt(collectionID) <= 6)
         // collections for Honorary and metakey
         await claimLand(landX, landY, collectionID, {
           value: utils.parseEther("0"),
         });
       else
         await claimLand(landX, landY, collectionID, {
-          value: utils.parseEther("0.03"),
+          value: utils.parseEther("0.08"),
         });
     } catch (error) {
       console.log(error);
